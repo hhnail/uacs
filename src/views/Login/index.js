@@ -32,7 +32,7 @@ const {Header, Content, Footer} = Layout;
 export default function Login(props) {
 
     const onFinish = (values) => {
-        console.log("==1 values", values)
+        // console.log("==1 values", values)
         // console.log("==1 values", props)
 
         // 验证后台数据

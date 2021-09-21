@@ -59,7 +59,7 @@ export default function UserList() {
         axios.get("/association/getAllUsers")
             .then(res => {
                 const {data} = res.data
-                console.log("==51 userList", data);
+                // console.log("==51 userList", data);
                 setDataSource(data)
             })
             .catch(err => {

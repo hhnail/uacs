@@ -36,13 +36,14 @@ function TopHeader(props) {
         })
             .then(res => {
                 const {data} = res.data
-                console.log("==51 userInfo", data);
+                // console.log("==51 userInfo", data);
                 setserInfo(data)
             })
             .catch(err => {
                 console.log("获取用户信息出错！", err);
             })
     }, [])
+
 
     const menu = ( // 顶部菜单结构
         <Menu>
@@ -72,7 +73,7 @@ function TopHeader(props) {
             &nbsp;&nbsp;&nbsp;
             首页
             <div style={{float: "right"}}>
-                亲爱的 <b> {userInfo.name} </b> 同学 欢迎回来~
+                你好 <span style={{color:'orange'}}>{userInfo?.name}</span> 欢迎回来~
                 &nbsp;&nbsp;&nbsp;
                 <Dropdown overlay={menu}>
                     <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
