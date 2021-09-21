@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {
     Menu,
     Layout,
@@ -14,13 +14,37 @@ import {
 } from '@ant-design/icons'
 
 import {withRouter} from 'react-router-dom'
+import axios from "axios";
+import qs from 'querystring'
 
 const {Header} = Layout;
 
 function TopHeader(props) {
 
-// 菜单数据
-    const menu = (
+    const [collapsed, setCollapsed] = useState(false)
+    const [userInfo, setserInfo] = useState()
+
+    // 通过token换取用户信息
+    useEffect(() => {
+        const accessToken = localStorage.getItem("token")
+
+        axios({
+            url: "/user/getUserInfo",
+            method: 'post',
+            data: qs.stringify({accessToken: accessToken}),
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        })
+            .then(res => {
+                const {data} = res.data
+                console.log("==51 userInfo", data);
+                setserInfo(data)
+            })
+            .catch(err => {
+                console.log("获取用户信息出错！", err);
+            })
+    }, [])
+
+    const menu = ( // 顶部菜单结构
         <Menu>
             <Menu.Item key={1}>
                 <a>超级管理员</a>
@@ -36,8 +60,6 @@ function TopHeader(props) {
         </Menu>
     );
 
-    const [collapsed, setCollapsed] = useState(false)
-
     const changeFoldState = () => {
         setCollapsed(!collapsed)
     }
@@ -50,7 +72,7 @@ function TopHeader(props) {
             &nbsp;&nbsp;&nbsp;
             首页
             <div style={{float: "right"}}>
-                欢迎 admin 回来~
+                亲爱的 <b> {userInfo.name} </b> 同学 欢迎回来~
                 &nbsp;&nbsp;&nbsp;
                 <Dropdown overlay={menu}>
                     <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>

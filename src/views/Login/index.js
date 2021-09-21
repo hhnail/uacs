@@ -12,6 +12,7 @@ import {
     Switch,
     Input,
     Cascader,
+    message,
 } from 'antd';
 
 import {
@@ -28,23 +29,26 @@ import './index.css'
 
 const {Header, Content, Footer} = Layout;
 
-export default function Login() {
+export default function Login(props) {
 
     const onFinish = (values) => {
         console.log("==1 values", values)
+        // console.log("==1 values", props)
 
-        // 同步后端
+        // 验证后台数据
         axios({
             url: "/user/login",
             method: 'post',
             data: qs.stringify(values),
-            // data: `${...values}`,
-            // 以json格式提交
-            // headers: { 'Content-Type': 'application/json;charset=UTF-8' }
-            // 以表单方式提交
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).then(res => {
             console.log(res)
+            if (res.data.data) { // 如果data非空,说明验证成功
+                localStorage.setItem("token", res.data.data.accessToken) // 将token保存到浏览器中
+                props.history.push("/") // 跳转到主页面
+                return
+            }
+            message.error("用户名或密码输入错误！") // 验证失败，提示用户
         }).catch(err => {
             console.log(err)
         })
