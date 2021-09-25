@@ -48,6 +48,8 @@ class SideMenu extends Component {
         openKeys: [],
         // 用户信息
         userInfo: {},
+        // 用户权限路径列表
+        permissionRoutePathList: [],
     }
 
     componentWillMount() {
@@ -72,11 +74,13 @@ class SideMenu extends Component {
         })
             .then(res => {
                 const {data} = res.data
-                console.log("==1 data ", data)
-                this.setState({userInfo: data})
+                console.log("==1 用户侧边栏访问权限列表 ", data.permissionRoutePathList)
+                // this.setState({userInfo: data})
+                this.setState({permissionRoutePathList: data.permissionRoutePathList})
             })
             .catch(err => {
-                console.log("获取用户信息出错！", err);
+                console.log("获取用户信息出错！", err)
+                localStorage.removeItem("token")
             })
     }
 
@@ -84,7 +88,7 @@ class SideMenu extends Component {
     getMenuList = () => {
         axios.get("/association/getPermissionList").then(res => {
             const {data} = res.data
-            // console.log("==1 menuList", data);
+            // console.log("==1 SideMenu menuList", data);
             this.setState({menuList: data})
         }).catch(err => {
             console.log("获取菜单出错！", err);
@@ -108,12 +112,23 @@ class SideMenu extends Component {
     }
 
     checkPageElement = (item) => {
+        // console.log("==3 item的routePath", item.routePath)
+        // const {permissionRoutePathList} = this.state
+        // const {userInfo} = this.state
+        // console.log("==3 用户权限路径列表", userInfo)
+        // console.log("==3 用户权限路径列表", permissionRoutePathList)
+        // console.log("include item.routePath?", permissionRoutePathList.includes(item.routePath))
+
+        // TODO 菜单权限列表控制
         let isShow = false;
         // 检查是否是菜单元素。true才在菜单栏展示
         if ("MENU_ELEMENT" === item.type) {
-            // 权限控制 检查item是否能够展示
-            isShow = true
+            // 权限控制 检查当前用户有相应的访问权限
+            // if (permissionRoutePathList.includes(item.routePath)) {
+                isShow = true
+            // }
         }
+        // console.log("检查元素 checkPageElement结果", isShow)
         return isShow
 
     }
