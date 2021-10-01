@@ -125,7 +125,14 @@ class SideMenu extends Component {
         return menuList.map((item) => {
             // 当前item为父菜单，并且有下级菜单
             if (item.children.length > 0 && this.checkPageElement(item)) {
-                return <SubMenu key={item.routePath} title={item.title} icon={iconList[item.routePath]}>
+                return <SubMenu
+                    key={item.routePath}
+                    title={item.title}
+                    icon={iconList[item.routePath]}
+                    style={{
+                        backgroundColor:`rgba(232, 140, 20, 0.24)`,
+                    }}
+                >
                     {this.renderMenu(item.children)}{/* 递归 */}
                 </SubMenu>
             }

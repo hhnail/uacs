@@ -207,7 +207,7 @@ export default function UserList() {
             // 同步后端数据库
             axios.post(`/association/addUser`, userObj).then((res) => {
                 console.log("==10 addUser res", res)
-                if (!res.data.data) { //如果失败了，data是null（失败原因可能是：学号已经存在，数据库插入失败）
+                if (res.data.data) { //如果失败了，data是null（失败原因可能是：学号已经存在，数据库插入失败）
                     // 同步前端  根据当前user_id获取user信息
                     axios.get(`/association/getUserById/${userObj.userId}`).then(res => {
                         console.log("==11 getUserById res", res)
