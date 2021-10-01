@@ -92,6 +92,7 @@ export default class RoleList extends Component {
         })
     }
 
+    // TODO 删除后给个loading提示
     confirmDelete = (item) => {
         const { roleList } = this.state
         const thisPoint = this

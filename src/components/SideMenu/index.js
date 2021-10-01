@@ -48,19 +48,17 @@ class SideMenu extends Component {
         openKeys: [],
         // 用户信息
         userInfo: {},
-        // 用户权限路径列表
-        permissionRoutePathList: [],
     }
 
+    // 获取菜单信息
+    // 展开默认项。刷新后仍然有效
     componentWillMount() {
-        // 获取菜单信息
-        this.getMenuList()
-
-        // 展开默认项。刷新后仍然有效
-        this.showSelected()
-
         // 通过token换取用户信息
         this.getUserInfoByToken()
+
+        // this.getMenuList(userId)
+
+        this.showSelected()
     }
 
     // 通过token换取用户信息
@@ -73,22 +71,27 @@ class SideMenu extends Component {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         })
             .then(res => {
-                const {data} = res.data
-                console.log("==1 用户侧边栏访问权限列表 ", data.permissionRoutePathList)
-                // this.setState({userInfo: data})
-                this.setState({permissionRoutePathList: data.permissionRoutePathList})
+                const userInfo = res.data.data
+                console.log("==1 用户信息 ", userInfo)
+                this.setState({userInfo: userInfo})
+                // 根据userId获取菜单列表
+                this.getMenuList()
             })
             .catch(err => {
                 console.log("获取用户信息出错！", err)
                 localStorage.removeItem("token")
+                // TODO [bug] 描述：token过期后，虽然刷新后会重新登录，但是登不上去。props为空
+                // TODO 最好token过期后，给个提示
+                this.props.history.replace("/")
+                // history.replace("/")
             })
     }
 
     // 获取菜单数据
     getMenuList = () => {
-        axios.get("/association/getPermissionList").then(res => {
+        axios.get(`/association/getPermissionList/${this.state.userInfo.userId}`).then(res => {
             const {data} = res.data
-            // console.log("==1 SideMenu menuList", data);
+            console.log("==102 SideMenu menuList", data);
             this.setState({menuList: data})
         }).catch(err => {
             console.log("获取菜单出错！", err);
@@ -112,53 +115,25 @@ class SideMenu extends Component {
     }
 
     checkPageElement = (item) => {
-        // console.log("==3 item的routePath", item.routePath)
-        // const {permissionRoutePathList} = this.state
-        // const {userInfo} = this.state
-        // console.log("==3 用户权限路径列表", userInfo)
-        // console.log("==3 用户权限路径列表", permissionRoutePathList)
-        // console.log("include item.routePath?", permissionRoutePathList.includes(item.routePath))
-
-        // TODO 菜单权限列表控制
-        let isShow = false;
-        // 检查是否是菜单元素。true才在菜单栏展示
-        if ("MENU_ELEMENT" === item.type) {
-            // 权限控制 检查当前用户有相应的访问权限
-            // if (permissionRoutePathList.includes(item.routePath)) {
-                isShow = true
-            // }
-        }
-        // console.log("检查元素 checkPageElement结果", isShow)
-        return isShow
-
+        return "MENU_ELEMENT" === item.type ? true : false
     }
 
     // 渲染侧边栏菜单
     renderMenu = (menuList) => {
         return menuList.map((item) => {
+            // 当前item为父菜单，并且有下级菜单
             if (item.children.length > 0 && this.checkPageElement(item)) {
-                return <SubMenu
-                    key={item.routePath}
-                    title={item.title}
-                    icon={iconList[item.routePath]}
-                >
-                    {/* 递归 */}
-                    {this.renderMenu(item.children)}
+                return <SubMenu key={item.routePath} title={item.title} icon={iconList[item.routePath]}>
+                    {this.renderMenu(item.children)}{/* 递归 */}
                 </SubMenu>
             }
-            return this.checkPageElement(item) &&
-                <Menu.Item
-                    key={item.routePath}
-                    style={{
-                        height: "30px",
-                    }}
-                    onClick={() => {
-                        this.props.history.push(item.routePath)
-                    }}
-                >
-                    {iconList[item.routePath]}
-                    &nbsp;&nbsp;
-                    {item.title}
+            // 当前item为叶子菜单
+            return this.checkPageElement(item) && item.grade === 2 &&
+                <Menu.Item key={item.routePath} style={{height: "30px",}}
+                           onClick={() => {
+                               this.props.history.push(item.routePath)
+                           }}
+                >{iconList[item.routePath]}&nbsp;&nbsp;{item.title}
                 </Menu.Item>
         })
     }
