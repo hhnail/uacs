@@ -40,7 +40,7 @@ function TopHeader(props) {
                 setserInfo(data)
             })
             .catch(err => {
-                console.log("获取用户信息出错！", err);
+                console.log("==TopHeader 获取用户信息出错！", err);
             })
     }, [])
 

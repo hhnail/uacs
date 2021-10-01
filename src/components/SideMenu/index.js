@@ -54,15 +54,15 @@ class SideMenu extends Component {
     // 展开默认项。刷新后仍然有效
     componentWillMount() {
         // 通过token换取用户信息
-        this.getUserInfoByToken()
+        this.getMenuListByToken()
 
         // this.getMenuList(userId)
 
         this.showSelected()
     }
 
-    // 通过token换取用户信息
-    getUserInfoByToken = () => {
+    // 通过token换取用户信息 并 用userId获取权限列表
+    getMenuListByToken = () => {
         const accessToken = localStorage.getItem("token")
         axios({
             url: "/user/getUserInfo",
@@ -72,26 +72,28 @@ class SideMenu extends Component {
         })
             .then(res => {
                 const userInfo = res.data.data
-                console.log("==1 用户信息 ", userInfo)
+                // console.log("==1 用户信息 ", userInfo)
                 this.setState({userInfo: userInfo})
                 // 根据userId获取菜单列表
-                this.getMenuList()
+                if(userInfo){
+                    this.getMenuList(userInfo.userId)
+                }
             })
             .catch(err => {
-                console.log("获取用户信息出错！", err)
+                console.log("==SideMenu 获取用户信息出错！", err)
                 localStorage.removeItem("token")
                 // TODO [bug] 描述：token过期后，虽然刷新后会重新登录，但是登不上去。props为空
-                // TODO 最好token过期后，给个提示
+
                 this.props.history.replace("/")
-                // history.replace("/")
+                // TODO 最好token过期后，给个提示
             })
     }
 
     // 获取菜单数据
-    getMenuList = () => {
-        axios.get(`/association/getPermissionList/${this.state.userInfo.userId}`).then(res => {
+    getMenuList = (userId) => {
+        axios.get(`/association/getPermissionListByUserId/${userId}`).then(res => {
             const {data} = res.data
-            console.log("==102 SideMenu menuList", data);
+            // console.log("==102 SideMenu menuList", data);
             this.setState({menuList: data})
         }).catch(err => {
             console.log("获取菜单出错！", err);
