@@ -130,7 +130,7 @@ class SideMenu extends Component {
                     title={item.title}
                     icon={iconList[item.routePath]}
                     style={{
-                        backgroundColor:`rgba(232, 140, 20, 0.24)`,
+                        backgroundColor:`rgba(232, 140, 20, 0.1)`,
                     }}
                 >
                     {this.renderMenu(item.children)}{/* 递归 */}

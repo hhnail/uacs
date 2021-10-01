@@ -191,7 +191,7 @@ export default function UserList() {
         // console.log("====3 确定");
         addFormRef.current.validateFields().then(value => {
             setIsAddModalVisible(false)// 关闭模态框
-            console.log("==4 ", value);
+            // console.log("==4 ", value);
 
             // 封装表单信息
             const userObj = {
@@ -206,12 +206,12 @@ export default function UserList() {
 
             // 同步后端数据库
             axios.post(`/association/addUser`, userObj).then((res) => {
-                console.log("==10 addUser res", res)
+                // console.log("==10 addUser res", res)
                 if (res.data.data) { //如果失败了，data是null（失败原因可能是：学号已经存在，数据库插入失败）
                     // 同步前端  根据当前user_id获取user信息
                     axios.get(`/association/getUserById/${userObj.userId}`).then(res => {
-                        console.log("==11 getUserById res", res)
-                        console.log("==11 getUserById res.data.data", res.data.data)
+                        // console.log("==11 getUserById res", res)
+                        // console.log("==11 getUserById res.data.data", res.data.data)
                         setDataSource([...dataSource, res.data.data])
                     }).catch(err => { // catch 获取用户信息失败
                         console.log("==err3 getUserById err", err)
