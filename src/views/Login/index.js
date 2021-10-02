@@ -45,6 +45,7 @@ export default function Login(props) {
             console.log(res)
             if (res.data.data) { // 如果data非空,说明验证成功
                 localStorage.setItem("token", res.data.data.accessToken) // 将token保存到浏览器中
+                localStorage.setItem("userInfo", JSON.stringify(res.data.data)) // 将token保存到浏览器中
                 props.history.push("/") // 跳转到主页面
                 return
             }

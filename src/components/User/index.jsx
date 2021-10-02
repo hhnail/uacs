@@ -24,7 +24,7 @@ export default class index extends Component {
     render() {
         return (
             <div>
-                <UseHeader isUserMenu={true} />
+                {/*<UseHeader isUserMenu={true} />*/}
                 <UseHeader isUserMenu={false} />
                 <br />
                 <br />
@@ -47,6 +47,20 @@ export default class index extends Component {
                 <br />
                 {/* 社团展示栏 */}
                 <div className="site-card-wrapper">
+                    <Row gutter={16}>
+                        <Col span={6}>
+                        <AssociationCard/>
+                        </Col>
+                        <Col span={6}>
+                        <AssociationCard/>
+                        </Col>
+                        <Col span={6}>
+                        <AssociationCard/>
+                        </Col>
+                        <Col span={6}>
+                        <AssociationCard/>
+                        </Col>
+                    </Row>
                     <Row gutter={16}>
                         <Col span={6}>
                         <AssociationCard/>

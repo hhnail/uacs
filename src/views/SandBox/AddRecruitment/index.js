@@ -1,16 +1,10 @@
 import {useState, useRef} from "react";
 import {
-    Button,
-    PageHeader,
-    Steps,
-    Form,
-    Input,
-    Checkbox,
-    InputNumber,
-    Space,
-    DatePicker,
+    Button, PageHeader, Steps, Form, Input, Checkbox,
+    InputNumber, Space, DatePicker, message, notification,
 } from 'antd'
 import locale from 'antd/es/date-picker/locale/zh_CN';
+import axios from "axios";
 
 import moment from 'moment'
 
@@ -24,13 +18,27 @@ const {RangePicker} = DatePicker;
 
 const {TextArea} = Input
 
-export default function AddRecruitment() {
+// 点击“仅保存“或”提交审核“的key和btn
+const key = `open${Date.now()}`;
+const btn = (
+    <Button type="primary" size="small" onClick={() => notification.close(key)}>
+        我知道了
+    </Button>
+);
 
-    const [currentStep, setCurrentStep] = useState(0) // 撰写纳新展示信息 步骤 位置
+export default function AddRecruitment(props) {
+
+    const [currentStep, setCurrentStep] = useState(1) // 撰写纳新展示信息 步骤 位置
 
     const [value, setValue] = useState('30');// 社团纳新人数
 
-    const baseInfoForm = useRef(null)
+    const baseInfoFormRef = useRef(null)
+
+    const [baseInfoForm, setBaseInfoForm] = useState({})
+
+    const [content4Show, setContent4Show] = useState("")
+
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"))
 
     const toPrevious = () => {
         setCurrentStep(currentStep - 1)
@@ -39,13 +47,19 @@ export default function AddRecruitment() {
     const toNext = () => {
         // 校验第一步：基本信息
         if (currentStep === 0) {
-            baseInfoForm.current.validateFields().then(res => {
-                console.log(res)
+            baseInfoFormRef.current.validateFields().then(res => {
+                console.log("==1 AddRecrutment 校验结果：", res)
+                setBaseInfoForm(res)
                 setCurrentStep(currentStep + 1)
             }).catch(err => {
                 console.log(err)
             })
         } else {
+            if (content4Show === "" || content4Show.trim() === "<p></p>") {
+                message.error("社团纳新展示内容不得为空")
+                return
+            }
+            console.log("收集的信息：", baseInfoForm, content4Show)
             setCurrentStep(currentStep + 1)
         }
     }
@@ -54,6 +68,29 @@ export default function AddRecruitment() {
     const onChange = (dates, dateStrings) => {
         console.log('From: ', dates[0], ', to: ', dates[1]);
         console.log('From: ', dateStrings[0], ', to: ', dateStrings[1]);
+    }
+
+    const handleOnlySave = (state) => {
+
+        axios.post('', {
+            userId: userInfo.userId, // 申请人ID
+            ...baseInfoForm, // 基本信息
+            ...content4Show, // 展示信息
+            state: "UNEXAMINE", // 默认初始状态为未审核
+            createTime: Date.now(), // 创建事件为现在
+            view: 0, // 浏览量，默认为0
+        }).then((res) => {
+            console.log(res)
+            // props.history.push('/')
+        }).catch(err => {
+            console.log(err)
+            notification.open({
+                message: state === 'UNEXAMINE' ? '保存成功' : '审核提交成功',
+                description: `您可以到 纳新信息列表 查看${state === 'UNEXAMINE' ? '保存' : '审核'}结果`,
+                btn,
+                key,
+            });
+        })
     }
 
     return (
@@ -72,17 +109,19 @@ export default function AddRecruitment() {
                         name="basic"
                         labelCol={{span: 4,}}
                         wrapperCol={{span: 20,}}
-                        ref={baseInfoForm}
+                        ref={baseInfoFormRef}
                     >
                         <Form.Item
                             label="纳新标题"
                             name="title"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: '请输入纳新标题',
-                                },
-                            ]}
+                            rules={
+                                [
+                                    {
+                                        required: true,
+                                        message: '请输入纳新标题',
+                                    },
+                                ]
+                            }
                         >
                             <Input type="text"/>
                         </Form.Item>
@@ -109,32 +148,33 @@ export default function AddRecruitment() {
                                 />
                             </Space>
                         </Form.Item>
-                        <Form.Item label="备注"name="message">
+                        <Form.Item label="备注" name="message">
                             <TextArea rows={4} placeholder={"若需求请填写备注信息"}/>
                         </Form.Item>
                     </Form>
                 </div>
 
 
-
-                {/* step2 社团纳新展示信息 =====================================*/}
+                {/* step2 社团纳新展示信息 =====================================*/
+                }
                 <div style={currentStep === 1 ? {} : {display: 'none',}}>
-                    <AssociationEditor/>
-                    <br/>
-                    <input type="text"/>
+                    <AssociationEditor
+                        // 子传父 获取 富文本编辑器内容
+                        getContent={(value) => {
+                            console.log(value)
+                            setContent4Show(value)
+                        }}/>
                 </div>
 
 
-
-                {/*step3 保存或提交审核 =====================================*/}
+                {/*step3 保存或提交审核 =====================================*/
+                }
                 <div style={currentStep === 2 ? {} : {display: 'none',}}>
-                    3333333333333333
-                    <br/>
-                    <input type="text"/>
                 </div>
             </div>
 
-            {/*按钮组*/}
+            {/*按钮组*/
+            }
             <div style={{
                 marginTop: '50px',
                 // padding:'10px',
@@ -154,11 +194,21 @@ export default function AddRecruitment() {
                         onClick={toNext}
                     >下一步</Button>
                 }
+
                 {/*最后一步 保存或提交 ================*/}
                 {
                     currentStep === 2 && <span>
-                        <Button type="primary">仅保存</Button>
-                        <Button danger={true}>提交审核</Button>
+                        <Button
+                            type="primary"
+                            onClick={() => handleOnlySave("UNEXAMINE")}
+                        >
+                            仅保存
+                        </Button>
+                        <Button danger={true}
+                                onClick={() => handleOnlySave("EXAMINING")}
+                        >
+                            提交审核
+                        </Button>
                     </span>
                 }
             </div>
