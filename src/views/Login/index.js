@@ -168,7 +168,7 @@ export default function Login(props) {
                         <Input placeholder="请输入学号/职工号" id="userId" prefix={<UserOutlined/>}/>
                     </Form.Item>
                     <Form.Item name="password">
-                        <Input placeholder="请输入密码" id="password" prefix={<UnlockOutlined/>}/>
+                        <Input.Password placeholder="请输入密码" id="password" prefix={<UnlockOutlined/>}/>
                     </Form.Item>
                     <Form.Item style={{paddingLeft: '50%',}}>
                         <Button type={"primary"} htmlType={"submit"}>登录</Button>

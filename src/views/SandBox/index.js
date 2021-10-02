@@ -21,12 +21,12 @@ export default class SandBox extends Component {
                 <Layout>
                     {/* 头部导航栏 */}
                     <TopHeader />
-                    {/* 面包屑-标记当前位置 */}
-                    <Breadcrumb style={{ margin: '16px 19px' }}>
-                        <Breadcrumb.Item>HOME</Breadcrumb.Item>
-                        <Breadcrumb.Item>社团管理</Breadcrumb.Item>
-                        <Breadcrumb.Item>社团列表</Breadcrumb.Item>
-                    </Breadcrumb>
+                    {/* TODO 面包屑-标记当前位置 */}
+                    {/*<Breadcrumb style={{ margin: '16px 19px' }}>*/}
+                    {/*    <Breadcrumb.Item>HOME</Breadcrumb.Item>*/}
+                    {/*    <Breadcrumb.Item>社团管理</Breadcrumb.Item>*/}
+                    {/*    <Breadcrumb.Item>社团列表</Breadcrumb.Item>*/}
+                    {/*</Breadcrumb>*/}
                     {/* 前端路由 */}
                     <Content
                         className="site-layout-background"

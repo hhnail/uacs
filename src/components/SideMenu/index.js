@@ -9,7 +9,8 @@ import {
     BarsOutlined,
     CarryOutOutlined,
     TableOutlined,
-    AuditOutlined
+    AuditOutlined,
+    FormOutlined,
 } from '@ant-design/icons';
 
 import {withRouter} from 'react-router-dom'
@@ -28,6 +29,7 @@ const iconList = {
     "/manage/association": <ClusterOutlined/>,
     "/manage/association/list": <TableOutlined/>,
     "/manage/association/add": <UsergroupAddOutlined/>,
+    "/manage/association/addRecruitment": <FormOutlined/>,
     "/manage/permission": <CarryOutOutlined/>,
     "/manage/permission/roleList": <BarsOutlined/>,
     "/manage/permission/permissionList": <TableOutlined/>,
@@ -75,7 +77,7 @@ class SideMenu extends Component {
                 // console.log("==1 用户信息 ", userInfo)
                 this.setState({userInfo: userInfo})
                 // 根据userId获取菜单列表
-                if(userInfo){
+                if (userInfo) {
                     this.getMenuList(userInfo.userId)
                 }
             })
@@ -93,7 +95,7 @@ class SideMenu extends Component {
     getMenuList = (userId) => {
         axios.get(`/association/getPermissionListByUserId/${userId}`).then(res => {
             const {data} = res.data
-            // console.log("==102 SideMenu menuList", data);
+            console.log("==102 SideMenu menuList", data);
             this.setState({menuList: data})
         }).catch(err => {
             console.log("获取菜单出错！", err);
@@ -130,7 +132,7 @@ class SideMenu extends Component {
                     title={item.title}
                     icon={iconList[item.routePath]}
                     style={{
-                        backgroundColor:`rgba(232, 140, 20, 0.1)`,
+                        backgroundColor: `rgba(232, 140, 20, 0.1)`,
                     }}
                 >
                     {this.renderMenu(item.children)}{/* 递归 */}

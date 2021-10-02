@@ -111,6 +111,9 @@ export default class UserInfo extends Component {
 // <Switch/>
 // </Form.Item>
 
+
+    // TODO Slider 拖动展示个人能力（沟通能力、表达能力、合作能力、抗压能力。。。）
+
     onChange(value) {
         console.log(value);
     }
