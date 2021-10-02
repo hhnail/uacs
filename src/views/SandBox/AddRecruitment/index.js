@@ -14,7 +14,7 @@ import locale from 'antd/es/date-picker/locale/zh_CN';
 
 import moment from 'moment'
 
-
+import AssociationEditor from '../../../components/AssociationEditor'
 import style from './index.css'
 
 
@@ -65,9 +65,8 @@ export default function AddRecruitment() {
                 <Step title="保存/提交" description="仅保存或提交等待审核"/>
             </Steps>
             {/*内容组*/}
-            <div className={style.contentGroup} style={{
-                marginTop: '50px',
-            }}>
+            <div className={style.contentGroup} style={{marginTop: '50px',}}>
+                {/*step1 基本信息 =====================================*/}
                 <div style={currentStep === 0 ? {} : {display: 'none',}}>
                     <Form
                         name="basic"
@@ -116,12 +115,18 @@ export default function AddRecruitment() {
                     </Form>
                 </div>
 
+
+
+                {/* step2 社团纳新展示信息 =====================================*/}
                 <div style={currentStep === 1 ? {} : {display: 'none',}}>
-                    22222222222222
+                    <AssociationEditor/>
                     <br/>
                     <input type="text"/>
                 </div>
 
+
+
+                {/*step3 保存或提交审核 =====================================*/}
                 <div style={currentStep === 2 ? {} : {display: 'none',}}>
                     3333333333333333
                     <br/>
@@ -149,7 +154,7 @@ export default function AddRecruitment() {
                         onClick={toNext}
                     >下一步</Button>
                 }
-                {/*最后一步 保存或提交*/}
+                {/*最后一步 保存或提交 ================*/}
                 {
                     currentStep === 2 && <span>
                         <Button type="primary">仅保存</Button>

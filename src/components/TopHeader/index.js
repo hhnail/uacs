@@ -50,9 +50,14 @@ function TopHeader(props) {
             <Menu.Item key={1}>
                 <a>超级管理员</a>
             </Menu.Item>
-            <Menu.Item key={2} danger onClick={() => {
+            <Menu.Item key={2}>
+                <a onClick={()=>{
+                    props.history.replace("/user") // 重定向到用户界面
+                }}>切换角色</a>
+            </Menu.Item>
+            <Menu.Item key={3} danger onClick={() => {
                 localStorage.removeItem("token") // 去除浏览器中的token
-                props.history.replace("/login") // 重定向到login
+                props.history.replace("/login") // 重定向到登录界面
             }}>
                 退出系统<CloseOutlined/>
             </Menu.Item>

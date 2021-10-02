@@ -55,15 +55,63 @@ const options = [
 //     setFormSize(size);
 // };
 
+export default function UserInfo() {
 
-export default class UserInfo extends Component {
-    // 可以参考一下 用户信息的展示
+    const onChange = (value) => {
+        console.log(value);
+    }
+
+    const handleDateChange = (value) => {
+        console.log(value);
+    }
+    return (
+        <div>
+            <Descriptions title="" bordered={true} column={2}>
+                <Descriptions.Item label="姓名">
+                    <Input placeholder="请填写兴趣姓名"/>
+                    {/* <TextArea rows={1} /> */}
+                </Descriptions.Item>
+                <Descriptions.Item label="性别">
+                    <Input placeholder="请填写兴趣性别"/>
+                </Descriptions.Item>
+                <Descriptions.Item label="联系方式">
+                    <Input placeholder="请填写兴趣联系方式"/>
+                </Descriptions.Item>
+                <Descriptions.Item label="兴趣爱好" span={2}>
+                    <Input placeholder="请填写兴趣爱好"/>
+                </Descriptions.Item>
+                <Descriptions.Item label="学院/专业/班级">
+                    <Cascader
+                        defaultValue={['学院', '专业', '班级']}
+                        options={options}
+                        onChange={onChange}/>
+                </Descriptions.Item>
+                <Descriptions.Item label="生日">
+                    <DatePicker onChange={handleDateChange} bordered={false} placeholder="请选择生日"/>
+                </Descriptions.Item>
+                <Descriptions.Item label="自我评价" span={2}>
+                    <TextArea rows={4}/>
+                </Descriptions.Item>
+                <Descriptions.Item label="加入社团的期望" span={2}>
+                    <TextArea rows={4}/>
+                </Descriptions.Item>
+                <Descriptions.Item label="面试结果评价">
+                    <Input placeholder="请填写兴趣爱好"/>
+                </Descriptions.Item>
+                <Descriptions.Item label="纳新审核结果">
+                    <Badge status="processing" text="审核中"/>
+                </Descriptions.Item>
+            </Descriptions>
+        </div>
+    )
+}
+// 可以参考一下 用户信息的展示
 // <Form
 // labelCol={{span: 4,}}
 // wrapperCol={{span: 14,}}
 // onFinish={onFinish}
-    // size={formSize}
-    // onValuesChange={onFormLayoutChange}
+// size={formSize}
+// onValuesChange={onFormLayoutChange}
 // >
 // <Form.Item label="表单尺寸调整" name="size">
 // <Radio.Group>
@@ -110,61 +158,7 @@ export default class UserInfo extends Component {
 // <Form.Item label="隐藏个人信息" valuePropName="checked" name="isHidden">
 // <Switch/>
 // </Form.Item>
-
-
-    // TODO Slider 拖动展示个人能力（沟通能力、表达能力、合作能力、抗压能力。。。）
-
-    onChange(value) {
-        console.log(value);
-    }
-
-    dateChange(value) {
-        console.log(value);
-    }
-
-    render() {
-        return (
-            <div>
-                <Descriptions title="" bordered={true} column={2}>
-                    <Descriptions.Item label="姓名">
-                        <Input placeholder="请填写兴趣姓名"/>
-                        {/* <TextArea rows={1} /> */}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="性别">
-                        <Input placeholder="请填写兴趣性别"/>
-                    </Descriptions.Item>
-                    <Descriptions.Item label="联系方式">
-                        <Input placeholder="请填写兴趣联系方式"/>
-                    </Descriptions.Item>
-                    <Descriptions.Item label="兴趣爱好" span={2}>
-                        <Input placeholder="请填写兴趣爱好"/>
-                    </Descriptions.Item>
-                    <Descriptions.Item label="学院/专业/班级">
-                        <Cascader
-                            defaultValue={['学院', '专业', '班级']}
-                            options={options}
-                            onChange={this.onChange}/>
-                    </Descriptions.Item>
-                    <Descriptions.Item label="生日">
-                        <DatePicker onChange={this.dateChange} bordered={false} placeholder="请选择生日"/>
-                    </Descriptions.Item>
-                    <Descriptions.Item label="自我评价" span={2}>
-                        <TextArea rows={4}/>
-                    </Descriptions.Item>
-                    <Descriptions.Item label="加入社团的期望" span={2}>
-                        <TextArea rows={4}/>
-                    </Descriptions.Item>
-                    <Descriptions.Item label="面试结果评价">
-                        <Input placeholder="请填写兴趣爱好"/>
-                    </Descriptions.Item>
-                    <Descriptions.Item label="纳新审核结果">
-                        <Badge status="processing" text="审核中"/>
-                    </Descriptions.Item>
-                </Descriptions>
-            </div>
-        )
-    }
-}
+// TODO Slider 拖动展示个人能力（沟通能力、表达能力、合作能力、抗压能力。。。）
 
 
 

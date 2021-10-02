@@ -1,7 +1,10 @@
 import { React, Component } from 'react'
 import { HashRouter, Route, Switch } from 'react-router-dom'
+
+import User from '../components/User'
 import Login from '../views/Login'
 import SandBox from '../views/SandBox'
+import UserManage from '../components/UserManage'
 
 export default class IndexRouter extends Component {
     render() {
@@ -9,6 +12,8 @@ export default class IndexRouter extends Component {
             <HashRouter>
                 <Switch>
                     <Route path="/login" component={Login} />
+                    <Route path="/user" exact={true} component={User} />
+                    <Route path="/user/userManage" component={UserManage} />
                     {/* <Route path="/" component={AssociationSandBox} /> */}
                     <Route
                         path="/"
