@@ -1,10 +1,12 @@
-import {useState, useRef} from "react";
+import {useState, useRef, useEffect} from "react";
 import {
     Button, PageHeader, Steps, Form, Input, Checkbox,
-    InputNumber, Space, DatePicker, message, notification,
+    InputNumber, Space, DatePicker, message, notification, Select
 } from 'antd'
+
 import locale from 'antd/es/date-picker/locale/zh_CN';
 import axios from "axios";
+import qs from 'querystring'
 
 import moment from 'moment'
 
@@ -18,6 +20,8 @@ const {RangePicker} = DatePicker;
 
 const {TextArea} = Input
 
+const {Option} = Select;
+
 // 点击“仅保存“或”提交审核“的key和btn
 const key = `open${Date.now()}`;
 const btn = (
@@ -28,17 +32,41 @@ const btn = (
 
 export default function AddRecruitment(props) {
 
-    const [currentStep, setCurrentStep] = useState(1) // 撰写纳新展示信息 步骤 位置
+    // 展示
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"))
+    const [associationList, setAssociationList] = useState([])
 
-    const [value, setValue] = useState('30');// 社团纳新人数
-
+    // 交互逻辑
+    const [currentStep, setCurrentStep] = useState(0) // 撰写纳新展示信息 步骤 位置
     const baseInfoFormRef = useRef(null)
 
+    // step1 : baseInfo
+    const [newAssociation, setNewAssociation] = useState(0) // 纳新的社团组织
+    const [newNum, setNewNum] = useState(30);// 社团纳新人数
+    const [newStartTime, setNewStartTime] = useState("") //纳新开始时间
+    const [newEndTime, setNewEndTime] = useState("") //纳新结束时间
     const [baseInfoForm, setBaseInfoForm] = useState({})
-
+    // step2 : content for show
     const [content4Show, setContent4Show] = useState("")
 
-    const userInfo = JSON.parse(localStorage.getItem("userInfo"))
+
+    // 获取本用户管理的社团（才能撰写纳新信息/通知/展示）
+    useEffect(() => {
+        const data = {
+            userId: userInfo.userId,
+            roleIds: [2],
+        }
+        axios.post('/association/getAssociationByUserId',
+            qs.stringify(data))
+            .then(res => {
+                const associationList = res.data.data
+                setAssociationList(associationList)
+                // console.log(res)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }, [])
 
     const toPrevious = () => {
         setCurrentStep(currentStep - 1)
@@ -68,22 +96,37 @@ export default function AddRecruitment(props) {
     const onChange = (dates, dateStrings) => {
         console.log('From: ', dates[0], ', to: ', dates[1]);
         console.log('From: ', dateStrings[0], ', to: ', dateStrings[1]);
+        setNewStartTime(dateStrings[0])
+        setNewEndTime(dateStrings[1])
     }
 
-    const handleOnlySave = (state) => {
-
-        axios.post('', {
+    const handleCommit = (state) => {
+        const postData = {
             userId: userInfo.userId, // 申请人ID
             ...baseInfoForm, // 基本信息
-            ...content4Show, // 展示信息
+            newNum: newNum, // 纳新人数
+            content: content4Show, // 展示的信息
             state: "UNEXAMINE", // 默认初始状态为未审核
-            createTime: Date.now(), // 创建事件为现在
-            view: 0, // 浏览量，默认为0
-        }).then((res) => {
-            console.log(res)
-            // props.history.push('/')
+            startTime: newStartTime,
+            endTime: newEndTime,
+        }
+
+        axios({
+            url: '/association/addRecruitment',
+            method: 'post',
+            data: postData,
+            headers: { 'Content-Type': 'application/json;charset=UTF-8' }
+        }).then(res => {
+            console.log("==27 res", res);
+            // props.history.push('/') // TODO 提交后是否需要跳转页面？
+            notification.open({
+                message: state === 'UNEXAMINE' ? '保存成功' : '审核提交成功',
+                description: `您可以到 纳新信息列表 查看${state === 'UNEXAMINE' ? '保存' : '审核'}结果`,
+                btn,
+                key,
+            });
         }).catch(err => {
-            console.log(err)
+            console.log("==26 err", err);
             notification.open({
                 message: state === 'UNEXAMINE' ? '保存成功' : '审核提交成功',
                 description: `您可以到 纳新信息列表 查看${state === 'UNEXAMINE' ? '保存' : '审核'}结果`,
@@ -91,6 +134,32 @@ export default function AddRecruitment(props) {
                 key,
             });
         })
+
+
+    }
+
+    const handleOptionChange = (value) => {
+        console.log(`selected ${value}`);
+    }
+
+    const renderAssociationListToSelectOptions = () => {
+        let options = []
+        associationList.forEach(association => {
+            options.push(<Option
+                key={association.associationId}
+                value={association.associationId}>
+                {association.associationName}
+            </Option>)
+        })
+        return (
+            <Select
+                // defaultOpen={true} // 是否默认展开
+                defaultActiveFirstOption={true} // 首项高亮
+                style={{width: 240}}
+                onChange={handleOptionChange}>
+                {options}
+            </Select>
+        )
     }
 
     return (
@@ -125,21 +194,30 @@ export default function AddRecruitment(props) {
                         >
                             <Input type="text"/>
                         </Form.Item>
-                        <Form.Item label="纳新人数" name="num">
+                        {/* name相同的话，他们受控行为就相同 */}
+                        <Form.Item label="纳新社团" name="associationId">
+                            {renderAssociationListToSelectOptions()}
+                        </Form.Item>
+                        <Form.Item label="纳新人数">
                             <Space>
-                                <InputNumber min={1} max={30} value={value} onChange={setValue}/>
+                                <InputNumber
+                                    min={1}
+                                    max={30}
+                                    value={newNum}
+                                    onChange={setNewNum}/>
                                 <Button
                                     type="ghost"
                                     onClick={() => {
-                                        setValue(30);
+                                        setNewNum(30);
                                     }}
                                 >重置</Button>
                             </Space>
                         </Form.Item>
-                        <Form.Item label="纳新起始时间" name="timeRange">
+                        <Form.Item label="纳新起始时间">
                             <Space direction="vertical" size={12}>
                                 <RangePicker
-                                    locale={locale}
+                                    locale={locale} // 采用本地语言 即中文
+                                    // 不同选项快捷时间范围
                                     ranges={{
                                         '今天': [moment(), moment()],
                                         '本月': [moment().startOf('month'), moment().endOf('month')],
@@ -148,7 +226,7 @@ export default function AddRecruitment(props) {
                                 />
                             </Space>
                         </Form.Item>
-                        <Form.Item label="备注" name="message">
+                        <Form.Item label="备注" name="description">
                             <TextArea rows={4} placeholder={"若需求请填写备注信息"}/>
                         </Form.Item>
                     </Form>
@@ -200,12 +278,12 @@ export default function AddRecruitment(props) {
                     currentStep === 2 && <span>
                         <Button
                             type="primary"
-                            onClick={() => handleOnlySave("UNEXAMINE")}
+                            onClick={() => handleCommit("UNEXAMINE")}
                         >
                             仅保存
                         </Button>
                         <Button danger={true}
-                                onClick={() => handleOnlySave("EXAMINING")}
+                                onClick={() => handleCommit("EXAMINING")}
                         >
                             提交审核
                         </Button>

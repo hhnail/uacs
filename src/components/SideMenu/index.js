@@ -95,7 +95,7 @@ class SideMenu extends Component {
     getMenuList = (userId) => {
         axios.get(`/association/getPermissionListByUserId/${userId}`).then(res => {
             const {data} = res.data
-            console.log("==102 SideMenu menuList", data);
+            // console.log("==102 SideMenu menuList", data);
             this.setState({menuList: data})
         }).catch(err => {
             console.log("获取菜单出错！", err);
