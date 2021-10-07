@@ -30,6 +30,7 @@ const iconList = {
     "/manage/association/list": <TableOutlined/>,
     "/manage/association/add": <UsergroupAddOutlined/>,
     "/manage/association/addRecruitment": <FormOutlined/>,
+    "/manage/association/listRecruitment": <TableOutlined/>,
     "/manage/permission": <CarryOutOutlined/>,
     "/manage/permission/roleList": <BarsOutlined/>,
     "/manage/permission/permissionList": <TableOutlined/>,

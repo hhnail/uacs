@@ -1,59 +1,17 @@
 import React, {Component, useState} from 'react'
 import {
-    Descriptions,
-    Badge,
-    Cascader,
-    DatePicker,
-    Input, Form, Select, Switch, Radio
+    Descriptions, Badge, Cascader,
+    DatePicker, Input, Form, Select,
+    Switch, Radio, Slider
 } from 'antd';
+
+import {MAJORANDCLASS} from '../../constants/baseInfo'
 
 const {TextArea} = Input;
 
-//模拟数据
-const options = [
-    {
-        value: '工商管理学院',
-        label: '工商管理学院',
-        children: [
-            {
-                value: '电子商务',
-                label: '电子商务',
-                children: [
-                    {
-                        value: '商务1811',
-                        label: '商务1811',
-                    },
-                    {
-                        value: '商务1812',
-                        label: '商务1812',
-                    }
-                ],
-            },
-        ],
-    },
-    {
-        value: '计算机学院',
-        label: '计算机学院',
-        children: [
-            {
-                value: '软件工程',
-                label: '软件工程',
-                children: [
-                    {
-                        value: '软工1812',
-                        label: '软工1812',
-                    },
-                ],
-            },
-        ],
-    },
-];
-
-// const [formSize, setFormSize] = useState('default');
-//
-// const onFormLayoutChange = ({size}) => {
-//     setFormSize(size);
-// };
+// 这种层次接口让后端返回比较复杂。而且关系也不够直观。
+// 这里考虑用前端常量（但是这引发了一个问题，我怎么增删改查呢？）
+const options = MAJORANDCLASS
 
 export default function UserInfo() {
 
@@ -64,6 +22,7 @@ export default function UserInfo() {
     const handleDateChange = (value) => {
         console.log(value);
     }
+
     return (
         <div>
             <Descriptions title="" bordered={true} column={2}>
@@ -87,9 +46,13 @@ export default function UserInfo() {
                         onChange={onChange}/>
                 </Descriptions.Item>
                 <Descriptions.Item label="生日">
-                    <DatePicker onChange={handleDateChange} bordered={false} placeholder="请选择生日"/>
+                    <DatePicker onChange={handleDateChange} bordered={false} placeholder="请选择生日" local="local"/>
                 </Descriptions.Item>
                 <Descriptions.Item label="自我评价" span={2}>
+                    沟通能力：<Slider defaultValue={80} disabled={false}/>
+                    表达能力：<Slider defaultValue={80} disabled={false}/>
+                    合作能力：<Slider defaultValue={80} disabled={false}/>
+                    抗压能力：<Slider defaultValue={80} disabled={false}/>
                     <TextArea rows={4}/>
                 </Descriptions.Item>
                 <Descriptions.Item label="加入社团的期望" span={2}>
@@ -158,7 +121,6 @@ export default function UserInfo() {
 // <Form.Item label="隐藏个人信息" valuePropName="checked" name="isHidden">
 // <Switch/>
 // </Form.Item>
-// TODO Slider 拖动展示个人能力（沟通能力、表达能力、合作能力、抗压能力。。。）
 
 
 

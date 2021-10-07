@@ -106,7 +106,7 @@ export default function AddRecruitment(props) {
             ...baseInfoForm, // 基本信息
             newNum: newNum, // 纳新人数
             content: content4Show, // 展示的信息
-            state: "UNEXAMINE", // 默认初始状态为未审核
+            state: state, // 默认初始状态为未审核
             startTime: newStartTime,
             endTime: newEndTime,
         }

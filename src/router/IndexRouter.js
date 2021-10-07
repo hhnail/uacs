@@ -12,9 +12,10 @@ export default class IndexRouter extends Component {
             <HashRouter>
                 <Switch>
                     <Route path="/login" component={Login} />
+                    {/*使用者路由*/}
                     <Route path="/user" exact={true} component={User} />
                     <Route path="/user/userManage" component={UserManage} />
-                    {/* <Route path="/" component={AssociationSandBox} /> */}
+                    {/*管理员路由*/}
                     <Route
                         path="/"
                         render={() =>
