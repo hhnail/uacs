@@ -1,18 +1,9 @@
 import React, {useState} from 'react'
+import {useHistory} from 'react-router-dom'
 import {
-    Menu,
-    Layout,
-    Form,
-    Button,
-    Radio,
-    Select,
-    DatePicker,
-    InputNumber,
-    TreeSelect,
-    Switch,
-    Input,
-    Cascader,
-    message,
+    Menu, Layout, Form, Button, Radio, Select,
+    DatePicker, InputNumber, TreeSelect, Switch,
+    Input, Cascader, message,
 } from 'antd';
 
 import {
@@ -31,6 +22,8 @@ const {Header, Content, Footer} = Layout;
 
 export default function Login(props) {
 
+    const history = useHistory()
+
     const onFinish = (values) => {
         // console.log("==1 values", values)
         // console.log("==1 values", props)
@@ -45,8 +38,8 @@ export default function Login(props) {
             console.log(res)
             if (res.data.data) { // 如果data非空,说明验证成功
                 localStorage.setItem("token", res.data.data.accessToken) // 将token保存到浏览器中
-                localStorage.setItem("userInfo", JSON.stringify(res.data.data)) // 将token保存到浏览器中
-                props.history.push("/") // 跳转到主页面
+                localStorage.setItem("userInfo", JSON.stringify(res.data.data)) // 将userLoginInfo保存到浏览器中
+                history.push("/") // 跳转到主页面
                 return
             }
             message.error("用户名或密码输入错误！") // 验证失败，提示用户

@@ -20,7 +20,7 @@ export default class IndexRouter extends Component {
                         path="/"
                         render={() =>
                             // 用浏览器的cookie保存session token
-                            localStorage.getItem("token") ? <SandBox /> : <Login />
+                            localStorage.getItem("userInfo") ? <SandBox /> : <Login />
                             // localStorage.getItem("token") ? <SandBox /> : <SandBox />
                         } />
                 </Switch>
