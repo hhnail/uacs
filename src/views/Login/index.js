@@ -1,15 +1,8 @@
-import React, {useState} from 'react'
+import React, {useEffect} from 'react'
 import {useHistory} from 'react-router-dom'
-import {
-    Menu, Layout, Form, Button, Radio, Select,
-    DatePicker, InputNumber, TreeSelect, Switch,
-    Input, Cascader, message,
-} from 'antd';
+import {Button, Form, Input, Layout, message,} from 'antd';
 
-import {
-    UnlockOutlined,
-    UserOutlined,
-} from '@ant-design/icons';
+import {UnlockOutlined, UserOutlined,} from '@ant-design/icons';
 
 import axios from "axios";
 import qs from 'qs'
@@ -23,30 +16,35 @@ const {Header, Content, Footer} = Layout;
 export default function Login(props) {
 
     const history = useHistory()
+    let timer
+
+    useEffect(() => {
+        clearTimeout(timer)
+    }, [timer])
 
     const onFinish = (values) => {
-        // console.log("==1 values", values)
-        // console.log("==1 values", props)
         localStorage.removeItem("token") // 将原有的token移除
         localStorage.removeItem("userInfo") // 将原有的userInfo移除
-
-        // 验证后台数据
-        axios({
+        axios({// 验证后台数据
             url: "/user/login",
             method: 'post',
             data: qs.stringify(values),
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).then(res => {
-            console.log(res)
-            if (res.data.data) { // 如果data非空,说明验证成功
-                localStorage.setItem("token", res.data.data.accessToken) // 将token保存到浏览器中
-                localStorage.setItem("userInfo", JSON.stringify(res.data.data)) // 将userLoginInfo保存到浏览器中
-                history.push("/") // 跳转到主页面
-                return
+            const userInfo = res.data.data
+            if (!userInfo) {
+                message.error("用户名或密码输入错误！") // 验证失败，提示用户
             }
-            message.error("用户名或密码输入错误！") // 验证失败，提示用户
+            // 如果data非空,说明验证成功
+            localStorage.setItem("token", res.data.data.accessToken) // 将token保存到浏览器中
+            localStorage.setItem("userInfo", JSON.stringify(res.data.data)) // 将userLoginInfo保存到浏览器中
+            message.success("登录成功，跳转中...")
+            timer = setTimeout(() => {
+                history.push("/") // 跳转到主页面
+            }, 1500)
         }).catch(err => {
             console.log(err)
+            message.error("系统出现错误，请稍后重试！")
         })
     }
 
