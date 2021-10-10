@@ -12,6 +12,9 @@ import {useHistory} from "react-router-dom";
 
 const {Content} = Layout;
 
+
+let timer
+
 export default function SandBox() {
 
     const history = useHistory()
@@ -20,11 +23,16 @@ export default function SandBox() {
     useEffect(() => {
         if (!userInfo) {
             message.error("会话超时，请重新登录！")
-            setTimeout(() => {
+            timer = setTimeout(() => {
                 history.push("/login")
             }, 1500)
         }
     },[userInfo])
+
+    //清除定时器
+    useEffect(() => {
+        clearTimeout(timer)
+    }, [timer])
 
     return (
         <Layout>

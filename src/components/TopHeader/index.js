@@ -14,10 +14,12 @@ import qs from 'querystring'
 
 const {Header} = Layout;
 
+let timer
 
 function TopHeader(props) {
 
     const history = useHistory()
+
 
     const userInfo = JSON.parse(localStorage.getItem("userInfo"))
 
@@ -36,7 +38,7 @@ function TopHeader(props) {
                 const {data} = res.data
                 if (!data) {
                     message.error("会话超时，请重新登录！")
-                    setTimeout(() => {
+                    timer = setTimeout(() => {
                         history.push("/login")
                     }, 1500)
                 }
@@ -47,18 +49,20 @@ function TopHeader(props) {
             })
     }, [userInfo])
 
+    //清除定时器
+    useEffect(() => {
+        clearTimeout(timer)
+    }, [timer])
+
 
     const menu = ( // 顶部菜单结构
         <Menu>
-            <Menu.Item key={1}>
-                <a>超级管理员</a>
-            </Menu.Item>
-            <Menu.Item key={3} danger onClick={() => {
+            <Menu.Item key={0} danger onClick={() => {
                 localStorage.removeItem("token") // 去除浏览器中的token
                 localStorage.removeItem("userInfo") // 去除浏览器中的userInfo
                 message.success("注销成功！")
-                setTimeout(() => {
-                    props.history.replace("/login") // 重定向到登录界面
+                timer = setTimeout(() => {
+                    history.replace("/login") // 重定向到登录界面
                 }, 1000)
 
             }}>
