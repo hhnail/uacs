@@ -1,4 +1,8 @@
-import {Switch, Route, Redirect} from 'react-router-dom'
+import {useEffect} from "react";
+import {Redirect, Route, Switch} from 'react-router-dom'
+
+import 'nprogress/nprogress.css'
+import NProgress from 'nprogress'
 
 import Home from '../Home'
 import UserList from '../UserList'
@@ -9,9 +13,7 @@ import NoPermission from '../NoPermission'
 import AddRecruitment from '../AddRecruitment';
 import RecruitmentList from '../RecruitmentList'
 
-import 'nprogress/nprogress.css'
-import NProgress from 'nprogress'
-import {useEffect} from "react";
+
 import RecruitmentDetail from "../RecruitmentList/RecruitmentDetail";
 import ReviewAddAssociation from "../Review/ReviewAddAssociation";
 import ReviewJoinAssociation from "../Review/ReviewJoinAssociation";

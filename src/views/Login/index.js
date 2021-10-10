@@ -27,6 +27,8 @@ export default function Login(props) {
     const onFinish = (values) => {
         // console.log("==1 values", values)
         // console.log("==1 values", props)
+        localStorage.removeItem("token") // 将原有的token移除
+        localStorage.removeItem("userInfo") // 将原有的userInfo移除
 
         // 验证后台数据
         axios({

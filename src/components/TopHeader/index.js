@@ -1,50 +1,51 @@
 import React, {useEffect, useState} from 'react'
 import {
-    Menu,
-    Layout,
-    Dropdown,
-    Avatar,
-    Switch, Space
+    Avatar, Dropdown, Layout, Menu,
+    Space, Switch, message
 } from 'antd';
 import {
-    MenuFoldOutlined,
-    MenuUnfoldOutlined,
-    DownOutlined,
-    UserOutlined,
-    CloseOutlined,
-    UserSwitchOutlined
+    CloseOutlined, DownOutlined, MenuFoldOutlined,
+    MenuUnfoldOutlined, UserOutlined, UserSwitchOutlined
 } from '@ant-design/icons'
 
-import {withRouter} from 'react-router-dom'
+import {useHistory, withRouter} from 'react-router-dom'
 import axios from "axios";
 import qs from 'querystring'
 
 const {Header} = Layout;
 
+
 function TopHeader(props) {
 
+    const history = useHistory()
+
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"))
+
     const [collapsed, setCollapsed] = useState(false)
-    const [userInfo, setserInfo] = useState()
 
     // 通过token换取用户信息
     useEffect(() => {
-        const accessToken = localStorage.getItem("token")
 
         axios({
             url: "/user/getUserInfo",
             method: 'post',
-            data: qs.stringify({accessToken: accessToken}),
+            data: qs.stringify({accessToken: userInfo.accessToken}),
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         })
             .then(res => {
                 const {data} = res.data
-                // console.log("==51 userInfo", data);
-                setserInfo(data)
+                if (!data) {
+                    message.error("会话超时，请重新登录！")
+                    setTimeout(() => {
+                        history.push("/login")
+                    }, 1500)
+                }
             })
             .catch(err => {
                 console.log("==TopHeader 获取用户信息出错！", err);
+                message.error("系统出现错误，请稍后重试！")
             })
-    }, [])
+    }, [userInfo])
 
 
     const menu = ( // 顶部菜单结构
@@ -55,7 +56,11 @@ function TopHeader(props) {
             <Menu.Item key={3} danger onClick={() => {
                 localStorage.removeItem("token") // 去除浏览器中的token
                 localStorage.removeItem("userInfo") // 去除浏览器中的userInfo
-                props.history.replace("/login") // 重定向到登录界面
+                message.success("注销成功！")
+                setTimeout(() => {
+                    props.history.replace("/login") // 重定向到登录界面
+                }, 1000)
+
             }}>
                 退出系统<CloseOutlined/>
             </Menu.Item>
@@ -86,7 +91,9 @@ function TopHeader(props) {
                             props.history.replace("/user") // 重定向到用户界面
                         }}
                     />
-                    <div>您好 <span style={{color: 'orange'}}>{userInfo?.name}</span></div>
+                    {userInfo &&
+                    <div>您好 <span style={{color: 'orange'}}>{userInfo.name}</span></div>
+                    }
                     <Dropdown overlay={menu}>
                         <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
                             <Avatar size={28} icon={<UserOutlined/>}/>&nbsp;&nbsp;&nbsp;
