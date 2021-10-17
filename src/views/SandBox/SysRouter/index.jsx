@@ -4,13 +4,13 @@ import {Redirect, Route, Switch} from 'react-router-dom'
 import 'nprogress/nprogress.css'
 import NProgress from 'nprogress'
 
-import Home from '../Home'
-import UserList from '../UserList'
-import AssociationList from '../AssociationList'
-import RoleList from '../RoleList'
-import PermissionList from '../PermissionList'
-import NoPermission from '../NoPermission'
-import AddRecruitment from '../AddRecruitment';
+import Home from '../components/Home'
+import UserList from '../UserManage/UserList'
+import AssociationList from '../AssociationManage/AssociationList'
+import RoleList from '../PermissionManage/RoleList'
+import PermissionList from '../PermissionManage/PermissionList'
+import NoPermission from '../components/NoPermission'
+import AddRecruitment from '../RecruitmentManage/AddRecruitment';
 import RecruitmentList from '../RecruitmentList'
 
 
@@ -57,6 +57,7 @@ export default function SysRouter() {
             {/* =============== 审核管理 =======================*/}
             <Route path="/manage/review/addAssociation" component={ReviewAddAssociation}></Route>
             <Route path="/manage/review/joinAssociation" component={ReviewJoinAssociation}></Route>
+            <Route path="/manage/review/publishRecruitmentNotice" component={RecruitmentList}></Route>
 
 
             {/* =============== 杂项管理 =======================*/}

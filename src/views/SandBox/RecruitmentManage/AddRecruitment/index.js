@@ -10,7 +10,7 @@ import qs from 'querystring'
 
 import moment from 'moment'
 
-import AssociationEditor from '../../../components/AssociationEditor'
+import AssociationEditor from '../../../../components/AssociationEditor'
 import style from './index.css'
 
 

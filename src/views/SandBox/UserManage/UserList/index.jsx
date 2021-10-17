@@ -13,7 +13,7 @@ import {
 } from '@ant-design/icons';
 
 import axios from 'axios'
-import UserForm from '../../../components/user-manage/UserForm';
+import UserForm from '../../../../components/user-manage/UserForm';
 
 
 const {confirm} = Modal

@@ -1,40 +1,20 @@
-import React, {useState, useEffect, useRef} from 'react'
-import {
-    Table, Button, Modal, Switch,
-    notification, Space, Badge, Popover
-} from 'antd'
-import {
-    UnorderedListOutlined, DeleteOutlined,
-    ExclamationCircleOutlined, CarryOutOutlined
-} from '@ant-design/icons';
+import React, {useEffect, useState} from 'react'
+import {Badge, Button, Modal, Popover, Space, Table} from 'antd'
+import {DeleteOutlined, ExclamationCircleOutlined} from '@ant-design/icons';
 
 import axios from 'axios'
+import usePublish from "../../../hooks/usePublish";
 
 const {confirm} = Modal
 
 export default function RecruitmentList() {
 
-    const userInfo = JSON.parse(localStorage.getItem("userInfo"))
+    const dataSource = usePublish()
+    const [recruitmentList, setRecruitmentList] = useState()
 
-    const [recruitmentList, setRecruitmentList] = useState([])
-
-    // 获取用户列表
     useEffect(() => {
-        axios({
-            url: '/association/listRecruitment',
-            method: 'post',
-            data: {
-                userId: userInfo.userId,
-                state: ''
-            },
-            headers: {'Content-Type': 'application/json;charset=UTF-8'}
-        }).then(res => {
-            console.log("==27 resData", res.data.data);
-            setRecruitmentList(res.data.data)
-        }).catch(err => {
-            console.log("==26 err", err);
-        })
-    }, [])
+        setRecruitmentList(dataSource)
+    })
 
     // 表的行列结构
     const columns = [
@@ -49,7 +29,7 @@ export default function RecruitmentList() {
             title: '标题',
             dataIndex: 'title',
             render(title, item) {
-                return <Popover content={"点击查看详情"} >
+                return <Popover content={"点击查看详情"}>
                     <a href={`#/manage/association/listRecruitment/${item.recruitmentId}`}
                     >{title}</a>
                 </Popover>;
@@ -82,21 +62,8 @@ export default function RecruitmentList() {
         {
             title: '操作',
             render: (item) => {
+                // TODO 根据当前身份来判断是审核、查看等管理操作按钮
                 return <Space>
-                    {/*去掉查看按钮，用a标签链接替代*/}
-                    {/*<Button*/}
-                    {/*    size="small"*/}
-                    {/*    icon={<UnorderedListOutlined/>}*/}
-                    {/*>查看</Button>*/}
-
-                    {/*去掉提交按钮，用详情页面的操作按钮替代*/}
-                    {/*{*/}
-                    {/*    item.state === "UNEXAMINE" &&*/}
-                    {/*    <Button*/}
-                    {/*        size="small"*/}
-                    {/*        icon={<CarryOutOutlined />}*/}
-                    {/*    >提交</Button>*/}
-                    {/*}*/}
                     <Button
                         size="small"
                         danger
@@ -120,8 +87,8 @@ export default function RecruitmentList() {
                 const newList = recruitmentList.filter(data => data.id !== item.id)
                 setRecruitmentList(newList)
                 // 调用后端接口，同步后台数据库
-                console.log("同步后台数据。。。")
-                axios.delete(`/association/deleteUserById/${item.userId}`)
+                // TODO 同步后台数据(前台数据不可信？从后台更新后重新获取？)
+                axios.delete(`/association//${item.userId}`)
                     .then((res) => {
 
                     })
