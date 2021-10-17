@@ -1,8 +1,22 @@
 {
-  "posts": [
-    { "id": 1, "title": "json-server", "author": "typicode" }
-  ],
-  "comments": [
-    { "id": 1, "body": "some comment", "postId": 1 }
+  "profile": {
+    "name": "typicode"
+  },
+  "userTag": [
+    {
+      "key": 0,
+      "tagName": "足球",
+      "tagType": "运动类"
+    },
+    {
+      "key": 1,
+      "tagName": "篮球",
+      "tagType": "运动类"
+    },
+    {
+      "key": 2,
+      "tagName": "乒乓球",
+      "tagType": "运动类"
+    }
   ]
 }

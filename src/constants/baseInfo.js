@@ -73,4 +73,17 @@ const MAJORANDCLASS = [
     },
 ]
 
-export {MAJORANDCLASS}
+const USER_TAG_LIST = [
+    {
+        key: '0',
+        tagName: '足球',
+        tagType: '运动类',
+    },
+    {
+        key: '1',
+        tagName: '篮球',
+        tagType: '运动类',
+    },
+]
+
+export {MAJORANDCLASS,USER_TAG_LIST}
