@@ -17,6 +17,7 @@ import ReviewAddAssociation from "../Review/ReviewAddAssociation";
 import ReviewJoinAssociation from "../Review/ReviewJoinAssociation";
 import ClassList from "../Other/ClassList";
 import UserTagList from "../Other/UserTagList";
+import '../../../util/http'
 
 function SysRouter(props) {
     // TODO 动态创建路由 防止路由穿透
