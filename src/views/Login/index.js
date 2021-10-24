@@ -41,7 +41,7 @@ export default function Login(props) {
             message.success("登录成功，跳转中...")
             timer = setTimeout(() => {
                 history.push("/") // 跳转到主页面
-            }, 1500)
+            }, 500)
         }).catch(err => {
             console.log(err)
             message.error("系统出现错误，请稍后重试！")

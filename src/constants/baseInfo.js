@@ -1,5 +1,40 @@
 const MAJORANDCLASS = [
     {
+        value: '航海学院',
+        label: '航海学院',
+        children: [],
+    },
+    {
+        value: '轮机工程学院',
+        label: '轮机工程学院',
+        children: [],
+    },
+    {
+        value: '水产学院',
+        label: '水产学院',
+        children: [],
+    },
+    {
+        value: '海洋食品与生物工程学院',
+        label: '海洋食品与生物工程学院',
+        children: [],
+    },
+    {
+        value: '体育学院',
+        label: '体育学院',
+        children: [],
+    },
+    {
+        value: '财经学院',
+        label: '财经学院',
+        children: [],
+    },
+    {
+        value: '师范学院',
+        label: '师范学院',
+        children: [],
+    },
+    {
         value: '工商管理学院',
         label: '工商管理学院',
         children: [
@@ -56,8 +91,23 @@ const MAJORANDCLASS = [
         ],
     },
     {
-        value: '计算机学院',
-        label: '计算机学院',
+        value: '音乐学院',
+        label: '音乐学院',
+        children: [],
+    },
+    {
+        value: '美术与设计学院',
+        label: '美术与设计学院',
+        children: [],
+    },
+    {
+        value: '海洋信息工程学院',
+        label: '海洋信息工程学院',
+        children: [],
+    },
+    {
+        value: '计算机工程学院',
+        label: '计算机工程学院',
         children: [
             {
                 value: '软件工程',
@@ -86,4 +136,93 @@ const USER_TAG_LIST = [
     },
 ]
 
-export {MAJORANDCLASS,USER_TAG_LIST}
+const MAJORANDCLASS4Table = [
+    {
+        key: 1,
+        title: '航海学院',
+        value: '航海学院',
+        url: 'https://nav-jmu-edu-cn.webvpn.jmu.edu.cn',
+        children: []
+    },
+    {
+        key: 2,
+        title: '轮机工程学院',
+        value: '轮机工程学院',
+        url: 'https://mei-jmu-edu-cn.webvpn.jmu.edu.cn',
+        children: []
+    },
+    {
+        key: 3,
+        title: '水产学院',
+        value: '水产学院',
+        url: 'https://fishery-jmu-edu-cn.webvpn.jmu.edu.cn',
+        children: []
+    },
+    {
+        key: 4,
+        title: '海洋食品与生物工程学院',
+        value: '海洋食品与生物工程学院',
+        url: 'https://bec-jmu-edu-cn.webvpn.jmu.edu.cn',
+        children: []
+    },
+    {
+        key: 5,
+        title: '体育学院',
+        value: '体育学院',
+        url: 'https://phys-jmu-edu-cn.webvpn.jmu.edu.cn',
+        children: []
+    },
+    {
+        key: 6,
+        title: '财经学院',
+        value: '财经学院',
+        url: 'https://cjc-jmu-edu-cn.webvpn.jmu.edu.cn',
+        children: []
+    },
+    {
+        key: 7,
+        title: '师范学院',
+        value: '师范学院',
+        url: 'https://teacher-jmu-edu-cn.webvpn.jmu.edu.cn',
+        children: []
+    },
+    {
+        key: 8,
+        title: '工商管理学院',
+        value: '工商管理学院',
+        url: 'https://ms-jmu-edu-cn.webvpn.jmu.edu.cn',
+        children: []
+    },
+    {
+        key: 9,
+        title: '音乐学院',
+        value: '音乐学院',
+        url: 'https://com-jmu-edu-cn.webvpn.jmu.edu.cn',
+        children: []
+    },
+    {
+        key: 10,
+        title: '美术与设计学院',
+        value: '美术与设计学院',
+        url: 'https://arts-jmu-edu-cn.webvpn.jmu.edu.cn',
+        children: []
+    },
+    {
+        key: 11,
+        title: '海洋信息工程学院',
+        value: '海洋信息工程学院',
+        url: 'https://ie-jmu-edu-cn.webvpn.jmu.edu.cn',
+        children: []
+    },
+]
+// 计算机工程学院	https://cec-jmu-edu-cn.webvpn.jmu.edu.cn
+// 海洋装备与机械工程学院	http://mee.jmu.edu.cn
+// 理学院	https://sci-jmu-edu-cn.webvpn.jmu.edu.cn
+// 外国语学院	https://sfl-jmu-edu-cn.webvpn.jmu.edu.cn
+// 海洋文化与法律学院	https://chin-jmu-edu-cn.webvpn.jmu.edu.cn
+// 港口与海岸工程学院	http://heec.jmu.edu.cn
+// 马克思主义学院	https://szb-jmu-edu-cn.webvpn.jmu.edu.cn
+// 继续教育学院（船员培训中心）	https://ae-jmu-edu-cn.webvpn.jmu.edu.cn
+// 海外教育学院	https://oec-jmu-edu-cn.webvpn.jmu.edu.cn
+// 诚毅学院	https://chengyi.webvpn.jmu.edu.cn
+export {MAJORANDCLASS, USER_TAG_LIST, MAJORANDCLASS4Table}

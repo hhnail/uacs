@@ -19,6 +19,21 @@ const RECRUITMENT_STATE_MAP = new Map([
     ['OVER', '结束'],
 ]);
 
+const RECRUITMENT_STATE = {
+    UNEXAMINE: {
+        name: '未审核',
+        value: 'UNEXAMINE',
+    },
+    EXAMINING: {
+        name: '审核中',
+        value: 'EXAMINING',
+    },
+    EXAMINE_PASS: {
+        name: '审核通过',
+        value: 'EXAMINE_PASS',
+    },
+}
+
 // 纳新通知 发布状态map。获取方式：RECRUITMENT_PUBLISH_STATE_MAP.get(key)
 const RECRUITMENT_PUBLISH_STATE_MAP = new Map([
     ['UNPUBLISH', '未发布'],
@@ -45,5 +60,6 @@ const RECRUITMENT_PUBLISH_STATE_LIST = {
 export {
     RECRUITMENT_STATE_MAP,
     RECRUITMENT_PUBLISH_STATE_MAP,
-    RECRUITMENT_PUBLISH_STATE_LIST
+    RECRUITMENT_PUBLISH_STATE_LIST,
+    RECRUITMENT_STATE
 }

@@ -1,16 +1,16 @@
-import React, {Component, useEffect} from 'react'
+import React, {Component} from 'react'
 import {Layout, Menu} from 'antd';
 import {
     AppleFilled,
-    UsergroupAddOutlined,
-    HomeTwoTone,
-    TeamOutlined,
-    ClusterOutlined,
+    AuditOutlined,
     BarsOutlined,
     CarryOutOutlined,
-    TableOutlined,
-    AuditOutlined,
+    ClusterOutlined,
     FormOutlined,
+    HomeTwoTone,
+    TableOutlined,
+    TeamOutlined,
+    UsergroupAddOutlined,
 } from '@ant-design/icons';
 
 import {withRouter} from 'react-router-dom'
@@ -19,6 +19,7 @@ import axios from 'axios'
 
 import './index.css'
 import qs from "querystring";
+import {connect} from "react-redux";
 
 const {SubMenu} = Menu;
 const {Sider} = Layout;
@@ -85,10 +86,7 @@ class SideMenu extends Component {
             .catch(err => {
                 console.log("==SideMenu 获取用户信息出错！", err)
                 localStorage.removeItem("token")
-                // TODO [bug] 描述：token过期后，虽然刷新后会重新登录，但是登不上去。props为空
-
                 this.props.history.replace("/")
-                // TODO 最好token过期后，给个提示
             })
     }
 
@@ -133,7 +131,7 @@ class SideMenu extends Component {
                     title={item.title}
                     icon={iconList[item.routePath]}
                     style={{
-                        backgroundColor: `rgba(232, 140, 20, 0.1)`,
+                        backgroundColor: `rgba(232, 140, 20, 0.05)`,
                     }}
                 >
                     {this.renderMenu(item.children)}{/* 递归 */}
@@ -141,7 +139,8 @@ class SideMenu extends Component {
             }
             // 当前item为叶子菜单
             return this.checkPageElement(item) && item.grade === 2 &&
-                <Menu.Item key={item.routePath} style={{height: "30px",}}
+                <Menu.Item key={item.routePath}
+                    // style={{height: "30px",}}
                            onClick={() => {
                                this.props.history.push(item.routePath)
                            }}
@@ -153,9 +152,14 @@ class SideMenu extends Component {
 
     render() {
         return (
-            <Sider style={{backgroundColor: "orange"}} width={200} collapsed={false}>
+            <Sider
+                style={{backgroundColor: "orange"}}
+                width={200}
+                // 侧边菜单是否折叠
+                collapsed={this.props.isCollapsed}
+            >
                 <div style={{display: "flex", height: "100%", "flexDirection": "column"}}>
-                    <div className="logo"><AppleFilled/> 橘集 <AppleFilled/>
+                    <div className='logo'><AppleFilled/> 橘集
                         <br/>高校社团管理系统
                     </div>
                     <div style={{flex: 1, "overflow": "auto"}}>
@@ -172,4 +176,10 @@ class SideMenu extends Component {
     }
 }
 
-export default withRouter(SideMenu)
+const mapState2Props = ({CollapseReducer: {isCollapsed}}) => {
+    return {
+        isCollapsed
+    }
+}
+
+export default connect(mapState2Props)(withRouter(SideMenu))

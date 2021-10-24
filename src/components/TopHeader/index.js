@@ -11,19 +11,16 @@ import {
 import {useHistory, withRouter} from 'react-router-dom'
 import axios from "axios";
 import qs from 'querystring'
+import {connect} from "react-redux";
+import {CollapseReducer} from "../../redux/reducers/CollapseReducer";
 
 const {Header} = Layout;
-
-let timer
 
 function TopHeader(props) {
 
     const history = useHistory()
 
-
     const userInfo = JSON.parse(localStorage.getItem("userInfo"))
-
-    const [collapsed, setCollapsed] = useState(false)
 
     // 通过token换取用户信息
     useEffect(() => {
@@ -38,7 +35,7 @@ function TopHeader(props) {
                 const {data} = res.data
                 if (!data) {
                     message.error("会话超时，请重新登录！")
-                    timer = setTimeout(() => {
+                    setTimeout(() => {
                         history.push("/login")
                     }, 1500)
                 }
@@ -49,11 +46,6 @@ function TopHeader(props) {
             })
     }, [userInfo])
 
-    //清除定时器
-    useEffect(() => {
-        clearTimeout(timer)
-    }, [timer])
-
 
     const menu = ( // 顶部菜单结构
         <Menu>
@@ -61,9 +53,9 @@ function TopHeader(props) {
                 localStorage.removeItem("token") // 去除浏览器中的token
                 localStorage.removeItem("userInfo") // 去除浏览器中的userInfo
                 message.success("注销成功！")
-                timer = setTimeout(() => {
+                setTimeout(() => {
                     history.replace("/login") // 重定向到登录界面
-                }, 1000)
+                }, 500)
 
             }}>
                 退出系统<CloseOutlined/>
@@ -73,17 +65,15 @@ function TopHeader(props) {
 
 
     const changeFoldState = () => {
-        setCollapsed(!collapsed)
+        props.changeCollapsed()
     }
 
 
     return (
         <Header className="site-layout-background" style={{background: "white", padding: "0px 12px"}}>
-            {collapsed ?
-                <MenuFoldOutlined onClick={changeFoldState}/>
-                : <MenuUnfoldOutlined onClick={changeFoldState}/>}
-            &nbsp;&nbsp;&nbsp;
-            首页
+            {props.isCollapsed ?
+                <MenuUnfoldOutlined onClick={changeFoldState}/>
+                : <MenuFoldOutlined onClick={changeFoldState}/>}
             <div style={{float: "right"}}>
                 <Space size={"middle"}>
                     <UserSwitchOutlined/>
@@ -111,5 +101,20 @@ function TopHeader(props) {
     )
 }
 
-export default withRouter(TopHeader)
+const mapState2Props = ({CollapseReducer: {isCollapsed}}) => {
+    return {
+        isCollapsed
+    }
+}
+
+const mapDispatch2Props = {
+    changeCollapsed(){
+        return {
+            type:"change_collapsed",
+            // payload:
+        }
+    }
+}
+
+export default connect(mapState2Props,mapDispatch2Props)(withRouter(TopHeader))
 

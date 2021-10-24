@@ -1,22 +1,52 @@
 import React, {useEffect, useState} from 'react'
-import {Badge, Button, Modal, Popover, Space, Table} from 'antd'
-import {DeleteOutlined, ExclamationCircleOutlined} from '@ant-design/icons';
-
-import axios from 'axios'
+import {Badge, Button, Modal, Popover, Space, Table, Tooltip} from 'antd'
+import {
+    CloseOutlined, DeleteOutlined, ExclamationCircleOutlined,
+    RollbackOutlined, CheckOutlined
+} from '@ant-design/icons';
 import usePublish from "../../../hooks/usePublish";
+import {ROLE_TYPE} from "../../../constants/type";
 
 const {confirm} = Modal
 
 export default function RecruitmentList() {
 
-    const dataSource = usePublish()
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"))
+    const {dataSource, handleRollback, handleDelete, handlePass, handleRefuse} = usePublish()
     const [recruitmentList, setRecruitmentList] = useState()
 
     useEffect(() => {
         setRecruitmentList(dataSource)
     })
 
-    // 表的行列结构
+    const renderOptions = (item) => {
+        let isSuperAdmin = false
+        const hasRoleList = userInfo.roleList
+        hasRoleList.map(role => {
+            if (role.roleName === ROLE_TYPE.SUPER_ADMIN.name) {
+                isSuperAdmin = true
+                return
+            }
+        })
+        return <Space>
+            {!isSuperAdmin &&
+            <Button size="small" danger icon={<RollbackOutlined/>}
+                    onClick={() => handleRollback(item.recruitmentId)}>撤销</Button>}
+
+            {!isSuperAdmin &&
+            <Button size="small" danger icon={<DeleteOutlined/>}
+                    onClick={() => handleDelete(item.recruitmentId)}>删除</Button>}
+
+            {isSuperAdmin &&
+            <Button size="small" icon={<CheckOutlined/>}
+                    onClick={() => handlePass(item.recruitmentId)}>通过</Button>}
+
+            {isSuperAdmin &&
+            <Button size="small" danger icon={<CloseOutlined/>}
+                    onClick={() => handleRefuse(item.recruitmentId)}>拒绝</Button>}
+        </Space>
+    }
+
     const columns = [
         {
             title: '纳新通知ID',
@@ -29,10 +59,10 @@ export default function RecruitmentList() {
             title: '标题',
             dataIndex: 'title',
             render(title, item) {
-                return <Popover content={"点击查看详情"}>
+                return <Tooltip title="点击查看详情">
                     <a href={`#/manage/association/listRecruitment/${item.recruitmentId}`}
                     >{title}</a>
-                </Popover>;
+                </Tooltip>;
             }
         },
         {
@@ -61,23 +91,13 @@ export default function RecruitmentList() {
         },
         {
             title: '操作',
-            render: (item) => {
-                // TODO 根据当前身份来判断是审核、查看等管理操作按钮
-                return <Space>
-                    <Button
-                        size="small"
-                        danger
-                        icon={<DeleteOutlined/>}
-                        onClick={() => confirmDelete(item)}
-                    >删除</Button>
-                </Space>
-            }
+            render: (item) => renderOptions(item)
         },
     ]
 
     // 删除确认
     const confirmDelete = (item) => {
-        // console.log("delete item", item)
+        console.log("delete item", item)
         confirm({
             title: '您确认要删除吗？',
             icon: <ExclamationCircleOutlined/>,
@@ -88,13 +108,13 @@ export default function RecruitmentList() {
                 setRecruitmentList(newList)
                 // 调用后端接口，同步后台数据库
                 // TODO 同步后台数据(前台数据不可信？从后台更新后重新获取？)
-                axios.delete(`/association//${item.userId}`)
-                    .then((res) => {
-
-                    })
-                    .catch((err) => {
-
-                    })
+                // axios.delete(`/association//${item.userId}`)
+                //     .then((res) => {
+                //
+                //     })
+                //     .catch((err) => {
+                //
+                //     })
             },
             onCancel() {
 

@@ -1,20 +1,15 @@
 import './App.css';
-// import {useEffect} from 'react'
-// import axios from 'axios'
+import {Provider} from "react-redux";
 import IndexRouter from './router/IndexRouter'
-import { Divider } from 'rc-menu';
+import store from './redux/store'
 
 function App() {
 
-  // useEffect(() => {
-  //   axios.get("/association/getAllAssociationList").then((res)=>{
-  //     console.log(res.data);
-  //   })
-  // }, [])
-
-  return (
-      <IndexRouter />
-  );
+    return (
+        <Provider store={store}>
+            <IndexRouter/>
+        </Provider>
+    );
 }
 
 export default App;

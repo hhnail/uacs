@@ -4,12 +4,12 @@ import {Redirect, Route, Switch} from 'react-router-dom'
 import 'nprogress/nprogress.css'
 import NProgress from 'nprogress'
 
-import Home from '../components/Home'
+import Home from '../../Home'
 import UserList from '../UserManage/UserList'
 import AssociationList from '../AssociationManage/AssociationList'
 import RoleList from '../PermissionManage/RoleList'
 import PermissionList from '../PermissionManage/PermissionList'
-import NoPermission from '../components/NoPermission'
+import NoPermission from '../../NoPermission'
 import AddRecruitment from '../RecruitmentManage/AddRecruitment';
 import RecruitmentList from '../RecruitmentList'
 
