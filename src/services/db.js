@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export function getAllAssociationList() {
-    return axios.get('/association/getAllAssociationList1')
+    return axios.get('/association/getAllAssociationList')
 }
 
 export function getRoleList() {

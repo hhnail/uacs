@@ -1,5 +1,5 @@
 import axios from "axios";
-import store from '../redux/store'
+import {store} from '../redux/store'
 import {REDUXSTATE} from "../constants/redux";
 import {message} from "antd";
 // TODO 异步请求的loading效果
@@ -14,8 +14,8 @@ axios.interceptors.request.use(function (config) {
     })
     return config;
 }, function (error) {
-    console.log('系统异常！', error)
-    message.error('系统出现异常，请稍后重试！')
+    // console.log('系统异常！', error)
+    // message.error('系统出现异常，请稍后重试！')
     return Promise.reject(error);
 });
 
