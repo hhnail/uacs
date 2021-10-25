@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {Button, Table} from 'antd';
 import axios from "axios";
+import {getAllAssociationList} from "../../../../services/db";
 
 
 const columns = [
@@ -43,11 +44,10 @@ export default function AssociationList(props) {
     const [dataSource, setDataSource] = useState([])
 
     useEffect(() => {
-        axios.get('/association/getAllAssociationList')
-            .then(res => {
-                console.log("社团列表：", res.data.data)
-                setDataSource(res.data.data)
-            })
+        getAllAssociationList().then(res => {
+            console.log("社团列表：", res.data.data)
+            setDataSource(res.data.data)
+        })
     }, [])
 
     return (

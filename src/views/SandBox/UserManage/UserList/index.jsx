@@ -14,6 +14,7 @@ import {
 
 import axios from 'axios'
 import UserForm from '../../../../components/user-manage/UserForm';
+import {addUser, getAllAssociationList, getAllUsers, getRoleList, getUserById} from "../../../../services/db";
 
 
 const {confirm} = Modal
@@ -28,43 +29,26 @@ export default function UserList() {
 
     const addFormRef = useRef(null)
 
-    // 获取社团列表
+    // 获取全部社团列表（用于用户选择社团加入）
     useEffect(() => {
-        axios.get("/association/getAllAssociationList")
-            .then(res => {
-                const {data} = res.data
-                // console.log("==52 roleList", data);
-                setAssciationList(data)
-            })
-            .catch(err => {
-                console.log("获取社团列表出错！", err);
-            })
+        getAllAssociationList().then(res => {
+            setAssciationList(res.data.data)
+        })
     }, [])
 
     // 获取角色列表
     useEffect(() => {
-        axios.get("/association/getRoleList")
-            .then(res => {
-                const {data} = res.data
-                // console.log("==52 roleList", data);
-                setRoleList(data)
-            })
-            .catch(err => {
-                console.log("获取角色列表出错！", err);
-            })
+        getRoleList().then(res => {
+            setRoleList(res.data.data)
+        })
     }, [])
 
     // 获取用户列表
     useEffect(() => {
-        axios.get("/association/getAllUsers")
-            .then(res => {
-                const {data} = res.data
-                // console.log("==51 userList", data);
-                setDataSource(data)
-            })
-            .catch(err => {
-                console.log("获取用户列表出错！", err);
-            })
+        getAllUsers().then(res => {
+            const {data} = res.data
+            setDataSource(data)
+        })
     }, [])
 
     // 表的行列结构
@@ -91,12 +75,12 @@ export default function UserList() {
                     }
                 })
             ],
-            onFilter:(value,item)=>{
+            onFilter: (value, item) => {
                 // console.log("onFilter item",item)
                 let exist = false
-                item.roleList.map(role=>{
+                item.roleList.map(role => {
                     // console.log("onFilter 中的 role",role)
-                    if(role.roleName === value){
+                    if (role.roleName === value) {
                         exist = true
                     }
                 })
@@ -205,24 +189,14 @@ export default function UserList() {
             addFormRef.current.resetFields()
 
             // 同步后端数据库
-            axios.post(`/association/addUser`, userObj).then((res) => {
-                // console.log("==10 addUser res", res)
-                if (res.data.data) { //如果失败了，data是null（失败原因可能是：学号已经存在，数据库插入失败）
+            addUser(userObj).then((res) => {
+                if (res.data.data) {//如果失败了，data是null（失败原因可能是：学号已经存在，数据库插入失败）
                     // 同步前端  根据当前user_id获取user信息
-                    axios.get(`/association/getUserById/${userObj.userId}`).then(res => {
-                        // console.log("==11 getUserById res", res)
-                        // console.log("==11 getUserById res.data.data", res.data.data)
+                    getUserById(userObj.userId).then(res => {
                         setDataSource([...dataSource, res.data.data])
-                    }).catch(err => { // catch 获取用户信息失败
-                        console.log("==err3 getUserById err", err)
                     })
                 }
-            }).catch((err) => { // catch 同步后端数据失败
-                console.log("==err1 addUser err", err)
             })
-        }).catch(err => { // catch 表单验证失败
-            // setIsAddModalVisible(false)
-            console.log("==err2 ", err);
         })
     }
 
@@ -230,7 +204,7 @@ export default function UserList() {
         <div>
             <div style={{float: "right"}}>
                 <Button type="primary" // shape="circle"
-                    onClick={showAddModal}
+                        onClick={showAddModal}
                 >
                     新增成员
                 </Button>

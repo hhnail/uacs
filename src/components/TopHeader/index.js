@@ -13,6 +13,7 @@ import axios from "axios";
 import qs from 'querystring'
 import {connect} from "react-redux";
 import {CollapseReducer} from "../../redux/reducers/CollapseReducer";
+import {REDUXSTATE} from "../../constants/redux";
 
 const {Header} = Layout;
 
@@ -64,6 +65,7 @@ function TopHeader(props) {
     );
 
 
+    // TODO 为什么改变折叠状态，也会发请求？？？？？？
     const changeFoldState = () => {
         props.changeCollapsed()
     }
@@ -110,8 +112,7 @@ const mapState2Props = ({CollapseReducer: {isCollapsed}}) => {
 const mapDispatch2Props = {
     changeCollapsed(){
         return {
-            type:"change_collapsed",
-            // payload:
+            type:REDUXSTATE.CHANGE_COLLAPSED.type,
         }
     }
 }

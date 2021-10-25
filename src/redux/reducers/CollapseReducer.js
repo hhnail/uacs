@@ -1,9 +1,11 @@
+import {REDUXSTATE} from "../../constants/redux";
+
 export const CollapseReducer = (preState = {
     isCollapsed: false
 }, action) => {
     let {type} = action
     switch (type) {
-        case "change_collapsed":
+        case REDUXSTATE.CHANGE_COLLAPSED.type:
             let newState = {...preState}
             newState.isCollapsed = !newState.isCollapsed
             console.log(newState.isCollapsed ? '折叠' : '展开')

@@ -1,9 +1,11 @@
+import {REDUXSTATE} from "../../constants/redux";
+
 export const LoadingReducer = (preState = {
     isLoading: false
 }, action) => {
     let {type, payload} = action
     switch (type) {
-        case "change_isLoading":
+        case REDUXSTATE.CHANGE_ISLOADING.type:
             let newState = {...preState}
             newState.isLoading = payload
             return newState
