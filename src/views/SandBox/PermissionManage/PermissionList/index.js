@@ -1,14 +1,11 @@
-import React, { Component } from 'react'
-import { Table, Tag, Button, Modal, Popover, Switch } from 'antd'
-import {
-    EditOutlined,
-    DeleteOutlined,
-    ExclamationCircleOutlined
-} from '@ant-design/icons';
+import React, {Component} from 'react'
+import {Button, Modal, Popover, Switch, Table, Tag} from 'antd'
+import {DeleteOutlined, EditOutlined, ExclamationCircleOutlined} from '@ant-design/icons';
 import axios from 'axios'
+import {getPermissionList, updatePermissionById} from "../../../../services/db";
 
 
-const { confirm } = Modal
+const {confirm} = Modal
 
 export default class PermissonList extends Component {
 
@@ -43,7 +40,8 @@ export default class PermissonList extends Component {
                             style={{}}
                             content={
                                 <div>
-                                    <Switch checked={item.type === "MENU_ELEMENT"} onClick={() => this.changeMenuState(item)}></Switch>
+                                    <Switch checked={item.type === "MENU_ELEMENT"}
+                                            onClick={() => this.changeMenuState(item)}></Switch>
                                 </div>}
                             title="是否在左侧菜单栏展示"
                             trigger={
@@ -55,19 +53,19 @@ export default class PermissonList extends Component {
                             {/* {item.type === "MENU_ELEMENT" &&} */}
                             <Button
                                 shape={"circle"}
-                                icon={<EditOutlined />}
-                            // style={item.type === "MENU_ELEMENT" ? {
-                            //     border: "1px solid rgb(165, 99, 13)",
-                            //     color: "rgb(165, 99, 13)"
-                            // } : { border: "1px" }}
-                            // disabled={item.type === "PAGE_ELEMENT"}
+                                icon={<EditOutlined/>}
+                                // style={item.type === "MENU_ELEMENT" ? {
+                                //     border: "1px solid rgb(165, 99, 13)",
+                                //     color: "rgb(165, 99, 13)"
+                                // } : { border: "1px" }}
+                                // disabled={item.type === "PAGE_ELEMENT"}
                             >
                             </Button>
                         </Popover>
                         &nbsp;&nbsp;&nbsp;
                         <Button
                             shape={"circle"}
-                            icon={<DeleteOutlined />}
+                            icon={<DeleteOutlined/>}
                             danger
                             onClick={() => this.confirmDelete(item)}
                         >
@@ -82,21 +80,17 @@ export default class PermissonList extends Component {
     confirmDelete = (item) => {
         // const { dataSource } = this.state
         // console.log("==11 dataSource",this.state.dataSource);
-        const { dataSource } = this.state
+        const {dataSource} = this.state
         const thisPoint = this
         confirm({
             title: '您确认要删除吗？',
-            icon: <ExclamationCircleOutlined />,
+            icon: <ExclamationCircleOutlined/>,
             onOk() {
-                // console.log("==10 item", item);
                 // 同步页面
                 let ds = []
-                // let ds = Array.from(dataSource)
                 if (item.grade === 1) {
-                    // console.log("==11 ", ds);
                     ds = dataSource.filter(data => data.key !== item.key)
                 } else if (item.grade === 2) {
-                    // console.log("==12 ", ds);
                     dataSource.map((firstPermission) => {
                         if (firstPermission.children !== "") {
                             firstPermission.children = firstPermission.children.filter((child) => child.key !== item.key)
@@ -111,7 +105,7 @@ export default class PermissonList extends Component {
 
                     })
                 }
-                thisPoint.setState({ dataSource: ds })
+                thisPoint.setState({dataSource: ds})
                 // 调用后端接口，同步后台数据库
                 axios.get(`/association/deletePermissionById/${item.key}`)
             },
@@ -131,33 +125,18 @@ export default class PermissonList extends Component {
         }
         this.setState([...this.state.dataSource])
 
-        // 同步后端
-        axios({
-            url: "/association/updatePermissionById",
-            method: 'post',
-            data: {
-                permissionId: item.key,
-                type: item.type
-            },
-            headers: { 'Content-Type': 'application/json;charset=UTF-8' }
-        }).then(res => {
-            console.log("==27 res", res);
-        }).catch(err => {
-            console.log("==26 err", err);
-        })
-
+        const data = {
+            permissionId: item.key,
+            type: item.type
+        }
+        updatePermissionById(data)// 同步后端
     }
 
 
     componentDidMount() {
         // 获取菜单信息
-        axios.get("/association/getPermissionList").then(res => {
-            const { data } = res.data // res.data还只是responseBody
-            // 用map
-            // data.map((item) => {
-            //     return item.children = (item.children.length === 0 ? '' : item.children)
-            // })
-            // 用foreach
+        getPermissionList().then(res => {
+            const {data} = res.data // res.data还只是responseBody
             data.forEach((item) => {
                 if (item.children.length === 0) {
                     item.children = ""
@@ -169,11 +148,7 @@ export default class PermissonList extends Component {
                     })
                 }
             })
-            // console.log("==1 ", data);
-            this.setState({ dataSource: data })
-            // console.log("==2 ", this.state.dataSource);
-        }).catch(err => {
-            console.log("获取菜单（权限）列表出错！", err);
+            this.setState({dataSource: data})
         })
     }
 

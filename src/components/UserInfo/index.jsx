@@ -9,8 +9,6 @@ import {MAJORANDCLASS} from '../../constants/baseInfo'
 
 const {TextArea} = Input;
 
-// 这种层次接口让后端返回比较复杂。而且关系也不够直观。
-// 这里考虑用前端常量（但是这引发了一个问题，我怎么增删改查呢？）
 const options = MAJORANDCLASS
 
 export default function UserInfo() {
@@ -27,14 +25,13 @@ export default function UserInfo() {
         <div>
             <Descriptions title="" bordered={true} column={2}>
                 <Descriptions.Item label="姓名">
-                    <Input placeholder="请填写兴趣姓名"/>
-                    {/* <TextArea rows={1} /> */}
+                    <Input placeholder="请填写姓名"/>
                 </Descriptions.Item>
                 <Descriptions.Item label="性别">
-                    <Input placeholder="请填写兴趣性别"/>
+                    <Input placeholder="请填写性别"/>
                 </Descriptions.Item>
                 <Descriptions.Item label="联系方式">
-                    <Input placeholder="请填写兴趣联系方式"/>
+                    <Input placeholder="请填写联系方式"/>
                 </Descriptions.Item>
                 <Descriptions.Item label="兴趣爱好" span={2}>
                     <Input placeholder="请填写兴趣爱好"/>

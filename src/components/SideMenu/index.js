@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import {Layout, Menu} from 'antd';
-import {
-    AppleFilled,
+import Icon, {
     AuditOutlined,
     BarsOutlined,
     CarryOutOutlined,
@@ -12,6 +11,7 @@ import {
     TeamOutlined,
     UsergroupAddOutlined,
 } from '@ant-design/icons';
+import {ReactComponent as OrangeIcon} from '../../icons/orange.svg';
 
 import {withRouter} from 'react-router-dom'
 
@@ -159,7 +159,13 @@ class SideMenu extends Component {
                 collapsed={this.props.isCollapsed}
             >
                 <div style={{display: "flex", height: "100%", "flexDirection": "column"}}>
-                    <div className='logo'><AppleFilled/> 橘集
+                    <div className='logo'>
+                        <OrangeIcon
+                            style={{
+                                width: 26,
+                                height: 22,
+                                marginBottom: -3,
+                            }}/> 橘集
                         <br/>高校社团管理系统
                     </div>
                     <div style={{flex: 1, "overflow": "auto"}}>

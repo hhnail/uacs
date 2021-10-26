@@ -117,5 +117,5 @@ const mapDispatch2Props = {
     }
 }
 
-export default connect(mapState2Props,mapDispatch2Props)(withRouter(TopHeader))
+export default connect(mapState2Props, mapDispatch2Props)(withRouter(TopHeader))
 
