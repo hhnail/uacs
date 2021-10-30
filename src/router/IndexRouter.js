@@ -13,17 +13,18 @@ export default class IndexRouter extends Component {
                 <Switch>
                     <Route path="/login" component={Login} />
                     {/*使用者路由*/}
-                    <Route path="/user" component={UserBox} />
-                    {/*<Route path="/user/userManage" component={UserManage} />*/}
-                    {/*<Route path="/user/associationDetail/:id" component={AssociationDetail} />*/}
+                    <Route path="/user" render={() =>
+                        // 用浏览器的cookie保存session token
+                        localStorage.getItem("userInfo") ? <UserBox /> : <Login />
+                    }/>
+
                     {/*管理员路由*/}
-                    <Route
-                        path="/"
+                    <Route path="/"
                         render={() =>
                             // 用浏览器的cookie保存session token
                             localStorage.getItem("userInfo") ? <SandBox /> : <Login />
-                            // localStorage.getItem("token") ? <SandBox /> : <SandBox />
-                        } />
+                        }/>
+
                 </Switch>
             </HashRouter>
         )

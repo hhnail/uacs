@@ -1,9 +1,7 @@
-import {useEffect} from "react";
 import {Redirect, Route, Switch} from 'react-router-dom'
 import {Spin} from 'antd'
 import {connect} from "react-redux";
 import 'nprogress/nprogress.css'
-import NProgress from 'nprogress'
 import Home from '../../../pages/manage/Home'
 import UserList from '../UserManage/UserList'
 import AssociationList from '../AssociationManage/AssociationList'
@@ -20,6 +18,7 @@ import UserTagList from "../Other/UserTagList";
 import '../../../util/http'
 import ShareManage from "../ShareManage";
 import AddShare from "../ShareManage/AddShare";
+import ShareDetail from "../ShareManage/ShareDetail";
 
 function SysRouter(props) {
     // TODO 动态创建路由 防止路由穿透
@@ -68,6 +67,7 @@ function SysRouter(props) {
                 <Route path="/manage/other/userTag" component={UserTagList}></Route>
 
                 {/* =============== 分享管理 =======================*/}
+                <Route path="/manage/share/list/:shareId" component={ShareDetail}></Route>
                 <Route path="/manage/share/list" component={ShareManage}></Route>
                 <Route path="/manage/share/add" component={AddShare}></Route>
 
