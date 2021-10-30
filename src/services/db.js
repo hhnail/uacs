@@ -1,6 +1,7 @@
 import axios from "axios";
 import qs from "querystring";
 
+// ============================ 用户模块 ============================
 export function login(values) {
     return axios({
         url: "/user/login",
@@ -9,6 +10,23 @@ export function login(values) {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
     })
 }
+
+export function getUserInfo(accessToken) {
+    return axios({
+        url: "/user/getUserInfo",
+        method: 'post',
+        data: qs.stringify({accessToken: accessToken}),
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    })
+}
+
+
+
+
+
+
+
+// ============================ 社团模块 ============================
 export function getAllAssociationList() {
     return axios.get('/association/getAllAssociationList')
 }
@@ -46,14 +64,7 @@ export function getPermissionList() {
 export function updateUserSettings(data) {
     return axios.post("/association/updateUserSettings",data)
 }
-export function getUserInfo(accessToken) {
-    return axios({
-        url: "/user/getUserInfo",
-        method: 'post',
-        data: qs.stringify({accessToken: accessToken}),
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-    })
-}
+
 export function getPermissionListByUserId(userId) {
     return axios.get(`/association/getPermissionListByUserId/${userId}`)
 }

@@ -1,14 +1,12 @@
-import React, {useEffect, useState} from 'react'
-import {Carousel, Col, Layout, Row} from 'antd';
+import React from 'react'
+import {Layout} from 'antd';
 
 import UseHeader from '../../components/UserHeader'
-import AssociationCard from '../../components/AssociationCard'
-import {getAllAssociationList} from "../../services/db";
 import {Content} from "antd/lib/layout/layout";
 import AppRouter from "../AppRouter";
 
 
-export default function User() {
+export default function UserBox() {
 
     return (
         <Layout>

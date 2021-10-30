@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useState} from 'react'
 import {useHistory} from 'react-router-dom'
 import {Button, Form, Input, Layout, message,} from 'antd';
 
@@ -15,10 +15,13 @@ import {login} from "../../services/db";
 export default function Login(props) {
 
     const history = useHistory()
+    const [array,setArray] = useState([])
 
     const onFinish = (values) => {
         localStorage.removeItem("token") // 将原有的token移除
         localStorage.removeItem("userInfo") // 将原有的userInfo移除
+        const loginUser = login(values)
+        setArray(loginUser)
         login(values).then(res => {
             const userInfo = res.data.data
             if (!userInfo) {
