@@ -1,5 +1,4 @@
 import React, {useEffect, useRef} from 'react'
-import {Alert} from 'antd'
 import * as echarts from 'echarts'
 
 export default function Home() {

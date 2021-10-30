@@ -4,12 +4,12 @@ import {Spin} from 'antd'
 import {connect} from "react-redux";
 import 'nprogress/nprogress.css'
 import NProgress from 'nprogress'
-import Home from '../../Home'
+import Home from '../../../pages/manage/Home'
 import UserList from '../UserManage/UserList'
 import AssociationList from '../AssociationManage/AssociationList'
 import RoleList from '../PermissionManage/RoleList'
 import PermissionList from '../PermissionManage/PermissionList'
-import NoPermission from '../../NoPermission'
+import NoPermission from '../../../pages/manage/NoPermission'
 import AddRecruitment from '../RecruitmentManage/AddRecruitment';
 import RecruitmentList from '../RecruitmentList'
 import RecruitmentDetail from "../RecruitmentList/RecruitmentDetail";

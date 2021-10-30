@@ -10,7 +10,7 @@ import qs from 'qs'
 import Particles from 'react-particles-js';
 
 import './index.css'
-import {login} from "../../services/db";
+import {login} from "../../../services/db";
 
 export default function Login(props) {
 

@@ -1,6 +1,6 @@
 import {Redirect, Route, Switch} from 'react-router-dom'
 import 'nprogress/nprogress.css'
-import '../../util/http'
+import '../../../util/http'
 import AssciationSquare from "../AssociationSquare";
 import AssociationDetail from "../AssociationDetail";
 

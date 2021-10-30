@@ -1,7 +1,7 @@
 import {Carousel, Col, Row} from "antd";
-import AssociationCard from "../../components/AssociationCard";
+import AssociationCard from "../../../components/AssociationCard";
 import React, {useEffect, useState} from "react";
-import {getAllAssociationList} from "../../services/db";
+import {getAllAssociationList} from "../../../services/db";
 
 const contentStyle = {
     position: 'center',

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react"
 import {Button, Descriptions, PageHeader, Statistic, Tabs} from 'antd'
 import {useHistory} from "react-router-dom";
-import {getAssociationDetail, getRecentRecruitment} from "../../services/db";
+import {getAssociationDetail, getRecentRecruitment} from "../../../services/db";
 import axios from "axios";
 
 ;

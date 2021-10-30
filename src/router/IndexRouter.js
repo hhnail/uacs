@@ -1,8 +1,8 @@
 import { React, Component } from 'react'
 import { HashRouter, Route, Switch } from 'react-router-dom'
 
-import UserBox from '../pages/UserBox'
-import Login from '../views/Login'
+import UserBox from '../pages/user/UserBox'
+import Login from '../pages/manage/Login'
 import SandBox from '../views/SandBox'
 
 

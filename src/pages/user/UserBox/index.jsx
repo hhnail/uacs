@@ -1,7 +1,7 @@
 import React from 'react'
 import {Layout} from 'antd';
 
-import UseHeader from '../../components/UserHeader'
+import UseHeader from '../../../components/UserHeader'
 import {Content} from "antd/lib/layout/layout";
 import AppRouter from "../AppRouter";
 
