@@ -1,13 +1,6 @@
-import React, {Component, useEffect, useState} from 'react'
-import {} from 'antd';
-import {
-    Carousel,
-    Col,
-    Row
-} from 'antd';
-
-import UseHeader from '../UserHeader'
-import AssociationCard from '../AssociationCard'
+import {Carousel, Col, Row} from "antd";
+import AssociationCard from "../../components/AssociationCard";
+import React, {useEffect, useState} from "react";
 import {getAllAssociationList} from "../../services/db";
 
 const contentStyle = {
@@ -20,8 +13,7 @@ const contentStyle = {
     background: 'orange',
 };
 
-
-export default function User() {
+export default function AssciationSquare(){
 
     const [associationList, setAssociationList] = useState([])
 
@@ -34,10 +26,6 @@ export default function User() {
 
     return (
         <div>
-            {/*<UseHeader isUserMenu={true} />*/}
-            <UseHeader isUserMenu={false}/>
-            <br/>
-            <br/>
             {/* ======================== 轮播图 ========================  */}
             <Carousel autoplay={true} dotPosition={"right"} style={{
                 width: 500,

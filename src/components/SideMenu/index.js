@@ -1,16 +1,5 @@
 import React, {Component} from 'react'
 import {Layout, Menu} from 'antd';
-import Icon, {
-    AuditOutlined,
-    BarsOutlined,
-    CarryOutOutlined,
-    ClusterOutlined,
-    FormOutlined,
-    HomeTwoTone,
-    TableOutlined,
-    TeamOutlined,
-    UsergroupAddOutlined,
-} from '@ant-design/icons';
 import {ReactComponent as OrangeIcon} from '../../icons/orange.svg';
 
 import {withRouter} from 'react-router-dom'
@@ -21,26 +10,11 @@ import './index.css'
 import qs from "querystring";
 import {connect} from "react-redux";
 import {getPermissionListByUserId} from "../../services/db";
+import {SIDE_MENU_ICON_LIST} from "../../constants/baseInfo";
 
 const {SubMenu} = Menu;
 const {Sider} = Layout;
 
-const iconList = {
-    "/manage/home": <HomeTwoTone/>,
-    "/manage/user": <TeamOutlined/>,
-    "/manage/association": <ClusterOutlined/>,
-    "/manage/association/list": <TableOutlined/>,
-    "/manage/association/add": <UsergroupAddOutlined/>,
-    "/manage/association/addRecruitment": <FormOutlined/>,
-    "/manage/association/listRecruitment": <TableOutlined/>,
-    "/manage/permission": <CarryOutOutlined/>,
-    "/manage/permission/roleList": <BarsOutlined/>,
-    "/manage/permission/permissionList": <TableOutlined/>,
-    "/manage/review": <AuditOutlined/>,
-    "/manage/review/addAssociation": <AuditOutlined/>,
-    "/manage/review/joinAssociation": <AuditOutlined/>,
-    "/manage/review/exitAssociation": <AuditOutlined/>,
-}
 
 class SideMenu extends Component {
 
@@ -127,7 +101,7 @@ class SideMenu extends Component {
         return menuList.map((item) => {
             // 当前item为父菜单，并且有下级菜单
             if (item.children.length > 0 && this.checkPageElement(item)) {
-                return <SubMenu key={item.routePath} title={item.title} icon={iconList[item.routePath]}
+                return <SubMenu key={item.routePath} title={item.title} icon={SIDE_MENU_ICON_LIST[item.routePath]}
                                 style={{
                                     backgroundColor: `rgba(232, 140, 20, 0.05)`,
                                 }}>
@@ -140,7 +114,7 @@ class SideMenu extends Component {
                                   onClick={() => {
                                       this.props.history.push(item.routePath)
                                   }}
-                >{iconList[item.routePath]}&nbsp;&nbsp;{item.title}
+                >{SIDE_MENU_ICON_LIST[item.routePath]}&nbsp;&nbsp;{item.title}
                 </Menu.Item>
             }
 
@@ -150,7 +124,7 @@ class SideMenu extends Component {
                            onClick={() => {
                                this.props.history.push(item.routePath)
                            }}
-                >{iconList[item.routePath]}&nbsp;&nbsp;{item.title}
+                >{SIDE_MENU_ICON_LIST[item.routePath]}&nbsp;&nbsp;{item.title}
                 </Menu.Item>
         })
     }

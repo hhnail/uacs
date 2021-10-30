@@ -18,6 +18,8 @@ import ReviewJoinAssociation from "../Review/ReviewJoinAssociation";
 import ClassList from "../Other/ClassList";
 import UserTagList from "../Other/UserTagList";
 import '../../../util/http'
+import ShareManage from "../ShareManage";
+import AddShare from "../ShareManage/AddShare";
 
 function SysRouter(props) {
     // TODO 动态创建路由 防止路由穿透
@@ -64,6 +66,10 @@ function SysRouter(props) {
                 {/* =============== 杂项管理 =======================*/}
                 <Route path="/manage/other/class" component={ClassList}></Route>
                 <Route path="/manage/other/userTag" component={UserTagList}></Route>
+
+                {/* =============== 分享管理 =======================*/}
+                <Route path="/manage/share/list" component={ShareManage}></Route>
+                <Route path="/manage/share/add" component={AddShare}></Route>
 
 
                 {/* 其他情况 ================== 重定向 =====================*/}

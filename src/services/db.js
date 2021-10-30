@@ -58,6 +58,33 @@ export function getPermissionListByUserId(userId) {
     return axios.get(`/association/getPermissionListByUserId/${userId}`)
 }
 
+export function listRecruitment(recruitmentId) {
+    return axios.get(`/association/listRecruitment/${recruitmentId}`)
+}
+
+export function listRecruitmentByUserId(userId) {
+    return axios({
+        url: '/association/listRecruitment',
+        method: 'post',
+        data: {
+            userId: userId,
+            state: ''
+        },
+        headers: {'Content-Type': 'application/json;charset=UTF-8'}
+    })
+}
+
+export function getAssociationDetail(associationId) {
+    return axios.get(`/association/associationInfo/${associationId}`)
+}
+
+
+export function getRecentRecruitment(associationId,size=1) {
+    return axios.get(`/association/getRecentRecruitment/${associationId}/${size}`)
+}
+
+
+
 
 
 

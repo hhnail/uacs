@@ -1,18 +1,18 @@
 import React, {useEffect, useState} from 'react'
 
-import {Layout, Menu} from 'antd';
-import TopHeader from "../TopHeader";
+import {Menu, Spin} from 'antd';
+import UserSettings from "../UserSettings";
+import {useHistory} from "react-router-dom";
 
-
-const {Header} = Layout;
 
 //空菜单
 const nullArray = new Array(5).fill(null);
+
 //“广场”菜单
 const partMenuArray = [
     {id: 1, value: '纳新广场'},
-    {id: 2, value: '活动广场'},
-    {id: 3, value: '赛事广场'}
+    {id: 2, value: '社团风采'},
+    {id: 3, value: '活动广场'}
 ];
 //用户菜单
 const userMenuArray = [
@@ -23,6 +23,7 @@ const userMenuArray = [
 
 export default function UserHeader(props) {
 
+    const history = useHistory()
     const [isUserMenu, setIsUserMenu] = useState(props.isUserMenu)
 
     const [menuArray, setMenuArray] = useState(nullArray)
@@ -33,16 +34,27 @@ export default function UserHeader(props) {
     })
 
     return (
-        <Header>
-            <div className="logo"/>
-            <TopHeader/>
-            <Menu theme="light" mode="horizontal" defaultSelectedKeys={['0']}>
-                {
-                    menuArray.map((item, id) => {
-                        return <Menu.Item key={id}>{item?.value}</Menu.Item>
-                    })
-                }
-            </Menu>
-        </Header>
+        <div style={{
+            display: 'flex'
+        }}>
+            <div style={{
+                width:'100%'
+            }}>
+                <Menu theme="light" mode="horizontal" defaultSelectedKeys={['0']} key='userMenu'>
+                    {
+                        menuArray.map((item, id) => {
+                            return <Menu.Item key={id} style={{height: 55}}>{item?.value}</Menu.Item>
+                        })
+                    }
+                </Menu>
+            </div>
+            <div style={{
+                position: 'absolute',
+                right: '3%',
+                top:'3%',
+            }}>
+                <UserSettings history={history}/>
+            </div>
+        </div>
     )
 }

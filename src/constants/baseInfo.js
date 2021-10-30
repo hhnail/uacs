@@ -1,3 +1,17 @@
+import {
+    AuditOutlined,
+    BarsOutlined,
+    CarryOutOutlined,
+    ClusterOutlined,
+    FormOutlined,
+    HomeTwoTone,
+    TableOutlined,
+    TeamOutlined,
+    UsergroupAddOutlined
+} from "@ant-design/icons";
+import {ReactComponent as HomeIcon} from "../icons/home.svg";
+import React from "react";
+
 const MAJORANDCLASS = [
     {
         value: '航海学院',
@@ -225,4 +239,22 @@ const MAJORANDCLASS4Table = [
 // 继续教育学院（船员培训中心）	https://ae-jmu-edu-cn.webvpn.jmu.edu.cn
 // 海外教育学院	https://oec-jmu-edu-cn.webvpn.jmu.edu.cn
 // 诚毅学院	https://chengyi.webvpn.jmu.edu.cn
-export {MAJORANDCLASS, USER_TAG_LIST, MAJORANDCLASS4Table}
+
+
+const SIDE_MENU_ICON_LIST = {
+    "/manage/home": <HomeIcon style={{width:15,height:15,paddingTop:1}}/>,
+    "/manage/user": <TeamOutlined/>,
+    "/manage/association": <ClusterOutlined/>,
+    "/manage/association/list": <TableOutlined/>,
+    "/manage/association/add": <UsergroupAddOutlined/>,
+    "/manage/association/addRecruitment": <FormOutlined/>,
+    "/manage/association/listRecruitment": <TableOutlined/>,
+    "/manage/permission": <CarryOutOutlined/>,
+    "/manage/permission/roleList": <BarsOutlined/>,
+    "/manage/permission/permissionList": <TableOutlined/>,
+    "/manage/review": <AuditOutlined/>,
+    "/manage/review/addAssociation": <AuditOutlined/>,
+    "/manage/review/joinAssociation": <AuditOutlined/>,
+    "/manage/review/exitAssociation": <AuditOutlined/>,
+}
+export {MAJORANDCLASS, USER_TAG_LIST, MAJORANDCLASS4Table,SIDE_MENU_ICON_LIST}

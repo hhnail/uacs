@@ -1,44 +1,30 @@
-import React, {useState, useEffect, useRef} from 'react'
-import {
-    Table, Button, Modal, Switch,
-    notification, Space, Badge, Popover, PageHeader, Descriptions
-} from 'antd'
-
-// import {} from '@ant-design/icons';
+import React, {useEffect, useState} from 'react'
+import {Button, Descriptions, Modal, PageHeader} from 'antd'
 
 import {
-    RECRUITMENT_STATE_MAP,
+    RECRUITMENT_PUBLISH_STATE_LIST,
     RECRUITMENT_PUBLISH_STATE_MAP,
-    RECRUITMENT_PUBLISH_STATE_LIST
+    RECRUITMENT_STATE_MAP
 } from '../../../../constants/state'
-
-import axios from 'axios'
+import {listRecruitment} from "../../../../services/db";
 
 const {confirm} = Modal
 
 export default function RecruitmentDetail(props) {
-
-    const userInfo = JSON.parse(localStorage.getItem("userInfo"))
 
     const [recruitmentInfo, setRecruitmentInfo] = useState([])
 
     // 获取用户列表
     useEffect(() => {
         // 如何获取url地址中的参数？
-        axios.get(`/association/listRecruitment/${props.match.params.id}`)
-            .then(res => {
-                // console.log("==27 resData", res.data.data);
-                setRecruitmentInfo(res.data.data)
-            })
-            .catch(err => {
-                // console.log("==26 err", err);
-            })
+        listRecruitment(props.match.params.id).then(res => {
+            setRecruitmentInfo(res.data.data)
+        })
     }, [])
-
 
     return (
         <div className="site-page-header-ghost-wrapper">
-            {/* 纳新通知基本信息 */}
+            {/* =============== 纳新通知基本信息 =============== */}
             {recruitmentInfo &&
             <PageHeader
                 ghost={false}

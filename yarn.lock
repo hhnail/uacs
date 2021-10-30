@@ -9570,7 +9570,7 @@ prompts@2.4.0, prompts@^2.0.1:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@^15.5.10, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -10185,6 +10185,18 @@ react-is@^17.0.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.1.tgz#5b3531bd76a645a4c9fb6e693ed36419e3301339"
   integrity sha512-NAnt2iGDXohE5LI7uBnLnqvLQMtzhkiAOLXTmv+qnF9Ky7xAPcX8Up/xWIhxvLVGJvuLiNc4xQLtuqDRzb4fSA==
 
+react-native-better-banner@^1.1.3:
+  version "1.1.3"
+  resolved "https://registry.nlark.com/react-native-better-banner/download/react-native-better-banner-1.1.3.tgz#2ad1825581258ac9dec127400f68f80146a52862"
+  integrity sha1-KtGCVYElisnewSdAD2j4AUalKGI=
+
+react-native-swiper@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.npm.taobao.org/react-native-swiper/download/react-native-swiper-1.6.0.tgz#59fdbdf95addee49630312f27077622c27776819"
+  integrity sha1-Wf29+Vrd7kljAxLycHdiLCd3aBk=
+  dependencies:
+    prop-types "^15.5.10"
+
 react-particles-js@^3.5.3:
   version "3.5.3"
   resolved "https://registry.nlark.com/react-particles-js/download/react-particles-js-3.5.3.tgz#5fa8912cd3317061e4d31ed7743d331d9d7f2afe"
@@ -10311,6 +10323,13 @@ react@^17.0.2:
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
+
+reactjs-swiper@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.npm.taobao.org/reactjs-swiper/download/reactjs-swiper-0.1.0.tgz#38d2dbc4ffe896ecb7293643475555828ce080f1"
+  integrity sha1-ONLbxP/oluy3KTZDR1VVgozggPE=
+  dependencies:
+    swiper "^3.4.2"
 
 read-pkg-up@^2.0.0:
   version "2.0.0"
@@ -11672,6 +11691,11 @@ svgo@^1.0.0, svgo@^1.2.2:
     stable "^0.1.8"
     unquote "~1.1.1"
     util.promisify "~1.0.0"
+
+swiper@^3.4.2:
+  version "3.4.2"
+  resolved "https://registry.npmmirror.com/swiper/download/swiper-3.4.2.tgz?cache=0&sync_timestamp=1635331915370&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fswiper%2Fdownload%2Fswiper-3.4.2.tgz#39d6b410b1a39833e1f72d3b72999df5f5e38392"
+  integrity sha1-Oda0ELGjmDPh9y07cpmd9fXjg5I=
 
 symbol-tree@^3.2.4:
   version "3.2.4"

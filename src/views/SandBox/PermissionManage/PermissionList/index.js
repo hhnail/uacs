@@ -136,6 +136,7 @@ export default class PermissonList extends Component {
     componentDidMount() {
         // 获取菜单信息
         getPermissionList().then(res => {
+            console.log("权限列表",res.data.data)
             const {data} = res.data // res.data还只是responseBody
             data.forEach((item) => {
                 if (item.children.length === 0) {
