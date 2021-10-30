@@ -11,7 +11,7 @@ export const CollapseReducer = (preState = {
             console.log(newState.isCollapsed ? '折叠' : '展开')
             return newState
         default:
-            console.log("未找到对应的action")
+            // console.log("未找到对应的action")
             return preState
     }
     return preState

@@ -10,27 +10,16 @@ import qs from 'qs'
 import Particles from 'react-particles-js';
 
 import './index.css'
-
-const {Header, Content, Footer} = Layout;
+import {login} from "../../services/db";
 
 export default function Login(props) {
 
     const history = useHistory()
-    let timer
-
-    useEffect(() => {
-        clearTimeout(timer)
-    }, [timer])
 
     const onFinish = (values) => {
         localStorage.removeItem("token") // 将原有的token移除
         localStorage.removeItem("userInfo") // 将原有的userInfo移除
-        axios({// 验证后台数据
-            url: "/user/login",
-            method: 'post',
-            data: qs.stringify(values),
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-        }).then(res => {
+        login(values).then(res => {
             const userInfo = res.data.data
             if (!userInfo) {
                 message.error("用户名或密码输入错误！") // 验证失败，提示用户
@@ -39,12 +28,9 @@ export default function Login(props) {
             localStorage.setItem("token", res.data.data.accessToken) // 将token保存到浏览器中
             localStorage.setItem("userInfo", JSON.stringify(res.data.data)) // 将userLoginInfo保存到浏览器中
             message.success("登录成功，跳转中...")
-            timer = setTimeout(() => {
+            setTimeout(() => {
                 history.push("/") // 跳转到主页面
             }, 500)
-        }).catch(err => {
-            console.log(err)
-            message.error("系统出现错误，请稍后重试！")
         })
     }
 

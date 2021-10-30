@@ -22,11 +22,11 @@ import '../../../util/http'
 function SysRouter(props) {
     // TODO 动态创建路由 防止路由穿透
     // 切换路由 进度条
-    NProgress.start()
-    useEffect(() => {
-        // console.log(props.isLoading)
-        NProgress.done()
-    })
+    // NProgress.start()
+    // useEffect(() => {
+    //     // console.log(props.isLoading)
+    //     NProgress.done()
+    // })
 
     return (
         <Spin size={"large"} spinning={props.isLoading}>

@@ -1,5 +1,14 @@
 import axios from "axios";
+import qs from "querystring";
 
+export function login(values) {
+    return axios({
+        url: "/user/login",
+        method: 'post',
+        data: qs.stringify(values),
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    })
+}
 export function getAllAssociationList() {
     return axios.get('/association/getAllAssociationList')
 }
@@ -33,6 +42,23 @@ export function updatePermissionById(data) {
 export function getPermissionList() {
     return axios.get("/association/getPermissionList")
 }
+
+export function updateUserSettings(data) {
+    return axios.post("/association/updateUserSettings",data)
+}
+export function getUserInfo(accessToken) {
+    return axios({
+        url: "/user/getUserInfo",
+        method: 'post',
+        data: qs.stringify({accessToken: accessToken}),
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    })
+}
+export function getPermissionListByUserId(userId) {
+    return axios.get(`/association/getPermissionListByUserId/${userId}`)
+}
+
+
 
 
 

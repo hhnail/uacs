@@ -20,6 +20,7 @@ import axios from 'axios'
 import './index.css'
 import qs from "querystring";
 import {connect} from "react-redux";
+import {getPermissionListByUserId} from "../../services/db";
 
 const {SubMenu} = Menu;
 const {Sider} = Layout;
@@ -92,9 +93,9 @@ class SideMenu extends Component {
 
     // 获取菜单数据
     getMenuList = (userId) => {
-        axios.get(`/association/getPermissionListByUserId/${userId}`).then(res => {
+        getPermissionListByUserId(userId).then(res => {
             const {data} = res.data
-            // console.log("==102 SideMenu menuList", data);
+            console.log("==102 SideMenu menuList", data);
             this.setState({menuList: data})
         }).catch(err => {
             console.log("获取菜单出错！", err);
@@ -126,21 +127,26 @@ class SideMenu extends Component {
         return menuList.map((item) => {
             // 当前item为父菜单，并且有下级菜单
             if (item.children.length > 0 && this.checkPageElement(item)) {
-                return <SubMenu
-                    key={item.routePath}
-                    title={item.title}
-                    icon={iconList[item.routePath]}
-                    style={{
-                        backgroundColor: `rgba(232, 140, 20, 0.05)`,
-                    }}
-                >
+                return <SubMenu key={item.routePath} title={item.title} icon={iconList[item.routePath]}
+                                style={{
+                                    backgroundColor: `rgba(232, 140, 20, 0.05)`,
+                                }}>
                     {this.renderMenu(item.children)}{/* 递归 */}
                 </SubMenu>
             }
+            // 当前item为父菜单，但是没有下级菜单
+            else if (item.children.length === 0 && this.checkPageElement(item)) {
+                return <Menu.Item key={item.routePath}
+                                  onClick={() => {
+                                      this.props.history.push(item.routePath)
+                                  }}
+                >{iconList[item.routePath]}&nbsp;&nbsp;{item.title}
+                </Menu.Item>
+            }
+
             // 当前item为叶子菜单
             return this.checkPageElement(item) && item.grade === 2 &&
                 <Menu.Item key={item.routePath}
-                    // style={{height: "30px",}}
                            onClick={() => {
                                this.props.history.push(item.routePath)
                            }}
@@ -149,14 +155,12 @@ class SideMenu extends Component {
         })
     }
 
-
     render() {
         return (
-            <Sider
-                style={{backgroundColor: "orange"}}
-                width={200}
+            <Sider width={200}
+                   style={{backgroundColor: "orange"}}
                 // 侧边菜单是否折叠
-                collapsed={this.props.isCollapsed}
+                   collapsed={this.props.isCollapsed}
             >
                 <div style={{display: "flex", height: "100%", "flexDirection": "column"}}>
                     <div className='logo'>
@@ -165,8 +169,8 @@ class SideMenu extends Component {
                                 width: 26,
                                 height: 22,
                                 marginBottom: -3,
-                            }}/> 橘集
-                        <br/>高校社团管理系统
+                            }}/>
+                        {!this.props.isCollapsed && <>橘集<br/>高校社团管理系统</>}
                     </div>
                     <div style={{flex: 1, "overflow": "auto"}}>
                         <Menu theme="light" mode="inline"
