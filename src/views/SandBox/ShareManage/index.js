@@ -123,7 +123,7 @@ export default function ShareManage() {
                 dataSource={shareList}
                 columns={columns}
                 pagination={{
-                    pageSize: 4
+                    pageSize: 6
                 }}
                 rowKey={item => item.shareId}
             />

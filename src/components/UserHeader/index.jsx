@@ -37,21 +37,21 @@ export default function UserHeader(props) {
         <div style={{
             display: 'flex'
         }}>
-            <div style={{
-                width:'100%'
-            }}>
+            {/* ================ 系统图标 ================*/}
+            
+            {/* ================ 头部导航菜单  ================ */}
+            <div style={{width: '100%'}}>
                 <Menu theme="light" mode="horizontal" defaultSelectedKeys={['0']} key='userMenu'>
-                    {
-                        menuArray.map((item, id) => {
-                            return <Menu.Item key={id} style={{height: 55}}>{item?.value}</Menu.Item>
-                        })
-                    }
+                    {menuArray.map((item, id) => {
+                        return <Menu.Item key={id} style={{height: 55}}>{item?.value}</Menu.Item>
+                    })}
                 </Menu>
             </div>
+            {/* ================ 个人账号设置  ================ */}
             <div style={{
                 position: 'absolute',
                 right: '3%',
-                top:'3%',
+                top: '3%',
             }}>
                 <UserSettings history={history}/>
             </div>

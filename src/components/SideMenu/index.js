@@ -11,6 +11,7 @@ import qs from "querystring";
 import {connect} from "react-redux";
 import {getPermissionListByUserId} from "../../services/db";
 import {SIDE_MENU_ICON_LIST} from "../../constants/baseInfo";
+import {getUserInfoByToken} from "../../services/userService";
 
 const {SubMenu} = Menu;
 const {Sider} = Layout;
@@ -43,36 +44,22 @@ class SideMenu extends Component {
     // 通过token换取用户信息 并 用userId获取权限列表
     getMenuListByToken = () => {
         const accessToken = localStorage.getItem("token")
-        axios({
-            url: "/user/getUserInfo",
-            method: 'post',
-            data: qs.stringify({accessToken: accessToken}),
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        getUserInfoByToken(accessToken).then(res => {
+            const userInfo = res.data.data
+            // console.log("==1 用户信息 ", userInfo)
+            this.setState({userInfo: userInfo})
+            // 根据userId获取菜单列表
+            if (userInfo) {
+                this.getMenuList(userInfo.userId)
+            }
         })
-            .then(res => {
-                const userInfo = res.data.data
-                // console.log("==1 用户信息 ", userInfo)
-                this.setState({userInfo: userInfo})
-                // 根据userId获取菜单列表
-                if (userInfo) {
-                    this.getMenuList(userInfo.userId)
-                }
-            })
-            .catch(err => {
-                console.log("==SideMenu 获取用户信息出错！", err)
-                localStorage.removeItem("token")
-                this.props.history.replace("/")
-            })
     }
 
     // 获取菜单数据
     getMenuList = (userId) => {
         getPermissionListByUserId(userId).then(res => {
             const {data} = res.data
-            console.log("==102 SideMenu menuList", data);
             this.setState({menuList: data})
-        }).catch(err => {
-            console.log("获取菜单出错！", err);
         })
     }
 
@@ -84,9 +71,7 @@ class SideMenu extends Component {
         // console.log("==3", path);
         const openIndex = path.lastIndexOf("\/")
         const openKeys = [path.substring(0, openIndex)]
-        // console.log("==4", openKeys);
         const selectKeys = Array(this.props.location.pathname)
-        // console.log("==5", selectKeys);
 
         this.setState({openKeys})
         this.setState({selectKeys})
