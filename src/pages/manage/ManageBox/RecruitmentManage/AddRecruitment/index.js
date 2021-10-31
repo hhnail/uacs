@@ -1,7 +1,16 @@
-import {useState, useRef, useEffect} from "react";
+import {useEffect, useRef, useState} from "react";
 import {
-    Button, PageHeader, Steps, Form, Input, Checkbox,
-    InputNumber, Space, DatePicker, message, notification, Select
+    Button,
+    DatePicker,
+    Form,
+    Input,
+    InputNumber,
+    message,
+    notification,
+    PageHeader,
+    Select,
+    Space,
+    Steps
 } from 'antd'
 
 import locale from 'antd/es/date-picker/locale/zh_CN';
@@ -10,7 +19,7 @@ import qs from 'querystring'
 
 import moment from 'moment'
 
-import AssociationEditor from '../../../../components/AssociationEditor'
+import AssociationEditor from "../../../../../components/AssociationEditor";
 import style from './index.css'
 
 

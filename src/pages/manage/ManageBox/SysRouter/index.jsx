@@ -2,12 +2,12 @@ import {Redirect, Route, Switch} from 'react-router-dom'
 import {Spin} from 'antd'
 import {connect} from "react-redux";
 import 'nprogress/nprogress.css'
-import Home from '../../../pages/manage/Home'
-import UserList from '../UserManage/UserList'
+import Home from '../../Home'
+import UserList from '../UserList'
 import AssociationList from '../AssociationManage/AssociationList'
 import RoleList from '../PermissionManage/RoleList'
 import PermissionList from '../PermissionManage/PermissionList'
-import NoPermission from '../../../pages/manage/NoPermission'
+import NoPermission from '../../NoPermission'
 import AddRecruitment from '../RecruitmentManage/AddRecruitment';
 import RecruitmentList from '../RecruitmentList'
 import RecruitmentDetail from "../RecruitmentList/RecruitmentDetail";
@@ -15,7 +15,7 @@ import ReviewAddAssociation from "../Review/ReviewAddAssociation";
 import ReviewJoinAssociation from "../Review/ReviewJoinAssociation";
 import ClassList from "../Other/ClassList";
 import UserTagList from "../Other/UserTagList";
-import '../../../util/http'
+import '../../../../util/http'
 import ShareManage from "../ShareManage";
 import AddShare from "../ShareManage/AddShare";
 import ShareDetail from "../ShareManage/ShareDetail";
@@ -34,6 +34,10 @@ function SysRouter(props) {
             <Switch>
                 <Route path="/manage/home" component={Home}></Route>
 
+                {/* ==================== 成员管理 ==================== */}
+                <Route path="/manage/account/resume" component={Home}></Route>
+
+                {/* ==================== 成员管理 ==================== */}
                 <Route path="/manage/user/list" component={UserList}></Route>
 
                 {/*社团列表*/}

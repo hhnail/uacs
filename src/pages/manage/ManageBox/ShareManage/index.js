@@ -4,20 +4,28 @@ import {
     CloseOutlined, DeleteOutlined, ExclamationCircleOutlined,
     RollbackOutlined, CheckOutlined
 } from '@ant-design/icons';
-import usePublish from "../../../hooks/usePublish";
-import {ROLE_TYPE} from "../../../constants/type";
+import usePublish from "../../../../hooks/usePublish";
+import {ROLE_TYPE} from "../../../../constants/type";
+import axios from "axios";
+import {getShareList} from "../../../../services/shareService";
 
 const {confirm} = Modal
 
-export default function RecruitmentList() {
+export default function ShareManage() {
 
     const userInfo = JSON.parse(localStorage.getItem("userInfo"))
-    const {dataSource, handleRollback, handleDelete, handlePass, handleRefuse} = usePublish()
-    const [recruitmentList, setRecruitmentList] = useState()
+    const [shareList, setShareList] = useState([])
 
     useEffect(() => {
-        setRecruitmentList(dataSource)
-    })
+        getShareList().then(res => {
+            const {data} = res.data
+            setShareList(data)
+        })
+    }, [])
+
+    const handelShareUpdate = (shareId) => {
+        console.log(shareId)
+    }
 
     const renderOptions = (item) => {
         let isSuperAdmin = false
@@ -31,28 +39,28 @@ export default function RecruitmentList() {
         return <Space>
             {!isSuperAdmin &&
             <Button size="small" danger icon={<RollbackOutlined/>}
-                    onClick={() => handleRollback(item.recruitmentId)}>撤销</Button>}
+                    onClick={() => handelShareUpdate(item.shareId)}>撤销</Button>}
 
             {!isSuperAdmin &&
             <Button size="small" danger icon={<DeleteOutlined/>}
-                    onClick={() => handleDelete(item.recruitmentId)}>删除</Button>}
+                    onClick={() => handelShareUpdate(item.shareId)}>删除</Button>}
 
             {isSuperAdmin &&
             <Button size="small" icon={<CheckOutlined/>}
-                    onClick={() => handlePass(item.recruitmentId)}>通过</Button>}
+                    onClick={() => handelShareUpdate(item.shareId)}>通过</Button>}
 
             {isSuperAdmin &&
             <Button size="small" danger icon={<CloseOutlined/>}
-                    onClick={() => handleRefuse(item.recruitmentId)}>拒绝</Button>}
+                    onClick={() => handelShareUpdate(item.shareId)}>拒绝</Button>}
         </Space>
     }
 
     const columns = [
         {
-            title: '纳新通知ID',
-            dataIndex: 'recruitmentId',
-            render(recruitmentId) {
-                return <b>{recruitmentId}</b>;
+            title: 'ID',
+            dataIndex: 'shareId',
+            render(shareId) {
+                return <b>{shareId}</b>;
             }
         },
         {
@@ -60,10 +68,18 @@ export default function RecruitmentList() {
             dataIndex: 'title',
             render(title, item) {
                 return <Tooltip title="点击查看详情">
-                    <a href={`#/manage/association/listRecruitment/${item.recruitmentId}`}
+                    <a href={`#/manage/share/list/${item.shareId}`}
                     >{title}</a>
                 </Tooltip>;
             }
+        },
+        {
+            title: '所在社团',
+            dataIndex: 'associationName',
+        },
+        {
+            title: '申请人',
+            dataIndex: 'name',
         },
         {
             title: '状态',
@@ -82,14 +98,6 @@ export default function RecruitmentList() {
             }
         },
         {
-            title: '纳新社团组织',
-            dataIndex: 'associationName',
-        },
-        {
-            title: '申请人',
-            dataIndex: 'name',
-        },
-        {
             title: '操作',
             render: (item) => renderOptions(item)
         },
@@ -97,24 +105,11 @@ export default function RecruitmentList() {
 
     // 删除确认
     const confirmDelete = (item) => {
-        console.log("delete item", item)
         confirm({
             title: '您确认要删除吗？',
             icon: <ExclamationCircleOutlined/>,
             onOk() {
-                // 同步页面
-                // console.log("同步前端页面")
-                const newList = recruitmentList.filter(data => data.id !== item.id)
-                setRecruitmentList(newList)
-                // 调用后端接口，同步后台数据库
-                // TODO 同步后台数据(前台数据不可信？从后台更新后重新获取？)
-                // axios.delete(`/association//${item.userId}`)
-                //     .then((res) => {
-                //
-                //     })
-                //     .catch((err) => {
-                //
-                //     })
+
             },
             onCancel() {
 
@@ -125,12 +120,12 @@ export default function RecruitmentList() {
     return (
         <div>
             <Table
-                dataSource={recruitmentList}
+                dataSource={shareList}
                 columns={columns}
                 pagination={{
-                    pageSize: 4
+                    pageSize: 6
                 }}
-                rowKey={item => item.recruitmentId}
+                rowKey={item => item.shareId}
             />
         </div>
     )

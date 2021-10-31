@@ -1,8 +1,8 @@
 // 第三方
 import React, {useEffect} from 'react'
 // uacs
-import SideMenu from '../../components/SideMenu'
-import TopHeader from '../../components/TopHeader'
+import SideMenu from '../../../components/SideMenu'
+import TopHeader from '../../../components/TopHeader'
 import SysRouter from './SysRouter'
 // css
 import './index.css'

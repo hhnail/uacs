@@ -3,7 +3,7 @@ import {Button, Form, Input, message, notification, PageHeader, Select, Steps} f
 import axios from "axios";
 import qs from 'querystring'
 
-import AssociationEditor from '../../../../components/AssociationEditor'
+import AssociationEditor from '../../../../../components/AssociationEditor'
 import style from './index.css'
 
 const {Step} = Steps;
@@ -33,13 +33,11 @@ export default function AddShare(props) {
     const [content4Show, setContent4Show] = useState()
     const [baseInfoForm, setBaseInfoForm] = useState()
 
-    // const shareFormRef = Form.useForm
-
-
     // 获取本用户管理的社团（才能撰写纳新信息/通知/展示）
     useEffect(() => {
         const data = {
             userId: userInfo.userId,
+            // TODO 多个角色怎么判断？
             roleIds: [2],
         }
         axios.post('/association/getAssociationByUserId',

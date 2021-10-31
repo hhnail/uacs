@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react'
 
-import {Menu, Spin} from 'antd';
+import {Menu} from 'antd';
 import UserSettings from "../UserSettings";
 import {useHistory} from "react-router-dom";
+import {ReactComponent as OrangeIcon} from "../../icons/orange.svg";
 
 
 //空菜单
@@ -37,11 +38,16 @@ export default function UserHeader(props) {
         <div style={{
             display: 'flex'
         }}>
-            {/* ================ 系统图标 ================*/}
-            
             {/* ================ 头部导航菜单  ================ */}
             <div style={{width: '100%'}}>
                 <Menu theme="light" mode="horizontal" defaultSelectedKeys={['0']} key='userMenu'>
+                    {/* ================ 系统图标 ================*/}
+                    <Menu.Item key={'systemIcon'} disabled>
+                        <OrangeIcon style={{
+                            width: 30,
+                            height: 30,
+                            marginTop: 10,
+                        }}/></Menu.Item>
                     {menuArray.map((item, id) => {
                         return <Menu.Item key={id} style={{height: 55}}>{item?.value}</Menu.Item>
                     })}

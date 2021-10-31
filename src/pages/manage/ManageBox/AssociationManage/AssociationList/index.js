@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import {Button, Table} from 'antd';
-import axios from "axios";
-import {getAllAssociationList} from "../../../../services/db";
+import {getAllAssociationList} from "../../../../../services/db";
 
 
 const columns = [

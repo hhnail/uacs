@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {Button, Modal, Popover, Switch, Table, Tag} from 'antd'
 import {DeleteOutlined, EditOutlined, ExclamationCircleOutlined} from '@ant-design/icons';
 import axios from 'axios'
-import {getPermissionList, updatePermissionById} from "../../../../services/db";
+import {getPermissionList, updatePermissionById} from "../../../../../services/db";
 
 
 const {confirm} = Modal

@@ -4,10 +4,7 @@ import {ReactComponent as OrangeIcon} from '../../icons/orange.svg';
 
 import {withRouter} from 'react-router-dom'
 
-import axios from 'axios'
-
 import './index.css'
-import qs from "querystring";
 import {connect} from "react-redux";
 import {getPermissionListByUserId} from "../../services/db";
 import {SIDE_MENU_ICON_LIST} from "../../constants/baseInfo";
@@ -83,6 +80,7 @@ class SideMenu extends Component {
 
     // 渲染侧边栏菜单
     renderMenu = (menuList) => {
+        console.log('待渲染的侧边菜单：', menuList)
         return menuList.map((item) => {
             // 当前item为父菜单，并且有下级菜单
             if (item.children.length > 0 && this.checkPageElement(item)) {
@@ -93,16 +91,6 @@ class SideMenu extends Component {
                     {this.renderMenu(item.children)}{/* 递归 */}
                 </SubMenu>
             }
-            // 当前item为父菜单，但是没有下级菜单
-            else if (item.children.length === 0 && this.checkPageElement(item)) {
-                return <Menu.Item key={item.routePath}
-                                  onClick={() => {
-                                      this.props.history.push(item.routePath)
-                                  }}
-                >{SIDE_MENU_ICON_LIST[item.routePath]}&nbsp;&nbsp;{item.title}
-                </Menu.Item>
-            }
-
             // 当前item为叶子菜单
             return this.checkPageElement(item) && item.grade === 2 &&
                 <Menu.Item key={item.routePath}

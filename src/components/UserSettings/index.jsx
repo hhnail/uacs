@@ -93,11 +93,9 @@ export default function UserSettings(props){
                     defaultChecked={props.history.location.pathname.substring(0,5) === '/user'}
                     onClick={() => {
                         if(props.history.location.pathname.substring(0,5) === '/user'){
-                            console.log("to manage")
                             props.history.replace("/manage") // 重定向到管理页面
                             return
                         }
-                        console.log("to manage")
                         props.history.replace("/user") // 重定向到用户界面
                     }}
                 />

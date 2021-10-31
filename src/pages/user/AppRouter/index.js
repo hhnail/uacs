@@ -3,7 +3,7 @@ import 'nprogress/nprogress.css'
 import '../../../util/http'
 import AssciationSquare from "../AssociationSquare";
 import AssociationDetail from "../AssociationDetail";
-import ShareDetail from "../../../views/SandBox/ShareManage/ShareDetail";
+import ShareDetail from "../../manage/ManageBox/ShareManage/ShareDetail";
 
 function AppRouter(props) {
     return (

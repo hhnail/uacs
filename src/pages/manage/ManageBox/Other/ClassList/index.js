@@ -1,6 +1,6 @@
 import {Space, Switch, Table} from 'antd';
 import {useState} from "react";
-import {MAJORANDCLASS4Table} from "../../../../constants/baseInfo";
+import {MAJORANDCLASS4Table} from '../../../../../constants/baseInfo';
 
 const columns = [
     {
