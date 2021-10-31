@@ -19,6 +19,7 @@ import '../../../../util/http'
 import ShareManage from "../ShareManage";
 import AddShare from "../ShareManage/AddShare";
 import ShareDetail from "../ShareManage/ShareDetail";
+import Resume from "../AccountManage/Resume";
 
 function SysRouter(props) {
     // TODO 动态创建路由 防止路由穿透
@@ -35,23 +36,25 @@ function SysRouter(props) {
                 <Route path="/manage/home" component={Home}></Route>
 
                 {/* ==================== 成员管理 ==================== */}
-                <Route path="/manage/account/resume" component={Home}></Route>
+                <Route path="/manage/account/resume" component={Resume}></Route>
 
                 {/* ==================== 成员管理 ==================== */}
                 <Route path="/manage/user/list" component={UserList}></Route>
 
+                {/* ==================== 社团管理 ==================== */}
                 {/*社团列表*/}
                 <Route path="/manage/association/list" component={AssociationList}></Route>
 
 
+                {/* ==================== 纳新通知管理 ==================== */}
                 {/*添加纳新通知*/}
-                <Route path="/manage/association/addRecruitment" component={AddRecruitment}></Route>
+                <Route path="/manage/recruitment/add" component={AddRecruitment}></Route>
                 {/*更新纳新通知*/}
                 <Route path="/manage/association/updateRecruitment/:id" component={AddRecruitment}></Route>
                 {/*纳新通知详情*/}
-                <Route path="/manage/association/listRecruitment/:id" component={RecruitmentDetail}></Route>
+                <Route path="/manage/recruitment/list/:id" component={RecruitmentDetail}></Route>
                 {/*纳新通知列表*/}
-                <Route path="/manage/association/listRecruitment" component={RecruitmentList}></Route>
+                <Route path="/manage/recruitment/list" component={RecruitmentList}></Route>
 
                 {/* =============== 权限管理 =======================*/}
                 {/*角色列表*/}

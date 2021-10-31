@@ -10,6 +10,10 @@ import {
     UsergroupAddOutlined
 } from "@ant-design/icons";
 import {ReactComponent as HomeIcon} from "../icons/home.svg";
+import {ReactComponent as ResumeIcon} from "../icons/resume.svg";
+import {ReactComponent as AccountManageIcon} from "../icons/account-manage.svg";
+import {ReactComponent as ShareManageIcon} from "../icons/share.svg";
+import {ReactComponent as RecruitmentIcon} from "../icons/recruitment.svg";
 import React from "react";
 
 const MAJORANDCLASS = [
@@ -243,12 +247,16 @@ const MAJORANDCLASS4Table = [
 
 const SIDE_MENU_ICON_LIST = {
     "/manage/home": <HomeIcon style={{width:15,height:15,paddingTop:1}}/>,
+    "/manage/account": <AccountManageIcon style={{width:15,height:15,paddingTop:1}}/>,
+    "/manage/account/resume": <ResumeIcon style={{width:15,height:15,paddingTop:1}}/>,
     "/manage/user": <TeamOutlined/>,
+    "/manage/user/list": <TableOutlined/>,
     "/manage/association": <ClusterOutlined/>,
     "/manage/association/list": <TableOutlined/>,
     "/manage/association/add": <UsergroupAddOutlined/>,
-    "/manage/association/addRecruitment": <FormOutlined/>,
-    "/manage/association/listRecruitment": <TableOutlined/>,
+    "/manage/recruitment": <RecruitmentIcon style={{width:15,height:15,paddingTop:1}}/>,
+    "/manage/recruitment/add": <FormOutlined/>,
+    "/manage/recruitment/list": <TableOutlined/>,
     "/manage/permission": <CarryOutOutlined/>,
     "/manage/permission/roleList": <BarsOutlined/>,
     "/manage/permission/permissionList": <TableOutlined/>,
@@ -256,5 +264,6 @@ const SIDE_MENU_ICON_LIST = {
     "/manage/review/addAssociation": <AuditOutlined/>,
     "/manage/review/joinAssociation": <AuditOutlined/>,
     "/manage/review/exitAssociation": <AuditOutlined/>,
+    "/manage/share": <ShareManageIcon style={{width:15,height:15,paddingTop:1}}/>,
 }
 export {MAJORANDCLASS, USER_TAG_LIST, MAJORANDCLASS4Table,SIDE_MENU_ICON_LIST}

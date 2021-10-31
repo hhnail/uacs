@@ -124,6 +124,12 @@ class SideMenu extends Component {
                               defaultSelectedKeys={this.state.selectKeys}
                               defaultOpenKeys={this.state.openKeys}
                               style={{height: '100%', borderRight: 0}}>
+                            <Menu.Item key={'systemHome'}
+                                       onClick={() => {
+                                           this.props.history.push('/#/manage/home')
+                                       }}
+                            >{SIDE_MENU_ICON_LIST['/manage/home']}&nbsp;&nbsp;HOME
+                            </Menu.Item>
                             {this.renderMenu(this.state.menuList)}
                         </Menu>
                     </div>

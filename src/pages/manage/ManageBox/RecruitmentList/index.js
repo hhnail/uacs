@@ -60,7 +60,7 @@ export default function RecruitmentList() {
             dataIndex: 'title',
             render(title, item) {
                 return <Tooltip title="点击查看详情">
-                    <a href={`#/manage/association/listRecruitment/${item.recruitmentId}`}
+                    <a href={`#/manage/recruitment/list/${item.recruitmentId}`}
                     >{title}</a>
                 </Tooltip>;
             }
