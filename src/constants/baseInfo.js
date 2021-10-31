@@ -14,6 +14,7 @@ import {ReactComponent as ResumeIcon} from "../icons/resume.svg";
 import {ReactComponent as AccountManageIcon} from "../icons/account-manage.svg";
 import {ReactComponent as ShareManageIcon} from "../icons/share.svg";
 import {ReactComponent as RecruitmentIcon} from "../icons/recruitment.svg";
+import {ReactComponent as PermissionIcon} from "../icons/permission.svg";
 import React from "react";
 
 const MAJORANDCLASS = [
@@ -257,7 +258,7 @@ const SIDE_MENU_ICON_LIST = {
     "/manage/recruitment": <RecruitmentIcon style={{width:15,height:15,paddingTop:1}}/>,
     "/manage/recruitment/add": <FormOutlined/>,
     "/manage/recruitment/list": <TableOutlined/>,
-    "/manage/permission": <CarryOutOutlined/>,
+    "/manage/permission": <PermissionIcon style={{width:15,height:15,paddingTop:1}}/>,
     "/manage/permission/roleList": <BarsOutlined/>,
     "/manage/permission/permissionList": <TableOutlined/>,
     "/manage/review": <AuditOutlined/>,

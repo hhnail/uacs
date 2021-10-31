@@ -3,9 +3,10 @@ import {Avatar, Col, Dropdown, Form, Input, Menu, message, Modal, Row, Space, Sw
 import Icon, {DownOutlined, UserOutlined, UserSwitchOutlined} from "@ant-design/icons";
 import {ReactComponent as UserSettingsIcon} from "../../icons/user-settings.svg";
 import {ReactComponent as LogoutIcon} from "../../icons/logout.svg";
-import {updateUserSettings} from "../../services/db";
+import {getUserInfo, updateUserSettings} from "../../services/userService";
 
-export default function UserSettings(props){
+
+export default function UserSettings(props) {
 
     const userInfo = JSON.parse(localStorage.getItem("userInfo"))
 
@@ -19,14 +20,16 @@ export default function UserSettings(props){
         <Menu key='userSetting'>
             {/* ====== 个人设置 ====== */}
             <Menu.Item key={0} onClick={() => {
-                console.log(userInfo)
-                userForm.setFieldsValue({
-                    name: userInfo.name,
-                    userId: userInfo.userId,
-                    phone: userInfo.phone,
-                    email: userInfo.email,
+                getUserInfo(userInfo.accessToken).then(res => {
+                    const {data} = res.data
+                    userForm.setFieldsValue({
+                        name: data.name,
+                        userId: data.userId,
+                        phone: data.phone,
+                        email: data.email,
+                    })
+                    setSettingsModalVisible(true)
                 })
-                setSettingsModalVisible(true)
             }}>
                 <Icon component={UserSettingsIcon}/> 个人设置
             </Menu.Item>
@@ -82,7 +85,7 @@ export default function UserSettings(props){
     };
 
 
-    return(
+    return (
         <div style={{float: "right"}}>
             <Space size={"middle"}>
                 <UserSwitchOutlined/>
@@ -90,9 +93,9 @@ export default function UserSettings(props){
                 <Switch
                     checkedChildren="USER"
                     unCheckedChildren="MANAGER"
-                    defaultChecked={props.history.location.pathname.substring(0,5) === '/user'}
+                    defaultChecked={props.history.location.pathname.substring(0, 5) === '/user'}
                     onClick={() => {
-                        if(props.history.location.pathname.substring(0,5) === '/user'){
+                        if (props.history.location.pathname.substring(0, 5) === '/user') {
                             props.history.replace("/manage") // 重定向到管理页面
                             return
                         }
@@ -179,7 +182,7 @@ export default function UserSettings(props){
                                                ? [
                                                    {required: true, message: '该项不得为空！'},
                                                    {
-                                                       pattern: /^[a-zA-Z]\\w{5,17}\$/,
+                                                       pattern: /^[a-zA-Z]\w{5,17}$/,
                                                        message: '密码必须为字母开头、长度[6,18]、仅含字母、数字和下划线的字符'
                                                    }
                                                ]

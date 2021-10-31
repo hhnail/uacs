@@ -5,8 +5,8 @@ import {MenuFoldOutlined, MenuUnfoldOutlined} from '@ant-design/icons'
 import {useHistory, withRouter} from 'react-router-dom'
 import {connect} from "react-redux";
 import {REDUXSTATE} from "../../constants/redux";
-import {getUserInfo} from "../../services/db";
 import UserSettings from '../UserSettings/index'
+import {getUserInfo} from "../../services/userService";
 
 const {Header} = Layout;
 
@@ -15,7 +15,7 @@ function TopHeader(props) {
 
     const history = useHistory()
     const userInfo = JSON.parse(localStorage.getItem("userInfo"))
-
+    console.log('userInfo',userInfo)
     // 通过token换取用户信息
     useEffect(() => {
         getUserInfo(userInfo.accessToken).then(res => {

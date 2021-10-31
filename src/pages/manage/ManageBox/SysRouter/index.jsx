@@ -33,6 +33,7 @@ function SysRouter(props) {
     return (
         <Spin size={"large"} spinning={props.isLoading}>
             <Switch>
+                <Route path="/manage" component={Home} exact></Route>
                 <Route path="/manage/home" component={Home}></Route>
 
                 {/* ==================== 成员管理 ==================== */}
