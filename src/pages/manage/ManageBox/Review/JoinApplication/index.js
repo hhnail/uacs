@@ -1,23 +1,30 @@
 import React, {useEffect, useState} from 'react'
-import {Badge, Button, Modal, Popover, Space, Table, Tooltip} from 'antd'
+import {Badge, Button, Modal, Space, Table, Tooltip} from 'antd'
 import {
-    CloseOutlined, DeleteOutlined, ExclamationCircleOutlined,
-    RollbackOutlined, CheckOutlined
+    CheckOutlined,
+    CloseOutlined,
+    DeleteOutlined,
+    ExclamationCircleOutlined,
+    RollbackOutlined
 } from '@ant-design/icons';
-import usePublish from "../../../../hooks/usePublish";
-import {ROLE_TYPE} from "../../../../constants/type";
+import usePublish from "../../../../../hooks/usePublish";
+import {ROLE_TYPE} from "../../../../../constants/type";
 
 const {confirm} = Modal
 
-export default function RecruitmentList() {
+export default function JoinAssociation() {
 
     const userInfo = JSON.parse(localStorage.getItem("userInfo"))
-    const {dataSource, handleRollback, handleDelete, handlePass, handleRefuse} = usePublish()
     const [recruitmentList, setRecruitmentList] = useState()
+    const [applicationList,setApplicationList] = useState([])
 
     useEffect(() => {
-        setRecruitmentList(dataSource)
+        setApplicationList([])
     })
+
+    const handleUpdateApplicationState = (applicationId)=>{
+
+    }
 
     const renderOptions = (item) => {
         let isSuperAdmin = false
@@ -31,25 +38,25 @@ export default function RecruitmentList() {
         return <Space>
             {!isSuperAdmin &&
             <Button size="small" danger icon={<RollbackOutlined/>}
-                    onClick={() => handleRollback(item.recruitmentId)}>撤销</Button>}
+                    onClick={() => handleUpdateApplicationState(item.recruitmentId)}>撤销</Button>}
 
             {!isSuperAdmin &&
             <Button size="small" danger icon={<DeleteOutlined/>}
-                    onClick={() => handleDelete(item.recruitmentId)}>删除</Button>}
+                    onClick={() => handleUpdateApplicationState(item.recruitmentId)}>删除</Button>}
 
             {isSuperAdmin &&
             <Button size="small" icon={<CheckOutlined/>}
-                    onClick={() => handlePass(item.recruitmentId)}>通过</Button>}
+                    onClick={() => handleUpdateApplicationState(item.recruitmentId)}>通过</Button>}
 
             {isSuperAdmin &&
             <Button size="small" danger icon={<CloseOutlined/>}
-                    onClick={() => handleRefuse(item.recruitmentId)}>拒绝</Button>}
+                    onClick={() => handleUpdateApplicationState(item.recruitmentId)}>拒绝</Button>}
         </Space>
     }
 
     const columns = [
         {
-            title: '纳新通知ID',
+            title: '序号',
             dataIndex: 'recruitmentId',
             render(recruitmentId) {
                 return <b>{recruitmentId}</b>;
@@ -102,19 +109,8 @@ export default function RecruitmentList() {
             title: '您确认要删除吗？',
             icon: <ExclamationCircleOutlined/>,
             onOk() {
-                // 同步页面
-                // console.log("同步前端页面")
                 const newList = recruitmentList.filter(data => data.id !== item.id)
                 setRecruitmentList(newList)
-                // 调用后端接口，同步后台数据库
-                // TODO 同步后台数据(前台数据不可信？从后台更新后重新获取？)
-                // axios.delete(`/association//${item.userId}`)
-                //     .then((res) => {
-                //
-                //     })
-                //     .catch((err) => {
-                //
-                //     })
             },
             onCancel() {
 

@@ -13,6 +13,16 @@ export default function Login(props) {
 
     const history = useHistory()
 
+    const formatUserInfo = (userInfo) => {
+        const manageAssociationKeys = []
+        userInfo.roleList.map(role=>{
+            if(role.roleName == '社团管理员'){
+                manageAssociationKeys.push(role.associationId)
+            }
+        })
+        return {...userInfo,manageAssociationKeys}
+    }
+
     const onFinish = (values) => {
         localStorage.removeItem("token") // 将原有的token移除
         localStorage.removeItem("userInfo") // 将原有的userInfo移除
@@ -24,7 +34,9 @@ export default function Login(props) {
             }
             // 如果data非空,说明验证成功
             localStorage.setItem("token", res.data.data.accessToken) // 将token保存到浏览器中
-            localStorage.setItem("userInfo", JSON.stringify(res.data.data)) // 将userLoginInfo保存到浏览器中
+            // 为便于权限控制，对用户信息进行二次处理
+            const formattedUserInfo = formatUserInfo(userInfo)
+            localStorage.setItem("userInfo", JSON.stringify(formattedUserInfo)) // 将userLoginInfo保存到浏览器中
             message.success("登录成功，跳转中...")
             setTimeout(() => {
                 history.push("/") // 跳转到主页面

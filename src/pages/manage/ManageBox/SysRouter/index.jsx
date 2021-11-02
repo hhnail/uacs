@@ -3,16 +3,16 @@ import {Spin} from 'antd'
 import {connect} from "react-redux";
 import 'nprogress/nprogress.css'
 import Home from '../../Home'
-import UserList from '../UserList'
+import UserList from '../UserManage/UserList'
 import AssociationList from '../AssociationManage/AssociationList'
 import RoleList from '../PermissionManage/RoleList'
 import PermissionList from '../PermissionManage/PermissionList'
 import NoPermission from '../../NoPermission'
 import AddRecruitment from '../RecruitmentManage/AddRecruitment';
-import RecruitmentList from '../RecruitmentList'
-import RecruitmentDetail from "../RecruitmentList/RecruitmentDetail";
-import ReviewAddAssociation from "../Review/ReviewAddAssociation";
-import ReviewJoinAssociation from "../Review/ReviewJoinAssociation";
+import RecruitmentList from '../RecruitmentManage/RecruitmentList'
+import RecruitmentDetail from "../RecruitmentManage/RecruitmentList/RecruitmentDetail";
+import ReviewAddAssociation from "../Review/AddAssociation";
+import ReviewJoinAssociation from "../Review/JoinApplication";
 import ClassList from "../Other/ClassList";
 import UserTagList from "../Other/UserTagList";
 import '../../../../util/http'
@@ -20,6 +20,10 @@ import ShareManage from "../ShareManage";
 import AddShare from "../ShareManage/AddShare";
 import ShareDetail from "../ShareManage/ShareDetail";
 import Resume from "../AccountManage/Resume";
+import AddAssociation from "../Review/AddAssociation";
+import JoinAssociation from "../Review/JoinApplication";
+import ApplicationList from "../ApplicationManage/ApplicationList";
+import ApplicationDetail from "../ApplicationManage/ApplicationDetail";
 
 function SysRouter(props) {
     // TODO 动态创建路由 防止路由穿透
@@ -65,8 +69,12 @@ function SysRouter(props) {
 
 
                 {/* =============== 审核管理 =======================*/}
-                <Route path="/manage/review/addAssociation" component={ReviewAddAssociation}></Route>
-                <Route path="/manage/review/joinAssociation" component={ReviewJoinAssociation}></Route>
+                <Route path="/manage/review/addAssociation" component={AddAssociation}></Route>
+                {/*入团申请详情（申请表 + 个人简历）*/}
+                <Route path="/manage/review/joinAssociation/:applicationId" component={ApplicationDetail}></Route>
+                {/*审批入团申请*/}
+                <Route path="/manage/review/joinAssociation" component={ApplicationList}></Route>
+                {/*发布纳新通知*/}
                 <Route path="/manage/review/publishRecruitmentNotice" component={RecruitmentList}></Route>
 
 

@@ -5,8 +5,8 @@ import {
     RECRUITMENT_PUBLISH_STATE_LIST,
     RECRUITMENT_PUBLISH_STATE_MAP,
     RECRUITMENT_STATE_MAP
-} from '../../../../../constants/state'
-import {listRecruitment} from "../../../../../services/db";
+} from '../../../../../../constants/state'
+import {listRecruitment} from "../../../../../../services/db";
 
 const {confirm} = Modal
 

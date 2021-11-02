@@ -1,20 +1,11 @@
-import React, {useState, useEffect, useRef} from 'react'
-import {
-    Table,
-    Button,
-    Modal,
-    Switch,
-} from 'antd'
+import React, {useEffect, useRef, useState} from 'react'
+import {Button, Modal, Switch, Table,} from 'antd'
 
-import {
-    UnorderedListOutlined,
-    DeleteOutlined,
-    ExclamationCircleOutlined
-} from '@ant-design/icons';
+import {DeleteOutlined, ExclamationCircleOutlined, UnorderedListOutlined} from '@ant-design/icons';
 
 import axios from 'axios'
-import UserForm from '../../../../components/user-manage/UserForm';
-import {addUser, getAllAssociationList, getAllUsers, getRoleList, getUserById} from "../../../../services/db";
+import UserForm from '../../../../../components/user-manage/UserForm';
+import {addUser, getAllAssociationList, getAllUsers, getRoleList, getUserById} from "../../../../../services/db";
 
 
 const {confirm} = Modal

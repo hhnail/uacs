@@ -80,7 +80,7 @@ class SideMenu extends Component {
 
     // 渲染侧边栏菜单
     renderMenu = (menuList) => {
-        console.log('待渲染的侧边菜单：', menuList)
+        // console.log('待渲染的侧边菜单：', menuList)
         return menuList.map((item) => {
             // 当前item为父菜单，并且有下级菜单
             if (item.children.length > 0 && this.checkPageElement(item)) {
