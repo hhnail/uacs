@@ -15,7 +15,6 @@ function TopHeader(props) {
 
     const history = useHistory()
     const userInfo = JSON.parse(localStorage.getItem("userInfo"))
-    console.log('userInfo',userInfo)
     // 通过token换取用户信息
     useEffect(() => {
         getUserInfo(userInfo.accessToken).then(res => {

@@ -10,3 +10,7 @@ export function getApplicationList(associationIds) {
     })
 }
 
+export function getApplicationDetail(applicationId) {
+    return axios.get(`association/getApplicationDetail/${applicationId}`)
+}
+

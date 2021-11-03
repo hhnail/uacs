@@ -1,13 +1,40 @@
-import {Badge, Button, Cascader, DatePicker, Descriptions, Drawer, Input, Slider, Space} from 'antd';
+import {
+    Badge,
+    Button,
+    Cascader,
+    Col,
+    DatePicker,
+    Descriptions,
+    Drawer,
+    Image,
+    Input,
+    PageHeader,
+    Row,
+    Slider,
+    Space
+} from 'antd';
 
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {MAJORANDCLASS} from "../../../../../constants/baseInfo";
 import TextArea from "antd/es/input/TextArea";
+import {useHistory} from "react-router-dom";
+import {getApplicationDetail} from "../../../../../services/applicationService";
 
-export default function ApplicationDetail() {
 
-    const [visible, setVisible] = useState(false);
+export default function ApplicationDetail(props) {
+
+    const history = useHistory()
+    const [visible, setVisible] = useState(false)
+    const [applicationDetail, setApplicationDetail] = useState()
+
+    useEffect(() => {
+        getApplicationDetail(props.match.params.applicationId).then(res => {
+            const applicationDetail = res.data.data
+            console.log(applicationDetail)
+            setApplicationDetail(applicationDetail)
+        })
+    }, [])
 
     const showDrawer = () => {
         setVisible(true);
@@ -18,36 +45,55 @@ export default function ApplicationDetail() {
     };
     return (
         <>
-            <Descriptions title="User Info" bordered>
-                <Descriptions.Item label="Product">Cloud Database</Descriptions.Item>
-                <Descriptions.Item label="Billing Mode">Prepaid</Descriptions.Item>
-                <Descriptions.Item label="Automatic Renewal">YES</Descriptions.Item>
-                <Descriptions.Item label="Order time">2018-04-24 18:00:00</Descriptions.Item>
-                <Descriptions.Item label="Usage Time" span={2}>
-                    2019-04-24 18:00:00
+            <PageHeader onBack={() => history.goBack()} title={'申请表详情'}/>
+            {/* ====== 基本信息 + 照片 ======  */}
+            <Row>
+                <Col span={18}>
+                    <Descriptions title="" bordered column={6}>
+                        <Descriptions.Item label="姓名" span={2}>{applicationDetail.name}</Descriptions.Item>
+                        <Descriptions.Item label="学号" span={2}>{applicationDetail.userId}</Descriptions.Item>
+                        <Descriptions.Item label="性别" span={2}>2019-04-24 18:00:00 </Descriptions.Item>
+                        <Descriptions.Item label="院系" span={3}>Cloud Database</Descriptions.Item>
+                        <Descriptions.Item label="专业班级" span={3}>Prepaid</Descriptions.Item>
+                        <Descriptions.Item label="联系方式" span={3}>YES</Descriptions.Item>
+                        <Descriptions.Item label="电子邮箱" span={3}>2018-04-24 18:00:00</Descriptions.Item>
+                        <Descriptions.Item label="意向部门" span={3}>2018-04-24 18:00:00</Descriptions.Item>
+                        <Descriptions.Item label="是否接受调剂" span={3}>2018-04-24 18:00:00</Descriptions.Item>
+                    </Descriptions>
+                </Col>
+                <Col span={6}>
+                    <Image
+                        width={200}
+                        height={200}
+                        src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                    />
+                </Col>
+            </Row>
+
+            {/* ====== 描述信息 ======  */}
+
+            <Descriptions title="" bordered column={6}>
+                <Descriptions.Item label="兴趣爱好" span={6}>
+                    篮球、足球、钢琴、跳舞
                 </Descriptions.Item>
+                <Descriptions.Item label="个人特长及优势" span={6}>
+                    {applicationDetail.selfProfile}
+                </Descriptions.Item>
+                <Descriptions.Item label="对社团的看法" span={6}>
+                    {applicationDetail.viewOfAssociation}
+                </Descriptions.Item>
+                <Descriptions.Item label="加入社团的目标" span={6}>
+                    {applicationDetail.joinPurpose}
+                </Descriptions.Item>
+
                 <Descriptions.Item label="Status" span={3}>
                     <Badge status="processing" text="Running"/>
                 </Descriptions.Item>
-                <Descriptions.Item label="Negotiated Amount">$80.00</Descriptions.Item>
-                <Descriptions.Item label="Discount">$20.00</Descriptions.Item>
-                <Descriptions.Item label="Official Receipts">$60.00</Descriptions.Item>
-                <Descriptions.Item label="Config Info">
-                    Data disk type: MongoDB
-                    <br/>
-                    Database version: 3.4
-                    <br/>
-                    Package: dds.mongo.mid
-                    <br/>
-                    Storage space: 10 GB
-                    <br/>
-                    Replication factor: 3
-                    <br/>
-                    Region: East China 1<br/>
-                </Descriptions.Item>
             </Descriptions>
+
+            {/* ============================ 操作 ============================ */}
             <Space>
-                <Button type="primary" onClick={()=>{
+                <Button type="primary" onClick={() => {
 
                 }}>
                     安排面试
@@ -58,6 +104,8 @@ export default function ApplicationDetail() {
                     浏览成员简历
                 </Button>
             </Space>
+
+            {/* ============================ 抽屉展示个人简历 ============================ */}
             <Drawer visible={visible} title="成员简历" placement="right" width={900}
                     onClose={onClose}>
                 <Descriptions title="" bordered={true} column={2}>
