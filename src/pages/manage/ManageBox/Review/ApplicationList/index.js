@@ -18,9 +18,9 @@ export default function ApplicationList() {
     const [shareList, setShareList] = useState([])
 
     useEffect(() => {
-        console.log(userInfo.manageAssociationKeys)
+        // console.log(userInfo.manageAssociationKeys)
         getApplicationList(userInfo.manageAssociationKeys).then(res => {
-            console.log(res)
+            // console.log(res)
             const {data} = res.data
             setShareList(data)
         })
@@ -80,7 +80,7 @@ export default function ApplicationList() {
             title: '意向部门',
             dataIndex: 'intentionDepartment',
             render(intentionDepartment, item) {
-                return (item.associationName + '-' +  intentionDepartment)
+                return (item.associationName + '-' + intentionDepartment)
             }
         },
         {

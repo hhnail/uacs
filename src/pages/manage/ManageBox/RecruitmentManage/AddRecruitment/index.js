@@ -21,6 +21,7 @@ import moment from 'moment'
 
 import AssociationEditor from "../../../../../components/AssociationEditor";
 import style from './index.css'
+import {getAssociationByUserId} from "../../../../../services/db";
 
 
 const {Step} = Steps;
@@ -65,15 +66,10 @@ export default function AddRecruitment(props) {
             userId: userInfo.userId,
             roleIds: [2],
         }
-        axios.post('/association/getAssociationByUserId',
-            qs.stringify(data))
+        getAssociationByUserId(data)
             .then(res => {
                 const associationList = res.data.data
                 setAssociationList(associationList)
-                // console.log(res)
-            })
-            .catch(err => {
-                console.log(err)
             })
     }, [])
 
@@ -124,7 +120,7 @@ export default function AddRecruitment(props) {
             url: '/association/addRecruitment',
             method: 'post',
             data: postData,
-            headers: { 'Content-Type': 'application/json;charset=UTF-8' }
+            headers: {'Content-Type': 'application/json;charset=UTF-8'}
         }).then(res => {
             console.log("==27 res", res);
             // props.history.push('/') // TODO 提交后是否需要跳转页面？

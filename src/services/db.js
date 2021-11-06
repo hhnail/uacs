@@ -1,4 +1,5 @@
 import axios from "axios";
+import qs from "querystring";
 
 
 // ============================ 社团模块 ============================
@@ -61,8 +62,12 @@ export function getAssociationDetail(associationId) {
 }
 
 
-export function getRecentRecruitment(associationId,size=1) {
+export function getRecentRecruitment(associationId, size = 1) {
     return axios.get(`/association/getRecentRecruitment/${associationId}/${size}`)
+}
+
+export function getAssociationByUserId(data) {
+    return axios.post('/association/getAssociationByUserId', qs.stringify(data))
 }
 
 

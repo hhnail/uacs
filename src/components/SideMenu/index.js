@@ -4,7 +4,7 @@ import {ReactComponent as OrangeIcon} from '../../icons/orange.svg';
 
 import {withRouter} from 'react-router-dom'
 
-import './index.css'
+import './index.less'
 import {connect} from "react-redux";
 import {getPermissionListByUserId} from "../../services/db";
 import {SIDE_MENU_ICON_LIST} from "../../constants/baseInfo";
@@ -106,20 +106,24 @@ class SideMenu extends Component {
         return (
             <Sider width={200}
                    style={{backgroundColor: "orange"}}
-                // 侧边菜单是否折叠
-                   collapsed={this.props.isCollapsed}
+                   collapsed={this.props.isCollapsed} // 侧边菜单是否折叠
             >
-                <div style={{display: "flex", height: "100%", "flexDirection": "column"}}>
+                <div style={{height: '100%', display: 'flex', flexDirection: 'column'}}>
+                    {/* ============ 系统图标 ========== */}
                     <div className='logo'>
-                        <OrangeIcon
-                            style={{
-                                width: 26,
-                                height: 22,
-                                marginBottom: -3,
-                            }}/>
+                        <OrangeIcon style={{
+                            width: 26,
+                            height: 22,
+                            marginBottom: -3,
+                        }}/>
                         {!this.props.isCollapsed && <>橘集<br/>高校社团管理系统</>}
                     </div>
-                    <div style={{flex: 1, "overflow": "auto"}}>
+
+                    {/* ============ 系统菜单 ========== */}
+                    <div style={{
+                        height: "100%",
+                        overflowY: 'scroll',
+                    }}>
                         <Menu theme="light" mode="inline"
                               defaultSelectedKeys={this.state.selectKeys}
                               defaultOpenKeys={this.state.openKeys}

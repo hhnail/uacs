@@ -22,8 +22,8 @@ import ShareDetail from "../ShareManage/ShareDetail";
 import Resume from "../AccountManage/Resume";
 import AddAssociation from "../Review/AddAssociation";
 import JoinAssociation from "../Review/JoinApplication";
-import ApplicationList from "../ApplicationManage/ApplicationList";
-import ApplicationDetail from "../ApplicationManage/ApplicationDetail";
+import ApplicationList from "../Review/ApplicationList";
+import ApplicationDetail from "../Review/ApplicationDetail";
 
 function SysRouter(props) {
     // TODO 动态创建路由 防止路由穿透
@@ -70,7 +70,7 @@ function SysRouter(props) {
 
                 {/* =============== 审核管理 =======================*/}
                 <Route path="/manage/review/addAssociation" component={AddAssociation}></Route>
-                {/*入团申请详情（申请表 + 个人简历）*/}
+                {/*审批入团申请 -- 申请表详情（申请表 + 个人简历）*/}
                 <Route path="/manage/review/joinAssociation/:applicationId" component={ApplicationDetail}></Route>
                 {/*审批入团申请*/}
                 <Route path="/manage/review/joinAssociation" component={ApplicationList}></Route>

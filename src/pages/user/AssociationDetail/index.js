@@ -17,7 +17,6 @@ export default function AssociationDetail(props) {
     const [recentRecruitmentContent, setRecentRecruitmentContent] = useState()
 
 
-
     useEffect(() => {
         getAssociationDetail(associationId).then(res => {
             const {data} = res.data
@@ -30,11 +29,6 @@ export default function AssociationDetail(props) {
     }, [])
 
 
-    const handleTabChange = (key) => {
-        console.log(key);
-    }
-
-
     return (
         <div>
             {/* ============================ 页面体 头部 ============================*/}
@@ -43,11 +37,9 @@ export default function AssociationDetail(props) {
                 title={associationDetail?.associationName}
                 subTitle={associationDetail?.info}
                 extra={[
-                    <Button key="3">操作1</Button>,
-                    <Button key="2">操作2</Button>,
-                    <Button key="1" type="primary">
-                        加入社团
-                    </Button>,
+                    <Button key="3">不感兴趣</Button>,
+                    <Button key="2">收藏</Button>,
+                    <Button key="1" type="primary">申请加入</Button>,
                 ]}
             >
                 {/* ======== 头部 描述信息 ==========*/}
@@ -62,14 +54,14 @@ export default function AssociationDetail(props) {
 
 
             {/* ============================ 页面体 内容 ============================*/}
-            <Tabs defaultActiveKey="1" onChange={handleTabChange}>
+            <Tabs defaultActiveKey="associationShare">
                 {/* ================= 社团经历分享  ====================-  */}
-                <TabPane tab="社团风采" key="1">
+                <TabPane tab="社团风采" key="associationShare">
                     <Share associationId={associationId}/>
                 </TabPane>
 
                 {/* ================================= 纳新通知  =================================  */}
-                <TabPane tab="社团纳新" key="2">
+                <TabPane tab="社团纳新" key="recruitment">
                     展示社团的纳新通知
                     <div dangerouslySetInnerHTML={{
                         __html: recentRecruitmentContent
@@ -82,11 +74,11 @@ export default function AssociationDetail(props) {
                 </TabPane>
 
                 {/* ================================= echarts数据可视化部分  =================================  */}
-                <TabPane tab="数据可视化" key="3">
+                <TabPane tab="数据可视化" key="dataView">
                     <DataView/>
                 </TabPane>
                 {/* ================= 社团大事记  ====================-  */}
-                <TabPane tab="社团大事记" key="4">
+                <TabPane tab="社团大事记" key="bigEvent">
                     <BigEvent/>
                 </TabPane>
             </Tabs>
