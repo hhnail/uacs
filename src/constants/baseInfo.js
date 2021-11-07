@@ -142,6 +142,57 @@ const MAJORANDCLASS = [
     },
 ]
 
+const COLLEGE = [
+    {
+        value: '航海学院',
+        label: '航海学院',
+    },
+    {
+        value: '轮机工程学院',
+        label: '轮机工程学院',
+    },
+    {
+        value: '水产学院',
+        label: '水产学院',
+    },
+    {
+        value: '海洋食品与生物工程学院',
+        label: '海洋食品与生物工程学院',
+    },
+    {
+        value: '体育学院',
+        label: '体育学院',
+    },
+    {
+        value: '财经学院',
+        label: '财经学院',
+    },
+    {
+        value: '师范学院',
+        label: '师范学院',
+    },
+    {
+        value: '工商管理学院',
+        label: '工商管理学院',
+    },
+    {
+        value: '音乐学院',
+        label: '音乐学院',
+    },
+    {
+        value: '美术与设计学院',
+        label: '美术与设计学院',
+    },
+    {
+        value: '海洋信息工程学院',
+        label: '海洋信息工程学院',
+    },
+    {
+        value: '计算机工程学院',
+        label: '计算机工程学院',
+    },
+]
+
 const USER_TAG_LIST = [
     {
         key: '0',
@@ -247,24 +298,24 @@ const MAJORANDCLASS4Table = [
 
 
 const SIDE_MENU_ICON_LIST = {
-    "/manage/home": <HomeIcon style={{width:15,height:15,paddingTop:1}}/>,
-    "/manage/account": <AccountManageIcon style={{width:15,height:15,paddingTop:1}}/>,
-    "/manage/account/resume": <ResumeIcon style={{width:15,height:15,paddingTop:1}}/>,
+    "/manage/home": <HomeIcon style={{width: 15, height: 15, paddingTop: 1}}/>,
+    "/manage/account": <AccountManageIcon style={{width: 15, height: 15, paddingTop: 1}}/>,
+    "/manage/account/resume": <ResumeIcon style={{width: 15, height: 15, paddingTop: 1}}/>,
     "/manage/user": <TeamOutlined/>,
     "/manage/user/list": <TableOutlined/>,
     "/manage/association": <ClusterOutlined/>,
     "/manage/association/list": <TableOutlined/>,
     "/manage/association/add": <UsergroupAddOutlined/>,
-    "/manage/recruitment": <RecruitmentIcon style={{width:15,height:15,paddingTop:1}}/>,
+    "/manage/recruitment": <RecruitmentIcon style={{width: 15, height: 15, paddingTop: 1}}/>,
     "/manage/recruitment/add": <FormOutlined/>,
     "/manage/recruitment/list": <TableOutlined/>,
-    "/manage/permission": <PermissionIcon style={{width:15,height:15,paddingTop:1}}/>,
+    "/manage/permission": <PermissionIcon style={{width: 15, height: 15, paddingTop: 1}}/>,
     "/manage/permission/roleList": <BarsOutlined/>,
     "/manage/permission/permissionList": <TableOutlined/>,
     "/manage/review": <AuditOutlined/>,
     "/manage/review/addAssociation": <AuditOutlined/>,
     "/manage/review/joinAssociation": <AuditOutlined/>,
     "/manage/review/exitAssociation": <AuditOutlined/>,
-    "/manage/share": <ShareManageIcon style={{width:15,height:15,paddingTop:1}}/>,
+    "/manage/share": <ShareManageIcon style={{width: 15, height: 15, paddingTop: 1}}/>,
 }
-export {MAJORANDCLASS, USER_TAG_LIST, MAJORANDCLASS4Table,SIDE_MENU_ICON_LIST}
+export {MAJORANDCLASS, USER_TAG_LIST, MAJORANDCLASS4Table, SIDE_MENU_ICON_LIST,COLLEGE}

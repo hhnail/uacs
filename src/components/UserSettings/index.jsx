@@ -1,20 +1,35 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Avatar, Col, Dropdown, Form, Input, Menu, message, Modal, Row, Space, Switch} from "antd";
 import Icon, {DownOutlined, UserOutlined, UserSwitchOutlined} from "@ant-design/icons";
 import {ReactComponent as UserSettingsIcon} from "../../icons/user-settings.svg";
 import {ReactComponent as LogoutIcon} from "../../icons/logout.svg";
 import {getUserInfo, updateUserSettings} from "../../services/userService";
+import {useHistory} from "react-router-dom";
 
 
 export default function UserSettings(props) {
 
     const userInfo = JSON.parse(localStorage.getItem("userInfo"))
+    const history = useHistory()
 
     // 个人设置
     const [userForm] = Form.useForm()
     const [settingsModalVisible, setSettingsModalVisible] = useState(false)
     const [confirmLoading, setConfirmLoading] = useState(false)
     const [passwordReseting, setPasswordReseting] = useState(false)
+
+    // 通过token换取用户信息
+    useEffect(() => {
+        getUserInfo(userInfo.accessToken).then(res => {
+            const {data} = res.data
+            if (!data) {
+                message.error("会话超时，请重新登录！")
+                setTimeout(() => {
+                    history.push("/login")
+                }, 1500)
+            }
+        })
+    }, [userInfo])
 
     const menu = ( // 顶部菜单结构
         <Menu key='userSetting'>

@@ -15,18 +15,6 @@ function TopHeader(props) {
 
     const history = useHistory()
     const userInfo = JSON.parse(localStorage.getItem("userInfo"))
-    // 通过token换取用户信息
-    useEffect(() => {
-        getUserInfo(userInfo.accessToken).then(res => {
-            const {data} = res.data
-            if (!data) {
-                message.error("会话超时，请重新登录！")
-                setTimeout(() => {
-                    history.push("/login")
-                }, 1500)
-            }
-        })
-    }, [userInfo])
 
     // TODO 为什么改变折叠状态，也会发请求？？？？？？
     const changeFoldState = () => {

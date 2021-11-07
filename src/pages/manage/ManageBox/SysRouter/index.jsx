@@ -19,7 +19,7 @@ import '../../../../util/http'
 import ShareManage from "../ShareManage";
 import AddShare from "../ShareManage/AddShare";
 import ShareDetail from "../ShareManage/ShareDetail";
-import Resume from "../AccountManage/Resume";
+import Resume from "../AccountManage/Resume/index";
 import AddAssociation from "../Review/AddAssociation";
 import JoinAssociation from "../Review/JoinApplication";
 import ApplicationList from "../Review/ApplicationList";
@@ -40,7 +40,7 @@ function SysRouter(props) {
                 <Route path="/manage" component={Home} exact></Route>
                 <Route path="/manage/home" component={Home}></Route>
 
-                {/* ==================== 成员管理 ==================== */}
+                {/* ==================== 账号管理 ==================== */}
                 <Route path="/manage/account/resume" component={Resume}></Route>
 
                 {/* ==================== 成员管理 ==================== */}

@@ -10,20 +10,22 @@ export default function Share(props) {
     const [shareList, setShareList] = useState([])
 
     useEffect(() => {
-        getShareByAssociation(props.associationId).then(res => {
-            const {data} = res.data
-            console.log("社团分享：", data)
-            const newData = data.map(item => {
-                return {
-                    ...item,
-                    title: item.title,
-                    avatar: 'https://joeschmoe.io/api/v1/random',
-                    description: `来自 ${item.roleName} - ${item.name}, 发布时间： ${item.shareTime || '--/--'}`,
-                    content: item.shortDescription,
-                }
+        getShareByAssociation(props.associationId)
+            .then(res => {
+                const {data} = res.data
+                // console.log("社团分享：", data)
+                // 调整展示方式
+                const newData = data.map(item => {
+                    return {
+                        ...item,
+                        title: item.title,
+                        avatar: 'https://joeschmoe.io/api/v1/random',
+                        description: `来自 ${item.roleName} - ${item.name}, 发布时间： ${item.shareTime || '--/--'}`,
+                        content: item.shortDescription,
+                    }
+                })
+                setShareList(newData)
             })
-            setShareList(newData)
-        })
     }, [])
 
     const IconText = ({icon, text}) => (
