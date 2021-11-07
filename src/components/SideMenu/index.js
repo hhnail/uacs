@@ -56,6 +56,8 @@ class SideMenu extends Component {
     getMenuList = (userId) => {
         getPermissionListByUserId(userId).then(res => {
             const {data} = res.data
+            // console.log('获取菜单数据')
+            // console.log(data)
             this.setState({menuList: data})
         })
     }

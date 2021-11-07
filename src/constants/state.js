@@ -57,9 +57,50 @@ const RECRUITMENT_PUBLISH_STATE_LIST = {
     },
 }
 
+// 纳新通知 发布状态list。获取方式：RECRUITMENT_PUBLISH_STATE_MAP.xx.xx
+const APPLICATION_STATE = {
+    UN_COMMIT: {
+        name: '未提交申请',
+        value: 'UN_COMMIT',
+    },
+    APPLYING: {
+        name: '申请中',
+        value: 'APPLYING',
+    },
+    APPLY_REFUSE: {
+        name: '申请被拒',
+        value: 'APPLY_REFUSE',
+    },
+    INTERVIEW_INVITING: {
+        name: '邀请面试中',
+        value: 'INTERVIEW_INVITING',
+    },
+    REFUSE_INVITING: {
+        name: '拒绝面试邀请',
+        value: 'REFUSE_INVITING',
+    },
+    UN_INTERVIEW: {
+        name: '待面试',
+        value: 'UN_INTERVIEW',
+    },
+    INTERVIEW_PASS: {
+        name: '面试通过',
+        value: 'INTERVIEW_PASS',
+    },
+    CONFIRM: {
+        name: '确认加入',
+        value: 'CONFIRM',
+    },
+    REGRET: {
+        name: '流程取消',
+        value: 'REGRET',
+    },
+}
+
 export {
     RECRUITMENT_STATE_MAP,
     RECRUITMENT_PUBLISH_STATE_MAP,
     RECRUITMENT_PUBLISH_STATE_LIST,
-    RECRUITMENT_STATE
+    RECRUITMENT_STATE,
+    APPLICATION_STATE,
 }

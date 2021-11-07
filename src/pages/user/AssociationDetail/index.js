@@ -19,10 +19,12 @@ export default function AssociationDetail(props) {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"))
     const history = useHistory()
     const {associationId} = props.match.params
-    const [userResume,setUserResume] = useState()
+    const [userResume, setUserResume] = useState()
     const [associationDetail, setAssociationDetail] = useState()
-    const [recentRecruitmentContent, setRecentRecruitmentContent] = useState()
-    const [joinModalVisible, setJoinModalVisible] = useState(true);
+    const [recentRecruitment, setRecentRecruitment] = useState()
+    // 入团申请表 Modal
+    const [joinModalVisible, setJoinModalVisible] = useState(false);
+    // 入团申请表 Form
     const [joinForm] = useForm()
 
     useEffect(() => {
@@ -32,16 +34,27 @@ export default function AssociationDetail(props) {
         })
         getRecentRecruitment(associationId).then(res => {
             const {data} = res.data
-            setRecentRecruitmentContent(data.content)
+            setRecentRecruitment(data)
         })
-        getUserById(userInfo.userId).then(res=>{
+        getUserById(userInfo.userId).then(res => {
             setUserResume(res.data.data)
         })
     }, [])
 
 
-    const handleJoin = () => {
-        setJoinModalVisible(true)
+    const handleJoinOk = () => {
+        joinForm.validateFields().then((values) => {
+            console.log(values)
+            const data = {
+                ...values,
+                userId: userResume.userId,
+                recruitmentId:recentRecruitment.recruitmentId,
+            }
+            axios.post('/association/saveApplication', data).then(res => {
+                console.log("申请表提交结果", res.data.data)
+                setJoinModalVisible(false)
+            })
+        })
     }
 
     return (
@@ -54,7 +67,6 @@ export default function AssociationDetail(props) {
                 extra={[
                     <Button key="3">不感兴趣</Button>,
                     <Button key="2">收藏</Button>,
-                    <Button key="1" type="primary" onClick={handleJoin}>申请加入</Button>,
                 ]}
             >
                 {/* ======== 头部 描述信息 ==========*/}
@@ -77,15 +89,29 @@ export default function AssociationDetail(props) {
 
                 {/* ================================= 纳新通知  =================================  */}
                 <TabPane tab="社团纳新" key="recruitment">
-                    展示社团的纳新通知
-                    <div dangerouslySetInnerHTML={{
-                        __html: recentRecruitmentContent
-                    }}
-                         style={{
-                             margin: '24px 24px',
-                             border: '1px solid gray',
-                         }}>
+                    <div style={{
+                        float:'right',
+                        margin:'20px 20px 0px 0px',
+                    }}>
+                        <Button key="saveApplication" type="primary"
+                                style={{
+                                    width:150,
+                                    height:50,
+                                }}
+                                onClick={() => {
+                                    setJoinModalVisible(true)
+                                }}>申请加入</Button>
                     </div>
+                    <div style={{
+                        padding:'16px 16px 16px 16px',
+                        margin: '24px 24px',
+                        border: '1px solid gray',
+                    }}>
+                        <div dangerouslySetInnerHTML={{
+                            __html: recentRecruitment?.content
+                        }}/>
+                    </div>
+
                 </TabPane>
 
                 {/* ================================= echarts数据可视化部分  =================================  */}
@@ -101,15 +127,7 @@ export default function AssociationDetail(props) {
 
             {/* ================== 申请加入社团 Modal =============== */}
             <Modal title="入团申请表" visible={joinModalVisible} width={1200}
-                   onOk={() => {
-                       joinForm.validateFields().then((values) => {
-                           console.log(values)
-                           setJoinModalVisible(false)
-                           axios.post('/association/saveApplication', {...values}).then(res => {
-                               console.log("申请表提交结果", res.data.data)
-                           })
-                       })
-                   }}
+                   onOk={handleJoinOk}
                    onCancel={() => {
                        setJoinModalVisible(false)
                    }}
@@ -122,34 +140,24 @@ export default function AssociationDetail(props) {
                                 <Descriptions.Item label="学号" span={2}>{userResume?.userId}</Descriptions.Item>
                                 <Descriptions.Item label="性别" span={2}>{userResume?.gender}</Descriptions.Item>
                                 <Descriptions.Item label="院系" span={3}>
-                                    <Form.Item name={'college'}
-                                               rules={[{required: true}]}><Input/></Form.Item>
+                                    {userResume?.college}
                                 </Descriptions.Item>
                                 <Descriptions.Item label="专业班级" span={3}>
-                                    <Form.Item name={'majorAndClass'}
-                                               rules={[{required: true}]}><Input/></Form.Item>
+                                    {userResume?.majorAndClass}
                                 </Descriptions.Item>
-                                <Descriptions.Item label="联系方式" span={3}>
-                                    <Form.Item name={'phone'}
-                                               rules={[{required: true}]}>
-                                        <Input/>
-                                    </Form.Item>
-                                </Descriptions.Item>
-                                <Descriptions.Item label="电子邮箱" span={3}>
-                                    <Form.Item name={'email'}
-                                               rules={[{required: true}]}>
-                                        <Input/>
-                                    </Form.Item>
-                                </Descriptions.Item>
+                                <Descriptions.Item label="联系方式" span={3}>{userResume?.phone}</Descriptions.Item>
+                                <Descriptions.Item label="电子邮箱" span={3}>{userResume?.email}</Descriptions.Item>
                                 <Descriptions.Item label="意向部门" span={3}>
                                     <Form.Item name={'intentionDepartment'}
-                                               rules={[{required: true}]}>
+                                               rules={[{required: true, message: '请填写意向部门！'}]}>
                                         <Input/>
                                     </Form.Item>
                                 </Descriptions.Item>
                                 <Descriptions.Item label="是否接受调剂" span={3}>
                                     <Form.Item name={'canAdjust'}
-                                               rules={[{required: true}]}><Input/></Form.Item>
+                                               rules={[{required: true, message: '请确认是否接受调剂！'}]}>
+                                        <Input/>
+                                    </Form.Item>
                                 </Descriptions.Item>
                             </Descriptions>
                         </Col>
@@ -166,7 +174,7 @@ export default function AssociationDetail(props) {
                                 <TextArea rows={5}/>
                             </Form.Item>
                         </Descriptions.Item>
-                        <Descriptions.Item label="个人特长及优势" span={6} style={{height: 95}}>
+                        <Descriptions.Item label="自我评价" span={6} style={{height: 95}}>
                             <Form.Item name={'selfProfile'} style={{height: 95}}>
                                 <TextArea rows={5}/>
                             </Form.Item>

@@ -1,8 +1,8 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {
     Anchor,
     Avatar,
-    Badge,
+    Badge, Button,
     Card,
     Cascader,
     Col,
@@ -12,11 +12,12 @@ import {
     Image,
     Input,
     Row, Select,
-    Slider
+    Slider, Space, Switch
 } from 'antd';
 import {EditOutlined, EllipsisOutlined, SettingOutlined} from '@ant-design/icons';
 import {COLLEGE, MAJORANDCLASS} from "../../../../../constants/baseInfo";
-
+import {getUserById} from "../../../../../services/db";
+import PickTag from '../../../../components/PickTag'
 
 // antd组件结构
 const {TextArea} = Input;
@@ -26,9 +27,22 @@ const {Option} = Select
 
 export default function Resume() {
 
-    const userInfo = JSON.parse(localStorage.getItem("userInfo"))
+    const userSession = JSON.parse(localStorage.getItem("userInfo"))
+    const [userInfo, setUserInfo] = useState()
     const [isEdit, setIsEdit] = useState(false)
 
+    useEffect(() => {
+        const {userId} = userSession
+        if (userId) {
+            getUserById(userId).then(res => {
+                // console.log('userInfo')
+                // console.log(userInfo)
+                // console.log('getUserById')
+                console.log(res.data.data)
+                setUserInfo(res.data.data)
+            })
+        }
+    }, [])
 
     return (
         <div style={{
@@ -43,30 +57,34 @@ export default function Resume() {
                 <Anchor>
                     <b>简历目录</b>
                     <Link href="#components-anchor-demo-basic" title="个人信息"/>
-                    <Link href="#components-anchor-demo-static" title="个人优势"/>
-                    <Link href="#components-anchor-demo-static" title="大学期望"/>
-                    <Link href="#components-anchor-demo-static" title="校园经历"/>
-                    <Link href="#API" title="哈哈哈哈">
-                        <Link href="#Anchor-Props" title="嘻嘻嘻嘻嘻"/>
-                        <Link href="#Link-Props" title="嘿嘿嘿嘿"/>
+                    <Link href="#components-anchor-demo-static" title="自我评价"/>
+                    <Link href="#components-anchor-demo-static" title="个性签名"/>
+                    <Link href="#API" title="父级">
+                        <Link href="#Anchor-Props" title="子锚点1"/>
+                        <Link href="#Link-Props" title="子锚点2"/>
                     </Link>
                 </Anchor>
             </div>
 
             {/* ============== 中侧简历展示区 ==================== */}
+
             <div style={{width: '70%'}}>
+                {userInfo &&
                 <Row>
                     <Col span={18}>
                         <Descriptions column={7} bordered={true} size={'small'}>
                             <Descriptions.Item label="姓名" span={3}>
-                                <Form.Item name='name' rules={[{required: true}]}>
-                                    <Input defaultValue={userInfo?.name}/>
-                                </Form.Item></Descriptions.Item>
-                            <Descriptions.Item label="学号" span={4}>
-                                {userInfo?.userId}
+                                {isEdit
+                                    ? <Form.Item name='name' rules={[{required: true}]}>
+                                        <Input defaultValue={userInfo.name}/>
+                                    </Form.Item>
+                                    : userInfo.name}
                             </Descriptions.Item>
-                            <Descriptions.Item label="院系" span={3} style={{height: 10}}>
-                                <Form.Item name='college' style={{height: 10}}>
+                            <Descriptions.Item label="学号" span={4}>
+                                {userInfo.userId}
+                            </Descriptions.Item>
+                            <Descriptions.Item label="院系" span={3}>
+                                <Form.Item name='college' style={{width: 200}}>
                                     <Select style={{width: '100%'}}>
                                         {COLLEGE.map(college => {
                                             return <Option value={college.value}>{college.value}</Option>
@@ -74,8 +92,12 @@ export default function Resume() {
                                     </Select>
                                 </Form.Item>
                             </Descriptions.Item>
-                            <Descriptions.Item label="专业班级" span={4} style={{height: 5}}>
-                                <Form.Item name={'majorAndClass'} style={{height: 5}}>
+                            <Descriptions.Item label="专业班级" span={4}
+                                // style={{height: 5}}
+                            >
+                                <Form.Item name={'majorAndClass'}
+                                    // style={{height: 5}}
+                                >
                                     <Cascader options={MAJORANDCLASS}
                                               defaultValue={['学院', '专业', '班级']}
                                         // value={}
@@ -85,21 +107,22 @@ export default function Resume() {
                                 </Form.Item>
                             </Descriptions.Item>
                             <Descriptions.Item label="联系方式" span={3}>
-                                <Form.Item name={'phone'}
-                                           rules={[{required: true}]}>
-                                    <Input defaultValue={userInfo?.phone}/>
-                                </Form.Item>
+                                {isEdit
+                                    ? <Form.Item name={'phone'}
+                                                 rules={[{required: true}]}>
+                                        <Input defaultValue={userInfo?.phone}/>
+                                    </Form.Item>
+                                    : userInfo?.phone
+                                }
                             </Descriptions.Item>
-                            <Descriptions.Item label="生日" span={3}
-                                               labelStyle={{width: 90}}
-                                               style={{
-                                                   height: 5,
-                                                   width: 10
-                                               }}
-                            >
-                                <DatePicker locale bordered={false} placeholder="请选择生日"
-                                    // style={{height: 5, width: 130}}
-                                />
+                            <Descriptions.Item label="邮箱" span={3}>
+                                {isEdit
+                                    ? <Form.Item name={'email'}
+                                                 rules={[{required: true}]}>
+                                        <Input defaultValue={userInfo?.email}/>
+                                    </Form.Item>
+                                    : userInfo.email
+                                }
                             </Descriptions.Item>
                         </Descriptions>
                     </Col>
@@ -108,36 +131,43 @@ export default function Resume() {
                                src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"/>
                     </Col>
                 </Row>
-
+                }
                 {/* ====== 描述信息 ======  */}
+                {userInfo &&
                 <Descriptions bordered={true} column={24} size={'small'}>
-                    <Descriptions.Item label="微信" span={5} style={{height: 8}}>
-                        <Form.Item name={'college'} style={{height: 8}}
-                                   rules={[{required: true}]}>
-                            <Input defaultValue={userInfo?.wechat}/>
-                        </Form.Item>
+                    <Descriptions.Item label="微信" span={12}>
+                        {isEdit
+                            ? <Form.Item name={'wechat'} rules={[{required: true}]}>
+                                <Input defaultValue={userInfo?.wechat}/>
+                            </Form.Item>
+                            : userInfo.wechat}
                     </Descriptions.Item>
-                    <Descriptions.Item label="QQ" span={5} style={{height: 8}}>
-                        <Form.Item name={'qq'} style={{height: 8}}
-                                   rules={[{required: true}]}>
-                            <Input defaultValue={userInfo?.qq}/>
-                        </Form.Item>
+                    <Descriptions.Item label="QQ" span={12}>
+                        {isEdit
+                            ? <Form.Item name={'qq'}>
+                                <Input defaultValue={userInfo?.qq}/>
+                            </Form.Item>
+                            : userInfo.qq}
                     </Descriptions.Item>
-                    <Descriptions.Item label="邮箱" span={5} labelStyle={{width: 90, height: 8}}>
-                        <Form.Item name={'email'} style={{height: 8}}
-                                   rules={[{required: true}]}>
-                            <Input defaultValue={userInfo?.email}/>
-                        </Form.Item>
+                    <Descriptions.Item label="生日" span={8}>
+                        <DatePicker locale bordered={false} placeholder="请选择生日"/>
                     </Descriptions.Item>
-                    <Descriptions.Item label="性别" span={9} style={{width: 50, height: 8}} labelStyle={{width: 90}}>
-                        <Form.Item name={'gender'} style={{width: 50, height: 8}}>
-                            <Input defaultValue={userInfo?.gender}/>
-                        </Form.Item>
+                    <Descriptions.Item label="民族" span={8}>
+                        {isEdit
+                            ? <Form.Item name='nation'>
+                                <Input defaultValue={userInfo.nation}/>
+                            </Form.Item>
+                            : userInfo.nation}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="性别" span={8}>
+                        {isEdit
+                            ? <Form.Item name={'gender'}>
+                                <Input defaultValue={userInfo.gender}/>
+                            </Form.Item>
+                            : userInfo.gender}
                     </Descriptions.Item>
                     <Descriptions.Item label="兴趣爱好" span={24} labelStyle={{width: 135}} style={{height: 45}}>
-                        <Form.Item name={'like'} style={{height: 30}}>
-                            <TextArea rows={2}/>
-                        </Form.Item>
+                        <PickTag/>
                     </Descriptions.Item>
                     <Descriptions.Item label="自我评价" span={24}>
                         <Form.Item name={'selfProfile'}>
@@ -145,51 +175,67 @@ export default function Resume() {
                                 display: 'flex',
                                 flexDirection: 'row',
                             }}>
-                                <div style={{width: '50%'}}>
-                                    沟通能力：<Slider defaultValue={80} disabled={false}/>
-                                    表达能力：<Slider defaultValue={80} disabled={false}/>
+                                <div style={{width: '65%', marginRight: '5%'}}>
+                                    <TextArea rows={10} disabled={!isEdit}/>
                                 </div>
-                                <div style={{width: '50%'}}>
-                                    合作能力：<Slider defaultValue={80} disabled={false}/>
-                                    抗压能力：<Slider defaultValue={80} disabled={false}/>
+                                <div style={{width: '30%'}}>
+                                    沟通能力：<Slider defaultValue={60} disabled={!isEdit}/>
+                                    表达能力：<Slider defaultValue={60} disabled={!isEdit}/>
+                                    合作能力：<Slider defaultValue={60} disabled={!isEdit}/>
+                                    抗压能力：<Slider defaultValue={60} disabled={!isEdit}/>
                                 </div>
                             </div>
-                            <TextArea rows={4}/>
                         </Form.Item>
                     </Descriptions.Item>
-                    <Descriptions.Item label="大学的期望" span={24} style={{height: 95}}>
-                        <Form.Item name={'expectation'} style={{height: 95}}>
-                            <TextArea rows={5}/>
+                    <Descriptions.Item label="个性签名" span={24} style={{height: 95}}>
+                        <Form.Item name={'personalSignature'} style={{height: 95}}>
+                            <TextArea rows={5} disabled={!isEdit}/>
                         </Form.Item>
                     </Descriptions.Item>
                 </Descriptions>
+                }
             </div>
+
 
             {/* ================== 右侧卡片展示区 ======================*/}
             <div style={{width: '20%'}}>
-                <Row>
-                    <Card
-                        style={{width: 300}}
-                        cover={
-                            <img
-                                alt="example"
-                                src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                <div>
+                    <div style={{display: 'flex', flexDirection: 'row'}}>
+                        <div style={{
+                            width: '40%',
+                        }}>
+                            <Switch defaultChecked={false}
+                                    unCheckedChildren={'浏览'}
+                                    checkedChildren={'编辑'}
+                                    onChange={() => {
+                                        setIsEdit(!isEdit)
+                                    }}
                             />
-                        }
-                        actions={[
-                            <SettingOutlined key="setting"/>,
-                            <EditOutlined key="edit"/>,
-                            <EllipsisOutlined key="ellipsis"/>,
-                        ]}
-                    >
-                        <Meta
-                            avatar={<Avatar src="https://joeschmoe.io/api/v1/random"/>}
-                            title="Card title"
-                            description="This is the description"
-                        />
-                    </Card>
-                </Row>
-
+                        </div>
+                        <Button size='middle' type='primary' onClick={() => {
+                            setIsEdit(false)
+                        }}>确认修改</Button>
+                    </div>
+                    <div style={{display: 'flex', flexDirection: 'row', marginTop: 30,}}>
+                        <div style={{
+                            width: '40%',
+                        }}>
+                            <Switch defaultChecked={false}
+                                    unCheckedChildren={'对他人可见'}
+                                    checkedChildren={'对他人隐藏'}
+                                    onChange={() => {
+                                        // setIsEdit(!isEdit)
+                                    }}
+                            />
+                        </div>
+                        <Button size='middle' type='primary' onClick={() => {
+                            setIsEdit(!isEdit)
+                        }}>帮助中心</Button>
+                    </div>
+                </div>
+                <br/>
+                <br/>
+                <br/>
                 <Row>
                     <Card
                         style={{width: 300}}

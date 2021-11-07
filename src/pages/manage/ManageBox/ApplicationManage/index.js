@@ -1,0 +1,123 @@
+import React, {useEffect, useState} from 'react'
+import {Badge, Button, message, Space, Table} from 'antd'
+import {RollbackOutlined} from '@ant-design/icons';
+import {getApplicationByUserId, updateApplicationState} from "../../../../services/applicationService";
+import {useHistory} from "react-router-dom";
+import {APPLICATION_STATE} from '../../../../constants/state'
+import qs from "querystring";
+import {OPTION_ICONS} from "../../../../constants/icon";
+
+export default function ApplicationManage() {
+
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"))
+    const history = useHistory()
+    const [applicationList, setApplicationList] = useState([])
+
+    useEffect(() => {
+        getApplicationByUserId(userInfo.userId).then(res => {
+            const {data} = res.data
+            setApplicationList(data)
+        })
+    }, [])
+
+    const handleApplicationUpdate = (applicationId, state) => {
+        updateApplicationState(qs.stringify({applicationId, state}))
+            .then(() => {
+                message.success('更新成功！')
+                getApplicationByUserId(userInfo.userId).then(res => {
+                    const {data} = res.data
+                    setApplicationList(data)
+                })
+            })
+    }
+
+    const renderOptions = (item) => {
+        return <Space>
+            <Button size="small" icon={OPTION_ICONS.VIEW}
+                    onClick={() => {
+                        history.push(`/manage/review/joinAssociation/${item.applicationId}`)
+                    }}
+            >
+                查看
+            </Button>
+            {item.state === APPLICATION_STATE.APPLYING.value &&
+            <Button size="small" danger icon={<RollbackOutlined/>}
+                    onClick={() => handleApplicationUpdate(item.applicationId, APPLICATION_STATE.UN_COMMIT.value)}>撤销</Button>
+            }
+            {item.state === APPLICATION_STATE.UN_COMMIT.value &&
+            <Button size="small" type='primary' icon={OPTION_ICONS.COMMIT}
+                    onClick={() => handleApplicationUpdate(item.applicationId, APPLICATION_STATE.APPLYING.value)}>提交</Button>
+            }
+            {!item.state &&
+            <Button size="small" danger icon={OPTION_ICONS.DELETE}
+                    onClick={() => handleApplicationUpdate(item.applicationId, APPLICATION_STATE.APPLYING.value)}>删除</Button>
+            }
+        </Space>
+    }
+
+
+    const columns = [
+        {
+            title: '编号',
+            dataIndex: 'applicationId',
+            render(applicationId) {
+                return <b>{applicationId}</b>;
+            }
+        },
+        {
+            title: '社团及意向部门',
+            dataIndex: 'intentionDepartment',
+            render(intentionDepartment, item) {
+                return (
+                    <>
+                        <a onClick={()=>{
+                            history.push(`/user/associationDetail/${item.associationId}`)
+                        }}>{item.associationName}</a> —— {item.intentionDepartment}
+                    </>
+                )
+            }
+        },
+        {
+            title: '申请时间',
+            dataIndex: 'applicationTime',
+            render(applicationTime) {
+                return (applicationTime)
+            }
+        },
+        {
+            title: '状态',
+            dataIndex: 'state',
+            render(state) {
+                switch (state) {
+                    case APPLICATION_STATE.UN_COMMIT.value:
+                        return <Badge status="warning" text={APPLICATION_STATE.UN_COMMIT.name}/>
+                    case APPLICATION_STATE.APPLYING.value:
+                        return <Badge status="processing" text={APPLICATION_STATE.APPLYING.name}/>
+                    case APPLICATION_STATE.INTERVIEW_INVITING:
+                        return <Badge status="success" text={APPLICATION_STATE.INTERVIEW_INVITING.name}/>
+                    default:
+                        return <Badge status="error" text="状态异常"/>
+                }
+            }
+        },
+        {
+            title: '操作',
+            render: (item) => renderOptions(item)
+        },
+    ]
+
+
+    return (
+        <div>
+            <Table
+                dataSource={applicationList}
+                columns={columns}
+                pagination={{
+                    pageSize: 6
+                }}
+                rowKey={item => item.shareId}
+            />
+        </div>
+    )
+
+}

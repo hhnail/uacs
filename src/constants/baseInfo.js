@@ -317,5 +317,9 @@ const SIDE_MENU_ICON_LIST = {
     "/manage/review/joinAssociation": <AuditOutlined/>,
     "/manage/review/exitAssociation": <AuditOutlined/>,
     "/manage/share": <ShareManageIcon style={{width: 15, height: 15, paddingTop: 1}}/>,
+    "/manage/share/list": <TableOutlined/>,
+    "/manage/share/add": <FormOutlined/>,
+    "/manage/application": <FormOutlined/>,
+    "/manage/application/list": <TableOutlined/>,
 }
-export {MAJORANDCLASS, USER_TAG_LIST, MAJORANDCLASS4Table, SIDE_MENU_ICON_LIST,COLLEGE}
+export {MAJORANDCLASS, USER_TAG_LIST, MAJORANDCLASS4Table, SIDE_MENU_ICON_LIST, COLLEGE}

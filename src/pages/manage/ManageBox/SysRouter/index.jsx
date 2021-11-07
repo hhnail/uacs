@@ -24,6 +24,7 @@ import AddAssociation from "../Review/AddAssociation";
 import JoinAssociation from "../Review/JoinApplication";
 import ApplicationList from "../Review/ApplicationList";
 import ApplicationDetail from "../Review/ApplicationDetail";
+import ApplicationManage from "../ApplicationManage";
 
 function SysRouter(props) {
     // TODO 动态创建路由 防止路由穿透
@@ -78,14 +79,18 @@ function SysRouter(props) {
                 <Route path="/manage/review/publishRecruitmentNotice" component={RecruitmentList}></Route>
 
 
-                {/* =============== 杂项管理 =======================*/}
-                <Route path="/manage/other/class" component={ClassList}></Route>
-                <Route path="/manage/other/userTag" component={UserTagList}></Route>
+                {/* =============== 申请管理 =======================*/}
+                <Route path="/manage/application/list" component={ApplicationManage}></Route>
+
 
                 {/* =============== 分享管理 =======================*/}
                 <Route path="/manage/share/list/:shareId" component={ShareDetail}></Route>
                 <Route path="/manage/share/list" component={ShareManage}></Route>
                 <Route path="/manage/share/add" component={AddShare}></Route>
+
+                {/* =============== 杂项管理 =======================*/}
+                <Route path="/manage/other/class" component={ClassList}></Route>
+                <Route path="/manage/other/userTag" component={UserTagList}></Route>
 
 
                 {/* 其他情况 ================== 重定向 =====================*/}

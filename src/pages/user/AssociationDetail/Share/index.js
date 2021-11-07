@@ -6,7 +6,6 @@ import {getShareByAssociation} from "../../../../services/shareService";
 const sharePageSize = 5
 export default function Share(props) {
 
-
     const [shareList, setShareList] = useState([])
 
     useEffect(() => {
