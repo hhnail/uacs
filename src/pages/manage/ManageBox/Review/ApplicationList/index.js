@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {Badge, Button, Modal, Space, Table, Tooltip} from 'antd'
+import {Badge, Button, message, Modal, Space, Table, Tooltip} from 'antd'
 import {
     CheckOutlined,
     CloseOutlined,
@@ -8,53 +8,58 @@ import {
     RollbackOutlined
 } from '@ant-design/icons';
 import {ROLE_TYPE} from "../../../../../constants/type";
-import {getApplicationList} from "../../../../../services/applicationService";
+import {
+    getApplicationByUserId,
+    getApplicationList,
+    updateApplicationState
+} from "../../../../../services/applicationService";
+import {ICON, OPTION_ICONS} from "../../../../../constants/icon";
+import {APPLICATION_STATE} from "../../../../../constants/state";
+import {useHistory} from "react-router-dom";
+import qs from "querystring";
+import ArrangeInterviewModal from "../../../../components/ArrangeInterviewModal";
+import ApplicationCalendar from "../../../../components/Calendar";
 
 const {confirm} = Modal
 
 export default function ApplicationList() {
 
     const userInfo = JSON.parse(localStorage.getItem("userInfo"))
-    const [shareList, setShareList] = useState([])
+    const history = useHistory()
+    const [applicationList, setApplicationList] = useState([])
 
     useEffect(() => {
-        // console.log(userInfo.manageAssociationKeys)
         getApplicationList(userInfo.manageAssociationKeys).then(res => {
-            // console.log(res)
             const {data} = res.data
-            setShareList(data)
+            setApplicationList(data)
         })
     }, [])
 
-    const handelShareUpdate = (shareId) => {
-        console.log(shareId)
+    const handleApplicationUpdate = (applicationId, state) => {
+        updateApplicationState(qs.stringify({applicationId, state}))
+            .then(() => {
+                message.success('更新成功！')
+                getApplicationByUserId(userInfo.userId).then(res => {
+                    const {data} = res.data
+                    setApplicationList(data)
+                })
+            })
     }
 
     const renderOptions = (item) => {
-        let isSuperAdmin = false
-        const hasRoleList = userInfo.roleList
-        hasRoleList.map(role => {
-            if (role.roleName === ROLE_TYPE.SUPER_ADMIN.name) {
-                isSuperAdmin = true
-                return
-            }
-        })
         return <Space>
-            {!isSuperAdmin &&
+            {item.state === APPLICATION_STATE.APPLYING.value &&
             <Button size="small" danger icon={<RollbackOutlined/>}
-                    onClick={() => handelShareUpdate(item.shareId)}>撤销</Button>}
-
-            {!isSuperAdmin &&
-            <Button size="small" danger icon={<DeleteOutlined/>}
-                    onClick={() => handelShareUpdate(item.shareId)}>删除</Button>}
-
-            {isSuperAdmin &&
-            <Button size="small" icon={<CheckOutlined/>}
-                    onClick={() => handelShareUpdate(item.shareId)}>通过</Button>}
-
-            {isSuperAdmin &&
-            <Button size="small" danger icon={<CloseOutlined/>}
-                    onClick={() => handelShareUpdate(item.shareId)}>拒绝</Button>}
+                    onClick={() => {
+                        Modal.info({
+                            width: 698,
+                            title: '面试安排',
+                            icon: ICON.interview,
+                            content: <ArrangeInterviewModal/>
+                        })
+                        // handleApplicationUpdate(item.applicationId, APPLICATION_STATE.UN_COMMIT.value)
+                    }}>安排面试</Button>
+            }
         </Space>
     }
 
@@ -70,7 +75,7 @@ export default function ApplicationList() {
             title: '申请人',
             dataIndex: 'name',
             render(name, item) {
-                return <Tooltip title="点击查看详情或个人简历">
+                return <Tooltip title="点击查看详情">
                     <a href={`#/manage/review/joinAssociation/${item.applicationId}`}
                     >{name}</a>
                 </Tooltip>;
@@ -95,12 +100,12 @@ export default function ApplicationList() {
             dataIndex: 'state',
             render(state) {
                 switch (state) {
-                    case "UNEXAMINE":
-                        return <Badge status="warning" text="未提交"/>
-                    case "EXAMINING":
-                        return <Badge status="processing" text="审核中"/>
-                    case "EXAMINE_PASS":
-                        return <Badge status="success" text="审核通过"/>
+                    case APPLICATION_STATE.UN_COMMIT.value:
+                        return <Badge status="warning" text={APPLICATION_STATE.UN_COMMIT.name}/>
+                    case APPLICATION_STATE.APPLYING.value:
+                        return <Badge status="processing" text={APPLICATION_STATE.APPLYING.name}/>
+                    case APPLICATION_STATE.INTERVIEW_INVITING:
+                        return <Badge status="success" text={APPLICATION_STATE.INTERVIEW_INVITING.name}/>
                     default:
                         return <Badge status="error" text="状态异常"/>
                 }
@@ -112,30 +117,27 @@ export default function ApplicationList() {
         },
     ]
 
-    // 删除确认
-    const confirmDelete = (item) => {
-        confirm({
-            title: '您确认要删除吗？',
-            icon: <ExclamationCircleOutlined/>,
-            onOk() {
-
-            },
-            onCancel() {
-
-            }
-        })
-    }
-
     return (
         <div>
+            <Button type='primary'
+                    onClick={() => {
+                        Modal.info({
+                            title: '面试安排日历',
+                            width: 1500,
+                            icon: ICON.calendar,
+                            content: <ApplicationCalendar/>
+                        })
+                    }}
+            >查看面试安排日历</Button>
             <Table
-                dataSource={shareList}
+                dataSource={applicationList}
                 columns={columns}
                 pagination={{
                     pageSize: 6
                 }}
-                rowKey={item => item.shareId}
+                rowKey={item => item.applicationId}
             />
+
         </div>
     )
 
