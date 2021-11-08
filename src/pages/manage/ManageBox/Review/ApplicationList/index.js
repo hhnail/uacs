@@ -1,13 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import {Badge, Button, message, Modal, Space, Table, Tooltip} from 'antd'
-import {
-    CheckOutlined,
-    CloseOutlined,
-    DeleteOutlined,
-    ExclamationCircleOutlined,
-    RollbackOutlined
-} from '@ant-design/icons';
-import {ROLE_TYPE} from "../../../../../constants/type";
+import {RollbackOutlined} from '@ant-design/icons';
 import {
     getApplicationByUserId,
     getApplicationList,
@@ -24,41 +17,61 @@ const {confirm} = Modal
 
 export default function ApplicationList() {
 
+    // localStorage
     const userInfo = JSON.parse(localStorage.getItem("userInfo"))
+    // hooks
     const history = useHistory()
     const [applicationList, setApplicationList] = useState([])
 
+    // life cycle
     useEffect(() => {
+        refresh()
+    }, [])
+
+    const refresh = ()=>{
         getApplicationList(userInfo.manageAssociationKeys).then(res => {
             const {data} = res.data
+            console.log('getApplicationList')
+            console.log(data)
             setApplicationList(data)
         })
-    }, [])
+    }
 
     const handleApplicationUpdate = (applicationId, state) => {
         updateApplicationState(qs.stringify({applicationId, state}))
             .then(() => {
+                Modal.destroyAll()
                 message.success('更新成功！')
-                getApplicationByUserId(userInfo.userId).then(res => {
-                    const {data} = res.data
-                    setApplicationList(data)
-                })
+                refresh()
             })
     }
 
     const renderOptions = (item) => {
         return <Space>
-            {item.state === APPLICATION_STATE.APPLYING.value &&
-            <Button size="small" danger icon={<RollbackOutlined/>}
+            {item.state === APPLICATION_STATE.APPLYING.value || item.state === APPLICATION_STATE.UN_INTERVIEW.value &&
+            <Button size="small" type='primary' icon={OPTION_ICONS.ARRANGE}
                     onClick={() => {
-                        Modal.info({
+                        Modal.confirm({
                             width: 698,
                             title: '面试安排',
                             icon: ICON.interview,
-                            content: <ArrangeInterviewModal/>
+                            content: <ArrangeInterviewModal canEdit={true}/>,
+                            onOk: () => {
+                                handleApplicationUpdate(item.applicationId, APPLICATION_STATE.INTERVIEW_INVITING.value)
+                            }
                         })
-                        // handleApplicationUpdate(item.applicationId, APPLICATION_STATE.UN_COMMIT.value)
-                    }}>安排面试</Button>
+                    }}>面试</Button>
+            }
+            {item.state === APPLICATION_STATE.INTERVIEW_INVITING.value &&
+            <Button size="small" danger icon={<RollbackOutlined/>}
+                    onClick={() => {
+                        Modal.confirm({
+                            title: '确认撤销面试邀请吗？',
+                            onOk: () => {
+                                handleApplicationUpdate(item.applicationId, APPLICATION_STATE.APPLYING.value)
+                            }
+                        })
+                    }}>撤销</Button>
             }
         </Space>
     }
@@ -104,8 +117,10 @@ export default function ApplicationList() {
                         return <Badge status="warning" text={APPLICATION_STATE.UN_COMMIT.name}/>
                     case APPLICATION_STATE.APPLYING.value:
                         return <Badge status="processing" text={APPLICATION_STATE.APPLYING.name}/>
-                    case APPLICATION_STATE.INTERVIEW_INVITING:
+                    case APPLICATION_STATE.INTERVIEW_INVITING.value:
                         return <Badge status="success" text={APPLICATION_STATE.INTERVIEW_INVITING.name}/>
+                    case APPLICATION_STATE.UN_INTERVIEW.value:
+                        return <Badge status="processing" text={APPLICATION_STATE.UN_INTERVIEW.name}/>
                     default:
                         return <Badge status="error" text="状态异常"/>
                 }
@@ -137,7 +152,6 @@ export default function ApplicationList() {
                 }}
                 rowKey={item => item.applicationId}
             />
-
         </div>
     )
 

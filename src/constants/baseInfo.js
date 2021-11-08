@@ -1,10 +1,8 @@
 import {
     AuditOutlined,
     BarsOutlined,
-    CarryOutOutlined,
     ClusterOutlined,
     FormOutlined,
-    HomeTwoTone,
     TableOutlined,
     TeamOutlined,
     UsergroupAddOutlined
@@ -297,29 +295,65 @@ const MAJORANDCLASS4Table = [
 // 诚毅学院	https://chengyi.webvpn.jmu.edu.cn
 
 
-const SIDE_MENU_ICON_LIST = {
-    "/manage/home": <HomeIcon style={{width: 15, height: 15, paddingTop: 1}}/>,
-    "/manage/account": <AccountManageIcon style={{width: 15, height: 15, paddingTop: 1}}/>,
-    "/manage/account/resume": <ResumeIcon style={{width: 15, height: 15, paddingTop: 1}}/>,
-    "/manage/user": <TeamOutlined/>,
-    "/manage/user/list": <TableOutlined/>,
-    "/manage/association": <ClusterOutlined/>,
-    "/manage/association/list": <TableOutlined/>,
-    "/manage/association/add": <UsergroupAddOutlined/>,
-    "/manage/recruitment": <RecruitmentIcon style={{width: 15, height: 15, paddingTop: 1}}/>,
-    "/manage/recruitment/add": <FormOutlined/>,
-    "/manage/recruitment/list": <TableOutlined/>,
-    "/manage/permission": <PermissionIcon style={{width: 15, height: 15, paddingTop: 1}}/>,
-    "/manage/permission/roleList": <BarsOutlined/>,
-    "/manage/permission/permissionList": <TableOutlined/>,
-    "/manage/review": <AuditOutlined/>,
-    "/manage/review/addAssociation": <AuditOutlined/>,
-    "/manage/review/joinAssociation": <AuditOutlined/>,
-    "/manage/review/exitAssociation": <AuditOutlined/>,
-    "/manage/share": <ShareManageIcon style={{width: 15, height: 15, paddingTop: 1}}/>,
-    "/manage/share/list": <TableOutlined/>,
-    "/manage/share/add": <FormOutlined/>,
-    "/manage/application": <FormOutlined/>,
-    "/manage/application/list": <TableOutlined/>,
+const INTERVIEW_ADDRESS_CASCADER_OPTIONS = [
+    {
+        value: '集大本部',
+        label: '集大本部',
+        children: [
+            {
+                value: '美岭楼',
+                label: '美岭楼',
+                children: [
+                    {
+                        value: '美岭201',
+                        label: '美岭201',
+                    },
+                ],
+            },
+            {
+                value: '建发楼',
+                label: '建发楼',
+                children: [
+                    {
+                        value: '建发201',
+                        label: '建发201',
+                    },
+                ],
+            },
+            {
+                value: '禹洲楼',
+                label: '禹洲楼',
+                children: [
+                    {
+                        value: '禹洲201',
+                        label: '禹洲201',
+                    },
+                ],
+            },
+        ],
+    },
+    {
+        value: '财经学院',
+        label: '财经学院',
+        children: [
+            {
+                value: '陆大楼',
+                label: '陆大楼',
+                children: [
+                    {
+                        value: '陆大201',
+                        label: '陆大201',
+                    },
+                ],
+            },
+        ],
+    },
+];
+
+export {
+    MAJORANDCLASS,
+    USER_TAG_LIST,
+    MAJORANDCLASS4Table,
+    COLLEGE,
+    INTERVIEW_ADDRESS_CASCADER_OPTIONS
 }
-export {MAJORANDCLASS, USER_TAG_LIST, MAJORANDCLASS4Table, SIDE_MENU_ICON_LIST, COLLEGE}

@@ -7,7 +7,7 @@ import {withRouter} from 'react-router-dom'
 import './index.less'
 import {connect} from "react-redux";
 import {getPermissionListByUserId} from "../../services/db";
-import {SIDE_MENU_ICON_LIST} from "../../constants/baseInfo";
+import {SIDE_MENU_ICON_LIST} from "../../constants/icon";
 import {getUserInfoByToken} from "../../services/userService";
 
 const {SubMenu} = Menu;

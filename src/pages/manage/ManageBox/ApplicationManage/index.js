@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react'
-import {Badge, Button, message, Space, Table} from 'antd'
+import {Badge, Button, message, Modal, Space, Table} from 'antd'
 import {RollbackOutlined} from '@ant-design/icons';
 import {getApplicationByUserId, updateApplicationState} from "../../../../services/applicationService";
 import {useHistory} from "react-router-dom";
 import {APPLICATION_STATE} from '../../../../constants/state'
 import qs from "querystring";
 import {OPTION_ICONS} from "../../../../constants/icon";
+import ArrangeInterviewModal from "../../../components/ArrangeInterviewModal";
 
 export default function ApplicationManage() {
 
@@ -23,7 +24,7 @@ export default function ApplicationManage() {
     const handleApplicationUpdate = (applicationId, state) => {
         updateApplicationState(qs.stringify({applicationId, state}))
             .then(() => {
-                message.success('更新成功！')
+                message.success('操作成功！')
                 getApplicationByUserId(userInfo.userId).then(res => {
                     const {data} = res.data
                     setApplicationList(data)
@@ -45,8 +46,32 @@ export default function ApplicationManage() {
                     onClick={() => handleApplicationUpdate(item.applicationId, APPLICATION_STATE.UN_COMMIT.value)}>撤销</Button>
             }
             {item.state === APPLICATION_STATE.UN_COMMIT.value &&
-            <Button size="small" type='primary' icon={OPTION_ICONS.COMMIT}
+            <Button size="small" icon={OPTION_ICONS.COMMIT}
                     onClick={() => handleApplicationUpdate(item.applicationId, APPLICATION_STATE.APPLYING.value)}>提交</Button>
+            }
+            {item.state === APPLICATION_STATE.INTERVIEW_INVITING.value &&
+            <Button size="small" type='primary' icon={OPTION_ICONS.REFUSE}
+                    onClick={() =>
+                        Modal.confirm({
+                            title:'接受面试',
+                            width:698,
+                            content:<ArrangeInterviewModal canEdit={false}/>,
+                            onOk:()=>{
+                                handleApplicationUpdate(item.applicationId, APPLICATION_STATE.UN_INTERVIEW.value)
+                            }
+                        })
+                    }>接受</Button>
+            }
+            {item.state === APPLICATION_STATE.INTERVIEW_INVITING.value &&
+            <Button size="small" danger icon={OPTION_ICONS.REFUSE}
+                    onClick={() =>
+                        Modal.confirm({
+                            title:'拒绝面试邀请无法撤销，确认拒绝吗？',
+                            onOk:()=>{
+                                handleApplicationUpdate(item.applicationId, APPLICATION_STATE.REFUSE_INVITING.value)
+                            }
+                        })
+                    }>拒绝</Button>
             }
             {!item.state &&
             <Button size="small" danger icon={OPTION_ICONS.DELETE}
@@ -93,8 +118,12 @@ export default function ApplicationManage() {
                         return <Badge status="warning" text={APPLICATION_STATE.UN_COMMIT.name}/>
                     case APPLICATION_STATE.APPLYING.value:
                         return <Badge status="processing" text={APPLICATION_STATE.APPLYING.name}/>
-                    case APPLICATION_STATE.INTERVIEW_INVITING:
+                    case APPLICATION_STATE.INTERVIEW_INVITING.value:
                         return <Badge status="success" text={APPLICATION_STATE.INTERVIEW_INVITING.name}/>
+                    case APPLICATION_STATE.REFUSE_INVITING.value:
+                        return <Badge status="warning" text={APPLICATION_STATE.REFUSE_INVITING.name}/>
+                    case APPLICATION_STATE.UN_INTERVIEW.value:
+                        return <Badge status="processing" text={APPLICATION_STATE.UN_INTERVIEW.name}/>
                     default:
                         return <Badge status="error" text="状态异常"/>
                 }
