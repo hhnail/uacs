@@ -18,6 +18,7 @@ import {EditOutlined, EllipsisOutlined, SettingOutlined} from '@ant-design/icons
 import {COLLEGE, MAJORANDCLASS} from "../../../../../constants/baseInfo";
 import {getUserById} from "../../../../../services/db";
 import PickTag from '../../../../components/PickTag'
+import {getClassTree} from "../../../../../services/treeService";
 
 // antd组件结构
 const {TextArea} = Input;
@@ -30,16 +31,17 @@ export default function Resume() {
     const userSession = JSON.parse(localStorage.getItem("userInfo"))
     const [userInfo, setUserInfo] = useState()
     const [isEdit, setIsEdit] = useState(false)
+    const [classTreeData, setClassTreeData] = useState([])
+
 
     useEffect(() => {
         const {userId} = userSession
         if (userId) {
             getUserById(userId).then(res => {
-                // console.log('userInfo')
-                // console.log(userInfo)
-                // console.log('getUserById')
-                console.log(res.data.data)
-                setUserInfo(res.data.data)
+                    setUserInfo(res.data.data)
+                })
+            getClassTree().then(res => {
+                setClassTreeData(res.data.data)
             })
         }
     }, [])
@@ -83,24 +85,10 @@ export default function Resume() {
                             <Descriptions.Item label="学号" span={4}>
                                 {userInfo.userId}
                             </Descriptions.Item>
-                            <Descriptions.Item label="院系" span={3}>
-                                <Form.Item name='college' style={{width: 200}}>
-                                    <Select style={{width: '100%'}}>
-                                        {COLLEGE.map(college => {
-                                            return <Option value={college.value}>{college.value}</Option>
-                                        })}
-                                    </Select>
-                                </Form.Item>
-                            </Descriptions.Item>
-                            <Descriptions.Item label="专业班级" span={4}
-                                // style={{height: 5}}
-                            >
-                                <Form.Item name={'majorAndClass'}
-                                    // style={{height: 5}}
-                                >
-                                    <Cascader options={MAJORANDCLASS}
+                            <Descriptions.Item label="专业班级" span={7}>
+                                <Form.Item name={'collegeMajorClass'}>
+                                    <Cascader options={classTreeData}
                                               defaultValue={['学院', '专业', '班级']}
-                                        // value={}
                                               onChange={(value) => {
                                                   console.log(value)
                                               }}/>

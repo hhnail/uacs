@@ -204,7 +204,7 @@ export default function UserList() {
                 dataSource={dataSource}
                 columns={columns}
                 pagination={{
-                    pageSize: 4
+                    pageSize: 6
                 }}
                 rowKey={item => item.id}
             />

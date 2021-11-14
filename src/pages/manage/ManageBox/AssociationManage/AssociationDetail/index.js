@@ -1,5 +1,5 @@
-import {Component} from 'react'
-import {Upload, Modal} from 'antd';
+import {useState} from 'react'
+import {Modal, Upload} from 'antd';
 import {PlusOutlined} from '@ant-design/icons';
 
 function getBase64(file) {
@@ -11,95 +11,69 @@ function getBase64(file) {
     });
 }
 
-export default class AssociationDetail extends Component {
-    state = {
-        previewVisible: false,
-        previewImage: '',
-        previewTitle: '',
-        fileList: [
-            {
-                uid: '-1',
-                name: 'image.png',
-                status: 'done',
-                url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-            },
-            {
-                uid: '-2',
-                name: 'image.png',
-                status: 'done',
-                url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-            },
-            {
-                uid: '-3',
-                name: 'image.png',
-                status: 'done',
-                url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-            },
-            {
-                uid: '-4',
-                name: 'image.png',
-                status: 'done',
-                url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-            },
-            {
-                uid: '-xxx',
-                percent: 50,
-                name: 'image.png',
-                status: 'uploading',
-                url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-            },
-            {
-                uid: '-5',
-                name: 'image.png',
-                status: 'error',
-            },
-        ],
-    };
+export default function AssociationDetail(props) {
 
-    handleCancel = () => this.setState({previewVisible: false});
+    // 预览图片 Modal、图片、标题
+    const [previewVisible, setPreviewVisible] = useState(false)
+    const [previewImage, setPreviewImage] = useState('')
+    const [previewTitle, setPreviewTitle] = useState('')
+    const [fileList, setFileList] = useState([
+        {
+            uid: '-4',
+            name: 'image.png',
+            status: 'done',
+            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+        },
+        {
+            uid: '-5',
+            name: 'image.png',
+            status: 'error',
+        },
+    ],)
 
-    handlePreview = async file => {
+
+    // 预览图片
+    const handlePreview = async file => {
         if (!file.url && !file.preview) {
             file.preview = await getBase64(file.originFileObj);
         }
-
-        this.setState({
-            previewImage: file.url || file.preview,
-            previewVisible: true,
-            previewTitle: file.name || file.url.substring(file.url.lastIndexOf('/') + 1),
-        });
+        setPreviewImage(file.url || file.preview)
+        setPreviewVisible(true)
+        setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1))
     };
 
-    handleChange = ({fileList}) => this.setState({fileList});
+    // 控制上传change
+    const handleChange = ({fileList}) => {
+        setFileList(fileList)
+    };
 
-    render() {
-        const {previewVisible, previewImage, fileList, previewTitle} = this.state;
-        const uploadButton = (
-            <div>
-                <PlusOutlined/>
-                <div style={{marginTop: 8}}>Upload</div>
-            </div>
-        );
-        return (
-            <>
-                <Upload
-                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                    listType="picture-card"
-                    fileList={fileList}
-                    onPreview={this.handlePreview}
-                    onChange={this.handleChange}
-                >
-                    {fileList.length >= 8 ? null : uploadButton}
-                </Upload>
-                <Modal
-                    visible={previewVisible}
-                    title={previewTitle}
-                    footer={null}
-                    onCancel={this.handleCancel}
-                >
-                    <img alt="example" style={{width: '100%'}} src={previewImage}/>
-                </Modal>
-            </>
-        );
-    }
+
+    return (
+        <div>
+
+
+            <Upload listType="picture-card"
+                // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                action="/"
+                fileList={fileList}
+                onPreview={handlePreview}
+                onChange={handleChange}
+            >
+                {fileList.length >= 8
+                    ? null
+                    : <div>
+                        <PlusOutlined/>
+                        <div style={{marginTop: 8}}>上传图片</div>
+                    </div>}
+            </Upload>
+            <Modal title={previewTitle} visible={previewVisible}
+                   footer={null}
+                   onCancel={() => {
+                       setPreviewVisible(false)
+                   }}
+            >
+                <img alt="example" style={{width: '100%'}} src={previewImage}/>
+            </Modal>
+        </div>
+    );
 }

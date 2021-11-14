@@ -53,19 +53,13 @@ function SysRouter(props) {
 
 
                 {/* ==================== 纳新通知管理 ==================== */}
-                {/*添加纳新通知*/}
                 <Route path="/manage/recruitment/add" component={AddRecruitment}></Route>
-                {/*更新纳新通知*/}
                 <Route path="/manage/association/updateRecruitment/:id" component={AddRecruitment}></Route>
-                {/*纳新通知详情*/}
                 <Route path="/manage/recruitment/list/:id" component={RecruitmentDetail}></Route>
-                {/*纳新通知列表*/}
                 <Route path="/manage/recruitment/list" component={RecruitmentList}></Route>
 
                 {/* =============== 权限管理 =======================*/}
-                {/*角色列表*/}
                 <Route path="/manage/permission/roleList" component={RoleList}></Route>
-                {/*权限列表*/}
                 <Route path="/manage/permission/permissionList" component={PermissionList}></Route>
 
 
