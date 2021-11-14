@@ -32,9 +32,9 @@ export default function UserSettings(props) {
     }, [userInfo])
 
     const menu = ( // 顶部菜单结构
-        <Menu key='userSetting'>
+        <Menu key='systemOptions'>
             {/* ====== 个人设置 ====== */}
-            <Menu.Item key={0} onClick={() => {
+            <Menu.Item key='userSettings' onClick={() => {
                 getUserInfo(userInfo.accessToken).then(res => {
                     const {data} = res.data
                     userForm.setFieldsValue({
@@ -49,7 +49,7 @@ export default function UserSettings(props) {
                 <Icon component={UserSettingsIcon}/> 个人设置
             </Menu.Item>
             {/* ====== 注销系统 ====== */}
-            <Menu.Item key={1} danger onClick={() => {
+            <Menu.Item key='logout' danger onClick={() => {
                 localStorage.removeItem("token") // 去除浏览器中的token
                 localStorage.removeItem("userInfo") // 去除浏览器中的userInfo
                 message.success("注销成功！")
@@ -61,7 +61,6 @@ export default function UserSettings(props) {
             </Menu.Item>
         </Menu>
     );
-
 
     const cleanPasswordForm = () => {
         userForm.setFieldsValue({

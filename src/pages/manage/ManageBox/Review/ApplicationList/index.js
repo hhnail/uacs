@@ -1,20 +1,27 @@
-import React, {useEffect, useState} from 'react'
-import {Badge, Button, message, Modal, Space, Table, Tooltip} from 'antd'
+import React, {useEffect, useRef, useState} from 'react'
+import {Badge, Button, Cascader, DatePicker, Form, Input, message, Modal, Space, Table, Tooltip} from 'antd'
 import {RollbackOutlined} from '@ant-design/icons';
-import {
-    getApplicationByUserId,
-    getApplicationList,
-    updateApplicationState
-} from "../../../../../services/applicationService";
+import {getApplicationList, updateApplicationState} from "../../../../../services/applicationService";
 import {ICON, OPTION_ICONS} from "../../../../../constants/icon";
 import {APPLICATION_STATE} from "../../../../../constants/state";
 import {useHistory} from "react-router-dom";
 import qs from "querystring";
-import ArrangeInterviewModal from "../../../../components/ArrangeInterviewModal";
+import ArrangeInterviewForm from "../../../../components/ArrangeInterviewForm";
 import ApplicationCalendar from "../../../../components/Calendar";
+import axios from "axios";
+import {getInterviewAddress} from "../../../../../services/treeService";
 
 const {confirm} = Modal
 
+
+const layout = {
+    labelCol: {
+        span: 4,
+    },
+    wrapperCol: {
+        span: 20,
+    },
+};
 export default function ApplicationList() {
 
     // localStorage
@@ -22,17 +29,26 @@ export default function ApplicationList() {
     // hooks
     const history = useHistory()
     const [applicationList, setApplicationList] = useState([])
+    const arrangeInterviewFormRef = useRef(null)
+    const [arrangeInterviewModalVisible, setArrangeInterviewModalVisible] = useState(false)
+    const [arrangingItem, setArrangingItem] = useState({})
+    const [interviewAddress, setInterviewAddress] = useState([])
+
+    // constans
 
     // life cycle
     useEffect(() => {
+        getInterviewAddress()
+            .then(res => {
+                const {data} = res.data
+                setInterviewAddress(data)
+            })
         refresh()
     }, [])
 
-    const refresh = ()=>{
+    const refresh = () => {
         getApplicationList(userInfo.manageAssociationKeys).then(res => {
             const {data} = res.data
-            console.log('getApplicationList')
-            console.log(data)
             setApplicationList(data)
         })
     }
@@ -41,39 +57,9 @@ export default function ApplicationList() {
         updateApplicationState(qs.stringify({applicationId, state}))
             .then(() => {
                 Modal.destroyAll()
-                message.success('更新成功！')
                 refresh()
+                message.success('更新成功！')
             })
-    }
-
-    const renderOptions = (item) => {
-        return <Space>
-            {item.state === APPLICATION_STATE.APPLYING.value || item.state === APPLICATION_STATE.UN_INTERVIEW.value &&
-            <Button size="small" type='primary' icon={OPTION_ICONS.ARRANGE}
-                    onClick={() => {
-                        Modal.confirm({
-                            width: 698,
-                            title: '面试安排',
-                            icon: ICON.interview,
-                            content: <ArrangeInterviewModal canEdit={true}/>,
-                            onOk: () => {
-                                handleApplicationUpdate(item.applicationId, APPLICATION_STATE.INTERVIEW_INVITING.value)
-                            }
-                        })
-                    }}>面试</Button>
-            }
-            {item.state === APPLICATION_STATE.INTERVIEW_INVITING.value &&
-            <Button size="small" danger icon={<RollbackOutlined/>}
-                    onClick={() => {
-                        Modal.confirm({
-                            title: '确认撤销面试邀请吗？',
-                            onOk: () => {
-                                handleApplicationUpdate(item.applicationId, APPLICATION_STATE.APPLYING.value)
-                            }
-                        })
-                    }}>撤销</Button>
-            }
-        </Space>
     }
 
     const columns = [
@@ -98,7 +84,7 @@ export default function ApplicationList() {
             title: '意向部门',
             dataIndex: 'intentionDepartment',
             render(intentionDepartment, item) {
-                return (item.associationName + '-' + intentionDepartment)
+                return (item.associationName + ' - ' + intentionDepartment)
             }
         },
         {
@@ -128,7 +114,28 @@ export default function ApplicationList() {
         },
         {
             title: '操作',
-            render: (item) => renderOptions(item)
+            render: (item) => {
+                return <Space>
+                    {(item.state === APPLICATION_STATE.APPLYING.value || item.state === APPLICATION_STATE.UN_INTERVIEW.value) &&
+                    <Button size="small" type='primary' icon={OPTION_ICONS.ARRANGE}
+                            onClick={() => {
+                                setArrangingItem({...item})
+                                setArrangeInterviewModalVisible(true)
+                            }}>面试</Button>
+                    }
+                    {item.state === APPLICATION_STATE.INTERVIEW_INVITING.value &&
+                    <Button size="small" danger icon={<RollbackOutlined/>}
+                            onClick={() => {
+                                Modal.confirm({
+                                    title: '确认撤销面试邀请吗？',
+                                    onOk: () => {
+                                        handleApplicationUpdate(item.applicationId, APPLICATION_STATE.APPLYING.value)
+                                    }
+                                })
+                            }}>撤销</Button>
+                    }
+                </Space>
+            }
         },
     ]
 
@@ -152,6 +159,55 @@ export default function ApplicationList() {
                 }}
                 rowKey={item => item.applicationId}
             />
+
+
+            {/* === 面试安排模态框 === */}
+            {arrangeInterviewModalVisible
+            && <Modal title="面试安排" visible={arrangeInterviewModalVisible}
+                      height={350}
+                      onCancel={() => {
+                          setArrangingItem({})
+                          setArrangeInterviewModalVisible(false)
+                      }}
+                      onOk={() => {
+                          arrangeInterviewFormRef .then(value => {
+
+                              //update
+                              // setArrangeInterviewModalVisible(false)
+                          })
+                      }}>
+                <Form {...layout} name="arrangeInterviewModal">
+                    <Form.Item name='interviewTime' label="面试时间"
+                               rules={[{required: true, message: '请选择面试时间'}]}
+                    >
+                        <DatePicker/>
+                    </Form.Item>
+                    <Form.Item name='interviewAddress' label="面试地点"
+                               rules={[{required: true, message: '请选择面试地点'}]}
+                               initialValue={['集大本部', '美岭楼', '美岭201']}
+                    >
+                        {
+                            interviewAddress.length > 0
+                            && <Cascader options={interviewAddress}/>
+                        }
+                    </Form.Item>
+                    <Form.Item name='intentionDepartment' label="意向部门"
+                               initialValue={arrangingItem.intentionDepartment}>
+                        <Input disabled={true}/>
+                    </Form.Item>
+                    <Form.Item name='contacterName' label="联系人"
+                               rules={[{required: true, message: '请选择联系人'}]}>
+                        <Input/>
+                    </Form.Item>
+                    <Form.Item name='contacterPhone' label="联系方式">
+                        <Input/>
+                    </Form.Item>
+                    <Form.Item name='description' label="备注">
+                        <Input.TextArea/>
+                    </Form.Item>
+                </Form>
+            </Modal>
+            }
         </div>
     )
 

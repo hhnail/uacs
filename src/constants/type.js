@@ -16,6 +16,35 @@ const ROLE_TYPE = {
     },
 }
 
+
+const TREE_NODE_TYPE = {
+    COLLEGE: {
+        label: '学院',
+        value: 'COLLEGE',
+    },
+    MAJOR: {
+        label: '专业',
+        value: 'MAJOR',
+    },
+    CLASS: {
+        label: 'CLASS',
+        value: 'CLASS',
+    },
+    CAMPUS: {
+        label: '校区',
+    },
+    BUILDING: {
+        label: '教学楼',
+    },
+    CLASSROOM: {
+        label: '教室',
+    },
+    TAG: {
+        label: '标签',
+    },
+}
+
 export {
     ROLE_TYPE,
+    TREE_NODE_TYPE,
 }

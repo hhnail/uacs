@@ -26,6 +26,10 @@ import {ReactComponent as AddressIcon} from "../icons/address.svg";
 import {ReactComponent as OtherIcon} from "../icons/other.svg";
 import {ReactComponent as ClassIcon} from "../icons/class.svg";
 import {ReactComponent as TagIcon} from "../icons/tag.svg";
+import {ReactComponent as College} from "../icons/college.svg";
+import {ReactComponent as Major} from "../icons/major.svg";
+import {ReactComponent as Add} from "../icons/add.svg";
+import {ReactComponent as Edit} from "../icons/edit.svg";
 
 
 // 用户操作图标
@@ -40,12 +44,19 @@ const OPTION_ICONS = {
     ARRANGE: <Icon component={ArrangeIcon} style={{fontSize: 14}}/>,
     // 拒绝
     REFUSE: <Icon component={RefuseIcon} style={{fontSize: 14}}/>,
+    // 新增
+    ADD: <Icon component={Add} style={{fontSize: 14}}/>,
+    // 编辑
+    EDIT: <Icon component={Edit} style={{fontSize: 14}}/>,
 }
 
 // 系统图标
 const ICON = {
     interview: <Icon component={Interview} style={{fontSize: 30}}/>,
     calendar: <Icon component={CalendarIcon} style={{fontSize: 30}}/>,
+    college: <Icon component={College} style={{fontSize: 15}}/>,
+    major: <Icon component={Major} style={{fontSize: 15}}/>,
+    class: <Icon component={ClassIcon} style={{fontSize: 15}}/>,
 }
 
 // 后台管理员 - 侧边栏 - 菜单图标 （前台路由 ~ 图标）

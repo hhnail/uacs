@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
-import {Button, Table} from 'antd';
+import {Button, Space, Table} from 'antd';
 import {getAllAssociationList} from "../../../../../services/db";
+import {OPTION_ICONS} from "../../../../../constants/icon";
 
 
 const columns = [
@@ -30,11 +31,14 @@ const columns = [
         dataIndex: 'state',
     },
     {
-        title: 'Action',
-        render: () => <div>
-            <Button>查看</Button>
-            <Button dange>删除</Button>
-        </div>
+        title: '操作',
+        render: () => <Space>
+            <Button size='small' icon={OPTION_ICONS.VIEW} type='ghost'
+                    onClick={() => {
+
+                    }}>查看</Button>
+            <Button danger size='small' icon={OPTION_ICONS.DELETE}>删除</Button>
+        </Space>
     },
 ];
 
@@ -44,14 +48,16 @@ export default function AssociationList(props) {
 
     useEffect(() => {
         getAllAssociationList().then(res => {
-            console.log("社团列表：", res.data.data)
-            setDataSource(res.data.data)
+            const {data} = res.data
+            setDataSource(data)
         })
     }, [])
 
     return (
         <div>
-            <Table columns={columns} dataSource={dataSource}/>
+            <Table columns={columns}
+                   dataSource={dataSource}
+            />
         </div>
     )
 }

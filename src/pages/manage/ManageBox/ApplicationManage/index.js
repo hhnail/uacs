@@ -6,7 +6,7 @@ import {useHistory} from "react-router-dom";
 import {APPLICATION_STATE} from '../../../../constants/state'
 import qs from "querystring";
 import {OPTION_ICONS} from "../../../../constants/icon";
-import ArrangeInterviewModal from "../../../components/ArrangeInterviewModal";
+import ArrangeInterviewModal from "../../../components/ArrangeInterviewForm";
 
 export default function ApplicationManage() {
 

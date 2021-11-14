@@ -57,7 +57,19 @@ const RECRUITMENT_PUBLISH_STATE_LIST = {
     },
 }
 
-// 纳新通知 发布状态list。获取方式：RECRUITMENT_PUBLISH_STATE_MAP.xx.xx
+/**
+ * 申请状态
+ * @type
+ * INTERVIEW_PASS:
+ * UN_COMMIT:
+ * UN_INTERVIEW:
+ * CONFIRM:
+ * INTERVIEW_INVITING:
+ * APPLYING:
+ * APPLY_REFUSE:
+ * REFUSE_INVITING:
+ * REGRET:
+ */
 const APPLICATION_STATE = {
     UN_COMMIT: {
         name: '未提交申请',

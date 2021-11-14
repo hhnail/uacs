@@ -11,8 +11,7 @@ import NoPermission from '../../NoPermission'
 import AddRecruitment from '../RecruitmentManage/AddRecruitment';
 import RecruitmentList from '../RecruitmentManage/RecruitmentList'
 import RecruitmentDetail from "../RecruitmentManage/RecruitmentList/RecruitmentDetail";
-import ReviewAddAssociation from "../Review/AddAssociation";
-import ReviewJoinAssociation from "../Review/JoinApplication";
+import AddAssociation from "../Review/AddAssociation";
 import ClassList from "../Other/ClassList";
 import UserTagList from "../Other/UserTagList";
 import '../../../../util/http'
@@ -20,11 +19,11 @@ import ShareManage from "../ShareManage";
 import AddShare from "../ShareManage/AddShare";
 import ShareDetail from "../ShareManage/ShareDetail";
 import Resume from "../AccountManage/Resume/index";
-import AddAssociation from "../Review/AddAssociation";
-import JoinAssociation from "../Review/JoinApplication";
 import ApplicationList from "../Review/ApplicationList";
 import ApplicationDetail from "../Review/ApplicationDetail";
 import ApplicationManage from "../ApplicationManage";
+import AssociationDetail from "../AssociationManage/AssociationDetail";
+import InterviewAddress from "../Other/InterviewAddress";
 
 function SysRouter(props) {
     // TODO 动态创建路由 防止路由穿透
@@ -49,6 +48,7 @@ function SysRouter(props) {
 
                 {/* ==================== 社团管理 ==================== */}
                 {/*社团列表*/}
+                <Route path="/manage/association/list/:associationId" component={AssociationDetail}></Route>
                 <Route path="/manage/association/list" component={AssociationList}></Route>
 
 
@@ -91,6 +91,7 @@ function SysRouter(props) {
                 {/* =============== 杂项管理 =======================*/}
                 <Route path="/manage/other/class" component={ClassList}></Route>
                 <Route path="/manage/other/userTag" component={UserTagList}></Route>
+                <Route path="/manage/other/address" component={InterviewAddress}></Route>
 
 
                 {/* 其他情况 ================== 重定向 =====================*/}

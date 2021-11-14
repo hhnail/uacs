@@ -6,9 +6,11 @@ import axios from "axios";
 export default function DataView() {
 
     const echartsContainerRef = useRef()
+    const echartsContainerRef2 = useRef()
 
     useEffect(() => {
         drawPie()
+        drawPie2()
     }, [])
 
     const drawPie = () => {
@@ -17,7 +19,8 @@ export default function DataView() {
 
         const option = {
             title: {
-                text: 'Referer of a Website',
+                // TODO 男女生比例
+                text: '男女生比例',
                 subtext: 'Fake Data',
                 left: 'center'
             },
@@ -54,11 +57,54 @@ export default function DataView() {
         option && myChart.setOption(option);
     }
 
+    const drawPie2 = () => {
+        // 基于准备好的dom，初始化echarts实例
+        const myChart2 = echarts.init(echartsContainerRef2.current);
+
+        const option = {
+            title: {
+                // TODO 投递通过率
+                text: '投递通过率',
+                subtext: 'Fake Data',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left'
+            },
+            series: [
+                {
+                    name: 'Access From',
+                    type: 'pie',
+                    radius: '50%',
+                    data: [
+                        {value: 1048, name: 'Search Engine'},
+                        {value: 735, name: 'Direct'},
+                        {value: 580, name: 'Email'},
+                        {value: 484, name: 'Union Ads'},
+                        {value: 300, name: 'Video Ads'}
+                    ],
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        option && myChart2.setOption(option);
+    }
+
 
     return (
         <div>
             展示社团的相关数据
-
             <div className="extra">
                 <div style={{
                     display: 'flex',
@@ -77,9 +123,16 @@ export default function DataView() {
                 </div>
             </div>
             <div ref={echartsContainerRef} style={{
-                width: '100%',
+                width: '50%',
                 height: 400,
                 marginTop: 30,
+                display:'inline-block',
+            }}></div>
+            <div ref={echartsContainerRef2} style={{
+                width: '50%',
+                height: 400,
+                marginTop: 30,
+                display:'inline-block',
             }}></div>
         </div>
     )
