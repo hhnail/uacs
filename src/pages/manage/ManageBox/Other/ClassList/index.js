@@ -141,7 +141,9 @@ export default function ClassList() {
                         >新增{nodeName}</Button>}
 
                         <Button size={"small"} icon={OPTION_ICONS.EDIT}
+                                onClick={() => {
 
+                                }}
                         >重命名</Button>
 
                         {item.children.length < 1 &&
@@ -218,19 +220,21 @@ export default function ClassList() {
             >
                 新增学院
             </Button>
-            <Table columns={columns} dataSource={classTreeData}
-                   pagination={{
-                       pageSize: 7
-                   }}
-                   rowKey={item => item.treeId}
-                   rowSelection={{
-                       onChange: (selectedRowKeys, selectedRows) => {
+            <Table
+                columns={columns}
+                dataSource={classTreeData}
+                rowKey={item => item.treeId}
+                pagination={{
+                    pageSize: 7
+                }}
+                rowSelection={{
+                    onChange: (selectedRowKeys, selectedRows) => {
 
-                       },
-                       onSelectAll: (selected, selectedRows, changeRows) => {
+                    },
+                    onSelectAll: (selected, selectedRows, changeRows) => {
 
-                       },
-                   }}
+                    },
+                }}
 
             />
         </>

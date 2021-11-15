@@ -41,6 +41,8 @@ export default function ApplicationList() {
         getInterviewAddress()
             .then(res => {
                 const {data} = res.data
+                console.log('data')
+                console.log(data)
                 setInterviewAddress(data)
             })
         refresh()
@@ -170,11 +172,11 @@ export default function ApplicationList() {
                           setArrangeInterviewModalVisible(false)
                       }}
                       onOk={() => {
-                          arrangeInterviewFormRef .then(value => {
-
-                              //update
-                              // setArrangeInterviewModalVisible(false)
-                          })
+                          arrangeInterviewFormRef.current.validateFields()
+                              .then(value => {
+                                  //update
+                                  // setArrangeInterviewModalVisible(false)
+                              })
                       }}>
                 <Form {...layout} name="arrangeInterviewModal">
                     <Form.Item name='interviewTime' label="面试时间"

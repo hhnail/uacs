@@ -9,7 +9,6 @@ import {useForm} from "antd/es/form/Form";
 import styles from './index.less'
 import TextArea from "antd/es/input/TextArea";
 import axios from "axios";
-import {JS} from "json-server/lib/cli/utils/is";
 
 const {TabPane} = Tabs;
 

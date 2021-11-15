@@ -19,7 +19,7 @@ export default function AssciationSquare(){
 
     useEffect(() => {
         getAllAssociationList().then(res => {
-            console.log(res.data.data)
+            // console.log(res.data.data)
             setAssociationList(res.data.data)
         })
     }, [])

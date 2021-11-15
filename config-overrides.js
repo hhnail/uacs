@@ -14,7 +14,7 @@ module.exports = override(
         lessOptions: {
             // 运行js修改less
             javascriptEnabled: true,
-            // 修改变量
+            // 修改变量（全局主题颜色，包括按钮、菜单背景、悬停高亮等等）
             modifyVars: { '@primary-color': 'orange' },
         }
     }),

@@ -24,6 +24,7 @@ import ApplicationDetail from "../Review/ApplicationDetail";
 import ApplicationManage from "../ApplicationManage";
 import AssociationDetail from "../AssociationManage/AssociationDetail";
 import InterviewAddress from "../Other/InterviewAddress";
+import Contacter from "../Other/Contacter";
 
 function SysRouter(props) {
     // TODO 动态创建路由 防止路由穿透
@@ -86,6 +87,7 @@ function SysRouter(props) {
                 <Route path="/manage/other/class" component={ClassList}></Route>
                 <Route path="/manage/other/userTag" component={UserTagList}></Route>
                 <Route path="/manage/other/address" component={InterviewAddress}></Route>
+                <Route path="/manage/other/contacter" component={Contacter}></Route>
 
 
                 {/* 其他情况 ================== 重定向 =====================*/}
