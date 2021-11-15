@@ -30,6 +30,8 @@ import {ReactComponent as College} from "../icons/college.svg";
 import {ReactComponent as Major} from "../icons/major.svg";
 import {ReactComponent as Add} from "../icons/add.svg";
 import {ReactComponent as Edit} from "../icons/edit.svg";
+import {ReactComponent as Member} from "../icons/member.svg";
+import {ReactComponent as Department} from "../icons/department.svg";
 
 
 // 用户操作图标
@@ -57,6 +59,8 @@ const ICON = {
     college: <Icon component={College} style={{fontSize: 15}}/>,
     major: <Icon component={Major} style={{fontSize: 15}}/>,
     class: <Icon component={ClassIcon} style={{fontSize: 15}}/>,
+    member:<Icon component={Member} style={{fontSize: 13}}/>,
+    department:<Icon component={Department} style={{fontSize: 30,color:'orange'}}/>,
 }
 
 // 后台管理员 - 侧边栏 - 菜单图标 （前台路由 ~ 图标）

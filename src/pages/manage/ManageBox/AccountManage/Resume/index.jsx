@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {
     Anchor,
     Avatar,
-    Badge, Button,
+    Button,
     Card,
     Cascader,
     Col,
@@ -11,11 +11,12 @@ import {
     Form,
     Image,
     Input,
-    Row, Select,
-    Slider, Space, Switch
+    Row,
+    Select,
+    Slider,
+    Switch
 } from 'antd';
 import {EditOutlined, EllipsisOutlined, SettingOutlined} from '@ant-design/icons';
-import {COLLEGE, MAJORANDCLASS} from "../../../../../constants/baseInfo";
 import {getUserById} from "../../../../../services/db";
 import PickTag from '../../../../components/PickTag'
 import {getClassTree} from "../../../../../services/treeService";
@@ -38,8 +39,8 @@ export default function Resume() {
         const {userId} = userSession
         if (userId) {
             getUserById(userId).then(res => {
-                    setUserInfo(res.data.data)
-                })
+                setUserInfo(res.data.data)
+            })
             getClassTree().then(res => {
                 setClassTreeData(res.data.data)
             })

@@ -4,8 +4,10 @@ import Icon, {EditOutlined, PlusCircleOutlined, PlusOutlined} from '@ant-design/
 import axios from "axios";
 import {useHistory} from "react-router-dom";
 import {getAssociationDetail} from "../../../../../services/db";
-import {OPTION_ICONS} from "../../../../../constants/icon";
+import {ICON, OPTION_ICONS} from "../../../../../constants/icon";
 import {ReactComponent as DeleteIcon} from "../../../../../icons/delete.svg";
+import {deleteDepartment} from "../../../../../services/departmentService";
+import UserList from "./UserList";
 
 const {TabPane} = Tabs;
 
@@ -41,15 +43,16 @@ export default function AssociationDetail(props) {
         },
     ],)
 
-    const refreshAssociationData = ()=>{
+    const refreshAssociationData = () => {
         getAssociationDetail(props.match.params.associationId).then(res => {
-            console.log(res.data.data)
+            // console.log("社团详情：")
+            // console.log(res.data.data)
             setAssociation(res.data.data)
         })
     }
 
     useEffect(() => {
-        // TODO
+        // TODO 图片查询
         // axios.get(`/association/getImageById/${1}`).then(res => {
         //     const {data} = res.data
         //     console.log(data)
@@ -71,11 +74,12 @@ export default function AssociationDetail(props) {
     // 控制上传change
     const handleChange = ({fileList}) => {
         setFileList(fileList)
-        // TODO
-        axios.post('/association/uploadImage', fileList[2])
-            .then(res => {
-                console.log(res.data.data)
-            })
+        // TODO 图片上传 变化
+        // axios.post('/association/uploadImage', fileList[2])
+        //     .then(res => {
+        // const {data} = res.data
+        // console.log(res.data.data)
+        // })
     };
 
 
@@ -105,68 +109,84 @@ export default function AssociationDetail(props) {
                 </PageHeader>
             </Row>
             }
-            <Tabs defaultActiveKey="associationShare">
+            <Tabs defaultActiveKey="structure">
                 {/* ================= 社团经历分享  ====================-  */}
-                <TabPane tab="部门列表" key="departmentList">
+                <TabPane tab="社团组织" key="structure">
                     <Row gutter={[24, 24]} style={{marginTop: 30}}>
+                        {/* =============== 左侧部门列表 =============== */}
                         <Col span={6}>
-                            <Card bordered hoverable style={{height: 195}}
-                                  onClick={() => {
+                            <Row gutter={[0, 24]}>
+                                <Col span={24}>
+                                    <Card bordered hoverable style={{height: 195}}
+                                          onClick={() => {
 
-                                  }}
-                            >
-                                <div style={{
-                                    height: '50%',
-                                    marginTop: '20%',
-                                    marginLeft: '25%',
-                                    fontSize: 25,
-                                    color: 'rgb(176,177,185)'
-                                }}>
-                                    <PlusCircleOutlined/>
-                                    <span style={{marginLeft: 10}}>新增部门</span>
-                                </div>
-                            </Card>
-                        </Col>
-                        {association?.departments.length > 0 &&
-                        association?.departments.map(dpt => {
-                            return <Col span={6}>
-                                <Card title={dpt.departmentName} bordered hoverable
-                                      style={{height: 195}}
-                                      actions={[
-                                          <EditOutlined key="edit"/>,
-                                          <Icon component={DeleteIcon} style={{fontSize: 17}}
-                                                onClick={() => {
-                                                    Modal.confirm({
-                                                        title: `您确认要删除【${dpt.departmentName}】吗？`,
-                                                        onOk: () => {
-                                                            axios.delete(`/association/deleteDepartment/${dpt.departmentId}`)
-                                                                .then(() => {
-                                                                    refreshAssociationData()
-                                                                    message.success('删除成功！')
-                                                                })
-                                                        }
-                                                    })
+                                          }}
+                                    >
+                                        <div style={{
+                                            height: '50%',
+                                            marginTop: '20%',
+                                            marginLeft: '25%',
+                                            fontSize: 20,
+                                            color: 'rgb(176,177,185)'
+                                        }}>
+                                            <PlusCircleOutlined/>
+                                            <span style={{marginLeft: 10}}>新增部门</span>
+                                        </div>
+                                    </Card>
+                                </Col>
+                                {association?.departments.length > 0 &&
+                                association?.departments.map(dpt => {
+                                    return <Col span={24}>
+                                        {/* ======== TODO 卡片与右侧成员列表联动 ========*/}
+                                        <Card title={
+                                            <>
+                                                {ICON.department}
+                                                <span style={{
+                                                    marginLeft: 10,
+                                                    marginBottom: 5,
+                                                    fontSize: 20,
+                                                    fontWeight: 1000,
                                                 }}
-                                          />,
-                                      ]}>
-                                    <div style={{height: 40}}>
-                                        主要职责：{dpt.job}
-                                    </div>
-                                </Card>
-                            </Col>
-                        })
-                        }
-                    </Row>
-                </TabPane>
-                <TabPane tab="成员列表" key="userList">
-                    <Row gutter={24} style={{marginTop: 30}}>
-                        <Col span={24}>
-                            <Card title="成员列表" bordered={false}>
-                                Card content
-                            </Card>
+                                                >{dpt.departmentName}</span>
+                                            </>
+                                        } bordered hoverable
+                                              style={{height: 195,}}
+                                              actions={[
+                                                  <EditOutlined key="edit"/>,
+                                                  <Icon component={DeleteIcon} style={{fontSize: 17}}
+                                                        onClick={() => {
+                                                            Modal.confirm({
+                                                                title: `您确认要删除【${dpt.departmentName}】吗？`,
+                                                                onOk: () => {
+                                                                    deleteDepartment(dpt.departmentId).then(() => {
+                                                                        refreshAssociationData()
+                                                                        message.success('删除成功！')
+                                                                    })
+                                                                }
+                                                            })
+                                                        }}
+                                                  />,
+                                              ]}>
+                                            <div style={{height: 40}}>
+                                                主要职责：{dpt.job}
+                                            </div>
+                                        </Card>
+                                    </Col>
+                                })
+                                }
+                            </Row>
+                        </Col>
+                        {/* =============== 右侧部门列表 =============== */}
+                        <Col span={18}>
+                            {association
+                            && <UserList
+                                associationId={association.associationId}
+                                departmentId={1}
+                            ></UserList>}
                         </Col>
                     </Row>
                 </TabPane>
+
                 <TabPane tab="社团展示" key="dataView">
                     {/* 上传图片 */}
                     首页社团图片
@@ -184,11 +204,13 @@ export default function AssociationDetail(props) {
                         </div>}
                     </Upload>
                 </TabPane>
+
+
                 {/* ================= 社团大事记  ====================-  */}
                 <TabPane tab="社团大事记" key="bigEvent">
 
                 </TabPane>
-                <TabPane tab="方便使用" key="easyUse">
+                <TabPane tab="更多" key="easyUse">
 
                 </TabPane>
             </Tabs>

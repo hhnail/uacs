@@ -20,6 +20,11 @@ export function getUserInfo(accessToken) {
     })
 }
 
+/**
+ * 使用token获取用户信息
+ * @param accessToken
+ * @returns {AxiosPromise}
+ */
 export function getUserInfoByToken(accessToken) {
     return axios({
         url: "/user/getUserInfo",
@@ -29,7 +34,24 @@ export function getUserInfoByToken(accessToken) {
     })
 }
 
+/**
+ * 更新系统右上角用户设置
+ * @param data
+ * @returns {Promise<AxiosResponse<any>>}
+ */
 export function updateUserSettings(data) {
-    return axios.post("/user/reset",data)
+    return axios.post("/user/reset", data)
 }
+
+/**
+ * 查询社团成员
+ * @param associationId
+ * @returns {Promise<AxiosResponse<any>>}
+ */
+export function getUserByAssociationId(associationId) {
+    return axios.get(`/association/getUserByAssociationId/${associationId}`)
+}
+
+
+
 
