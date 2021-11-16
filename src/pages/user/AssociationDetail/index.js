@@ -36,6 +36,8 @@ export default function AssociationDetail(props) {
             setRecentRecruitment(data)
         })
         getUserById(userInfo.userId).then(res => {
+            // console.log('用户简历信息：')
+            // console.log(res.data.data)
             setUserResume(res.data.data)
         })
     }, [])
@@ -47,7 +49,7 @@ export default function AssociationDetail(props) {
             const data = {
                 ...values,
                 userId: userResume.userId,
-                recruitmentId:recentRecruitment.recruitmentId,
+                recruitmentId: recentRecruitment.recruitmentId,
             }
             axios.post('/association/saveApplication', data).then(res => {
                 console.log("申请表提交结果", res.data.data)
@@ -89,20 +91,20 @@ export default function AssociationDetail(props) {
                 {/* ================================= 纳新通知  =================================  */}
                 <TabPane tab="社团纳新" key="recruitment">
                     <div style={{
-                        float:'right',
-                        margin:'20px 20px 0px 0px',
+                        float: 'right',
+                        margin: '20px 20px 0px 0px',
                     }}>
                         <Button key="saveApplication" type="primary"
                                 style={{
-                                    width:150,
-                                    height:50,
+                                    width: 150,
+                                    height: 50,
                                 }}
                                 onClick={() => {
                                     setJoinModalVisible(true)
                                 }}>申请加入</Button>
                     </div>
                     <div style={{
-                        padding:'16px 16px 16px 16px',
+                        padding: '16px 16px 16px 16px',
                         margin: '24px 24px',
                         border: '1px solid gray',
                     }}>

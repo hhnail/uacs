@@ -32,3 +32,7 @@ export function updateApplicationState(data) {
     return axios.post('/association/updateApplicationState', data)
 }
 
+export function updateApplicationInterview(data) {
+    return axios.post(`/association/updateApplicationInterview`, data)
+}
+

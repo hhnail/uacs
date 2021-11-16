@@ -1,7 +1,26 @@
 import React, {useEffect, useRef, useState} from 'react'
-import {Badge, Button, Cascader, DatePicker, Form, Input, message, Modal, Space, Table, Tooltip} from 'antd'
+import {
+    Badge,
+    Button,
+    Cascader,
+    DatePicker,
+    Form,
+    Input,
+    message,
+    Modal,
+    Space,
+    Table,
+    TimePicker,
+    Tooltip,
+    Row,
+    Col, Select
+} from 'antd'
 import {RollbackOutlined} from '@ant-design/icons';
-import {getApplicationList, updateApplicationState} from "../../../../../services/applicationService";
+import {
+    getApplicationList,
+    updateApplicationInterview,
+    updateApplicationState
+} from "../../../../../services/applicationService";
 import {ICON, OPTION_ICONS} from "../../../../../constants/icon";
 import {APPLICATION_STATE} from "../../../../../constants/state";
 import {useHistory} from "react-router-dom";
@@ -10,8 +29,10 @@ import ArrangeInterviewForm from "../../../../components/ArrangeInterviewForm";
 import ApplicationCalendar from "../../../../components/Calendar";
 import axios from "axios";
 import {getInterviewAddress} from "../../../../../services/treeService";
+import {getUserByAssociationId} from "../../../../../services/userService";
 
 const {confirm} = Modal
+const {Option} = Select
 
 
 const layout = {
@@ -31,37 +52,50 @@ export default function ApplicationList() {
     const [applicationList, setApplicationList] = useState([])
     const arrangeInterviewFormRef = useRef(null)
     const [arrangeInterviewModalVisible, setArrangeInterviewModalVisible] = useState(false)
+    // 当前安排面试的申请项
     const [arrangingItem, setArrangingItem] = useState({})
+    // 当前选中的面试联系人
+    const [arrangingContacterId, setArrangingContacterId] = useState('')
     const [interviewAddress, setInterviewAddress] = useState([])
+    const [memberList, setMemberList] = useState([])
 
     // constans
 
     // life cycle
     useEffect(() => {
-        getInterviewAddress()
-            .then(res => {
-                const {data} = res.data
-                console.log('data')
-                console.log(data)
-                setInterviewAddress(data)
-            })
+        getInterviewAddress().then(res => {
+            const {data} = res.data
+            // console.log('面试地点data')
+            // console.log(data)
+            setInterviewAddress(data)
+        })
         refresh()
     }, [])
 
+    useEffect(() => {
+        console.log('当前操作项:')
+        console.log(arrangingItem)
+        if (arrangingItem.associationId) {
+            getUserByAssociationId(arrangingItem.associationId).then(res => {
+                setMemberList(res.data.data)
+            })
+        }
+
+    }, [arrangingItem])
+
+    // 刷新申请列表
     const refresh = () => {
         getApplicationList(userInfo.manageAssociationKeys).then(res => {
             const {data} = res.data
             setApplicationList(data)
+            message.success('操作成功！')
         })
     }
 
     const handleApplicationUpdate = (applicationId, state) => {
-        updateApplicationState(qs.stringify({applicationId, state}))
-            .then(() => {
-                Modal.destroyAll()
-                refresh()
-                message.success('更新成功！')
-            })
+        updateApplicationState(qs.stringify({applicationId, state})).then(() => {
+            refresh()
+        })
     }
 
     const columns = [
@@ -84,9 +118,9 @@ export default function ApplicationList() {
         },
         {
             title: '意向部门',
-            dataIndex: 'intentionDepartment',
-            render(intentionDepartment, item) {
-                return (item.associationName + ' - ' + intentionDepartment)
+            dataIndex: 'departmentName',
+            render(departmentName, item) {
+                return (item.associationName + ' - ' + departmentName)
             }
         },
         {
@@ -165,8 +199,8 @@ export default function ApplicationList() {
 
             {/* === 面试安排模态框 === */}
             {arrangeInterviewModalVisible
-            && <Modal title="面试安排" visible={arrangeInterviewModalVisible}
-                      height={350}
+            && <Modal title="面试安排" height={350}
+                      visible={arrangeInterviewModalVisible}
                       onCancel={() => {
                           setArrangingItem({})
                           setArrangeInterviewModalVisible(false)
@@ -174,15 +208,29 @@ export default function ApplicationList() {
                       onOk={() => {
                           arrangeInterviewFormRef.current.validateFields()
                               .then(value => {
-                                  //update
-                                  // setArrangeInterviewModalVisible(false)
+                                  console.log('面试表单信息：')
+                                  const data = {
+                                      ...value,
+                                      applicationId: arrangingItem.applicationId,
+                                      departmentId: arrangingItem.departmentId,
+                                      contacterId: arrangingContacterId,
+                                      interviewAddress: value.interviewAddress.join('-'),
+                                  }
+                                  updateApplicationInterview(data).then(() => {
+                                      refresh()
+                                      setArrangeInterviewModalVisible(false)
+                                  })
                               })
                       }}>
-                <Form {...layout} name="arrangeInterviewModal">
-                    <Form.Item name='interviewTime' label="面试时间"
-                               rules={[{required: true, message: '请选择面试时间'}]}
+                <Form {...layout} name="arrangeInterviewModal" ref={arrangeInterviewFormRef}>
+                    <Form.Item name='interviewDate' label="面试日期"
+                               rules={[{required: true, message: '请选择面试日期！'}]}
                     >
                         <DatePicker/>
+                    </Form.Item>
+                    <Form.Item name='interviewTime' label="面试时间"
+                               rules={[{required: true, message: '请选择面试时间！'}]}>
+                        <TimePicker minuteStep={15} secondStep={10}/>
                     </Form.Item>
                     <Form.Item name='interviewAddress' label="面试地点"
                                rules={[{required: true, message: '请选择面试地点'}]}
@@ -194,12 +242,20 @@ export default function ApplicationList() {
                         }
                     </Form.Item>
                     <Form.Item name='intentionDepartment' label="意向部门"
-                               initialValue={arrangingItem.intentionDepartment}>
+                               initialValue={arrangingItem.departmentName}>
                         <Input disabled={true}/>
                     </Form.Item>
                     <Form.Item name='contacterName' label="联系人"
                                rules={[{required: true, message: '请选择联系人'}]}>
-                        <Input/>
+                        <Select onChange={(value) => {
+                            console.log('联系人ID：')
+                            console.log(value)
+                            setArrangingContacterId(value)
+                        }}>
+                            {memberList.map(user => {
+                                return <Option value={user.userId}>{user.name}</Option>
+                            })}
+                        </Select>
                     </Form.Item>
                     <Form.Item name='contacterPhone' label="联系方式">
                         <Input/>

@@ -13,7 +13,7 @@ const contentStyle = {
     background: 'orange',
 };
 
-export default function AssciationSquare(){
+export default function AssciationSquare() {
 
     const [associationList, setAssociationList] = useState([])
 
@@ -48,7 +48,7 @@ export default function AssciationSquare(){
             <br/>
             {/* ======================== 社团展示栏-卡片组 ======================== */}
             <div>
-                <Row>
+                <Row gutter={[24, 24]}>
                     {
                         associationList.map(item => {
                             return <Col span={6}>

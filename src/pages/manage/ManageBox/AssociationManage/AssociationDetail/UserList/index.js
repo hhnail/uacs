@@ -1,7 +1,8 @@
-import {Avatar, Card, Col, List, Row, Tag, Tooltip} from "antd";
+import {Avatar, Card, Col, List, Row, Space, Tag, Tooltip} from "antd";
 import React, {useEffect, useState} from "react";
 import {getUserByAssociationId} from "../../../../../../services/userService";
 import {ICON} from "../../../../../../constants/icon";
+import {GENDER_TYPE} from "../../../../../../constants/type";
 
 export default function UserList(props) {
 
@@ -23,6 +24,29 @@ export default function UserList(props) {
         refreshUserList()
     }, [props.associationId])
 
+
+    const renderUserTitle = (user) => {
+        let genderIcon = ''
+        // console.log(user.gender)
+        if(user.gender === GENDER_TYPE.BOY.label){
+            genderIcon = ICON.boy
+        }else if (user.gender === GENDER_TYPE.GIRL.label){
+            genderIcon = ICON.girl
+        }else{
+
+        }
+        return <>
+            <Space>
+                <Tag icon={ICON.member}color={'#cd201f'}>社团成员</Tag>
+                <Tooltip placement="topLeft" title={'点击查看TA的主页~'}>
+                    <a href="/#"><b>{user.name}</b></a>
+                </Tooltip>
+                {genderIcon}
+            </Space>
+
+        </>
+    }
+
     return <Row gutter={24}>
         <Col span={24}>
             <Card title="成员列表" bordered>
@@ -33,19 +57,7 @@ export default function UserList(props) {
                         <List.Item>
                             <List.Item.Meta
                                 avatar={<Avatar src="https://joeschmoe.io/api/v1/random"/>}
-                                title={<>
-                                    <Tooltip placement="topLeft" title={'点击查看TA的主页~'}>
-                                        <a href="/#"><b>{user.name}</b></a>
-                                    </Tooltip>
-                                    <Tag icon={ICON.member}
-                                         color={'#cd201f'}
-                                         style={{
-                                             marginLeft:10
-                                         }}
-                                    >
-                                        社团成员
-                                    </Tag>
-                                </>}
+                                title={renderUserTitle(user)}
                                 description={`个性签名：${user.personalSignature || '该成员很懒，没有签名哦~'}`}
                             />
                         </List.Item>

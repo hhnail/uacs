@@ -44,7 +44,23 @@ const TREE_NODE_TYPE = {
     },
 }
 
+const GENDER_TYPE = {
+    BOY: {
+        label: '男',
+        value: 'BOY',
+    },
+    GIRL: {
+        label: '女',
+        value: 'GIRL',
+    },
+    UNKONWN: {
+        label: '保密',
+        value: 'UNKONWN',
+    },
+}
+
 export {
     ROLE_TYPE,
     TREE_NODE_TYPE,
+    GENDER_TYPE,
 }
