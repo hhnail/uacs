@@ -4,7 +4,7 @@ import {connect} from "react-redux";
 import 'nprogress/nprogress.css'
 import Home from '../../Home'
 import UserList from '../UserManage/UserList'
-import AssociationList from '../AssociationManage/AssociationList'
+import AssociationList from '../AssociationManage'
 import RoleList from '../PermissionManage/RoleList'
 import PermissionList from '../PermissionManage/PermissionList'
 import NoPermission from '../../NoPermission'

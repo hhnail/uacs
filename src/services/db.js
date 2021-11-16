@@ -70,6 +70,12 @@ export function getAssociationByUserId(data) {
     return axios.post('/association/getAssociationByUserId', qs.stringify(data))
 }
 
+export function getAssociationAsMember(userId) {
+    return axios.post('/association/getAssociationAsMember', qs.stringify({userId}))
+}
+
+
+
 
 
 

@@ -1,18 +1,25 @@
 import React, {useEffect, useState} from 'react'
 import {Button, Space, Table} from 'antd';
-import {getAllAssociationList} from "../../../../../services/db";
-import {OPTION_ICONS} from "../../../../../constants/icon";
+import {getAssociationAsMember} from "../../../../services/db";
+import {OPTION_ICONS} from "../../../../constants/icon";
 import {useHistory} from "react-router-dom";
-
+import {getAssociationStateLabelByKey, getAssociationTypeLabel} from "../../../../constants/state";
 
 export default function AssociationList(props) {
+
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"))
+    const isSuperAdmin = false
 
     const history = useHistory()
     const [dataSource, setDataSource] = useState([])
 
+
     useEffect(() => {
-        getAllAssociationList().then(res => {
+        // getAllAssociationList().then(res => {
+        getAssociationAsMember(userInfo.userId).then(res => {
             const {data} = res.data
+            // console.log('社团列表：')
+            // console.log(data)
             setDataSource(data)
         })
     }, [])
@@ -32,18 +39,27 @@ export default function AssociationList(props) {
             dataIndex: 'associationName',
         },
         {
-            title: '基本信息',
-            dataIndex: 'info',
-            ellipsis: true
+            title: '担任职位',
+            dataIndex: 'roleName',
+        },
+        {
+            title: '类型',
+            dataIndex: 'type',
+            render: (type) => {
+                return <span>{getAssociationTypeLabel(type)}</span>
+            }
         },
         {
             title: '创建时间',
             dataIndex: 'createTime',
         },
-        {
-            title: '状态',
-            dataIndex: 'state',
-        },
+        // isSuperAdmin && {
+        //     title: '状态',
+        //     dataIndex: 'state',
+        //     render: (type) => {
+        //         return <span>{getAssociationStateLabelByKey(type)}</span>
+        //     }
+        // },
         {
             title: '操作',
             render: (_, item) => <Space>

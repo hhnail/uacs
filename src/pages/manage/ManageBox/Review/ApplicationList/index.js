@@ -154,7 +154,7 @@ export default function ApplicationList() {
             render: (item) => {
                 return <Space>
                     {(item.state === APPLICATION_STATE.APPLYING.value) &&
-                    <Button size="small" type='primary' icon={OPTION_ICONS.ARRANGE}
+                    <Button size="small" icon={OPTION_ICONS.ARRANGE}
                             onClick={() => {
                                 setArrangingItem({...item})
                                 setArrangeInterviewModalVisible(true)
@@ -177,7 +177,7 @@ export default function ApplicationList() {
                                 Modal.confirm({
                                     title: `您确认要拒绝【${item.name}】的入团申请吗？`,
                                     onOk: () => {
-                                        // TODO 填写拒绝回复理由
+                                        // TODO 回复拒绝申请的理由
                                         handleApplicationUpdate(item.applicationId, APPLICATION_STATE.APPLY_REFUSE.value)
                                     }
                                 })

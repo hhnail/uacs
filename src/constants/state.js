@@ -109,10 +109,103 @@ const APPLICATION_STATE = {
     },
 }
 
+
+// 纳新通知 发布状态list。获取方式：RECRUITMENT_PUBLISH_STATE_MAP.xx.xx
+const ASSOCIATION_STATE = {
+    APPROVED: {
+        key: 1,
+        label: '审核通过',
+        value: 'APPROVED',
+    },
+    APPROVING: {
+        key: 2,
+        label: '审核中',
+        value: 'APPROVING',
+    },
+    APPROVE_FAIL: {
+        key: 3,
+        label: '审核未通过',
+        value: 'APPROVE_FAIL',
+    },
+    LOCKED: {
+        key: 4,
+        label: '社团被锁定',
+        value: 'LOCKED',
+    },
+}
+
+const ASSOCIATION_STATE_LIST = [
+    {
+        key: '1',
+        label: '审核通过',
+        value: 'APPROVED',
+    },
+    {
+        key: '2',
+        label: '审核中',
+        value: 'APPROVING',
+    },
+    {
+        key: '3',
+        label: '审核未通过',
+        value: 'APPROVE_FAIL',
+    },
+    {
+        key: '4',
+        label: '社团被锁定',
+        value: 'LOCKED',
+    },
+]
+
+
+const getAssociationStateLabelByKey = (key) => {
+    let stateLabel = ''
+    ASSOCIATION_STATE_LIST.map(item => {
+        if (item.key === key) {
+            stateLabel = item.label
+        }
+    })
+    return stateLabel
+}
+
+
+const ASSOCIATION_TYPE_LIST = [
+    {
+        label: '学术性社团',
+        value: 'ACADEMIC',
+    },
+    {
+        label: '康乐性社团',
+        value: 'RECREATIONAL',
+    },
+    {
+        label: '艺术性社团',
+        value: 'ARTISTIC',
+    },
+    {
+        label: '体能性社团',
+        value: 'PHYSICAL',
+    },
+]
+
+const getAssociationTypeLabel = (value) => {
+    let Label = ''
+    ASSOCIATION_TYPE_LIST.map(item => {
+        if (item.value === value) {
+            Label = item.label
+        }
+    })
+    return Label
+}
+
 export {
     RECRUITMENT_STATE_MAP,
     RECRUITMENT_PUBLISH_STATE_MAP,
     RECRUITMENT_PUBLISH_STATE_LIST,
     RECRUITMENT_STATE,
     APPLICATION_STATE,
+    ASSOCIATION_STATE,
+    getAssociationStateLabelByKey,
+    ASSOCIATION_TYPE_LIST,
+    getAssociationTypeLabel,
 }
