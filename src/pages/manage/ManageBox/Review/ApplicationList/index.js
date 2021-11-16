@@ -8,12 +8,11 @@ import {
     Input,
     message,
     Modal,
+    Select,
     Space,
     Table,
     TimePicker,
-    Tooltip,
-    Row,
-    Col, Select
+    Tooltip
 } from 'antd'
 import {RollbackOutlined} from '@ant-design/icons';
 import {
@@ -25,9 +24,7 @@ import {ICON, OPTION_ICONS} from "../../../../../constants/icon";
 import {APPLICATION_STATE} from "../../../../../constants/state";
 import {useHistory} from "react-router-dom";
 import qs from "querystring";
-import ArrangeInterviewForm from "../../../../components/ArrangeInterviewForm";
 import ApplicationCalendar from "../../../../components/Calendar";
-import axios from "axios";
 import {getInterviewAddress} from "../../../../../services/treeService";
 import {getUserByAssociationId} from "../../../../../services/userService";
 
@@ -88,13 +85,13 @@ export default function ApplicationList() {
         getApplicationList(userInfo.manageAssociationKeys).then(res => {
             const {data} = res.data
             setApplicationList(data)
-            message.success('操作成功！')
         })
     }
 
     const handleApplicationUpdate = (applicationId, state) => {
         updateApplicationState(qs.stringify({applicationId, state})).then(() => {
             refresh()
+            message.success('操作成功！')
         })
     }
 
@@ -143,6 +140,8 @@ export default function ApplicationList() {
                         return <Badge status="success" text={APPLICATION_STATE.INTERVIEW_INVITING.name}/>
                     case APPLICATION_STATE.UN_INTERVIEW.value:
                         return <Badge status="processing" text={APPLICATION_STATE.UN_INTERVIEW.name}/>
+                    case APPLICATION_STATE.INTERVIEW_PASS.value:
+                        return <Badge status="success" text={APPLICATION_STATE.INTERVIEW_PASS.name}/>
                     default:
                         return <Badge status="error" text="状态异常"/>
                 }
@@ -152,12 +151,23 @@ export default function ApplicationList() {
             title: '操作',
             render: (item) => {
                 return <Space>
-                    {(item.state === APPLICATION_STATE.APPLYING.value || item.state === APPLICATION_STATE.UN_INTERVIEW.value) &&
+                    {(item.state === APPLICATION_STATE.APPLYING.value) &&
                     <Button size="small" type='primary' icon={OPTION_ICONS.ARRANGE}
                             onClick={() => {
                                 setArrangingItem({...item})
                                 setArrangeInterviewModalVisible(true)
                             }}>面试</Button>
+                    }
+                    {(item.state === APPLICATION_STATE.UN_INTERVIEW.value) &&
+                    <Button size="small" type='primary' icon={OPTION_ICONS.ARRANGE}
+                            onClick={() => {
+                                Modal.confirm({
+                                    title: `您确认要录用【${item.departmentName} - ${item.name}】吗？`,
+                                    onOk: () => {
+                                        handleApplicationUpdate(item.applicationId, APPLICATION_STATE.INTERVIEW_PASS.value)
+                                    }
+                                })
+                            }}>录用</Button>
                     }
                     {item.state === APPLICATION_STATE.INTERVIEW_INVITING.value &&
                     <Button size="small" danger icon={<RollbackOutlined/>}

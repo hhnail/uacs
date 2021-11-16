@@ -76,11 +76,11 @@ const APPLICATION_STATE = {
         value: 'UN_COMMIT',
     },
     APPLYING: {
-        name: '申请中',
+        name: '申请待审核',
         value: 'APPLYING',
     },
     APPLY_REFUSE: {
-        name: '申请被拒',
+        name: '申请已被拒',
         value: 'APPLY_REFUSE',
     },
     INTERVIEW_INVITING: {
@@ -92,19 +92,19 @@ const APPLICATION_STATE = {
         value: 'REFUSE_INVITING',
     },
     UN_INTERVIEW: {
-        name: '待面试',
+        name: '等待面试中',
         value: 'UN_INTERVIEW',
     },
     INTERVIEW_PASS: {
-        name: '面试通过',
+        name: '面试已通过',
         value: 'INTERVIEW_PASS',
     },
     CONFIRM: {
-        name: '确认加入',
+        name: '已正式加入',
         value: 'CONFIRM',
     },
     REGRET: {
-        name: '流程取消',
+        name: '流程已取消',
         value: 'REGRET',
     },
 }

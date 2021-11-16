@@ -34,6 +34,7 @@ import {ReactComponent as Member} from "../icons/member.svg";
 import {ReactComponent as Department} from "../icons/department.svg";
 import {ReactComponent as Boy} from "../icons/boy.svg";
 import {ReactComponent as Girl} from "../icons/girl.svg";
+import {ReactComponent as Accept} from "../icons/accept.svg";
 
 
 // 用户操作图标
@@ -46,6 +47,8 @@ const OPTION_ICONS = {
     DELETE: <Icon component={DeleteIcon} style={{fontSize: 16}}/>,
     // 安排
     ARRANGE: <Icon component={ArrangeIcon} style={{fontSize: 14}}/>,
+    // 接受
+    ACCEPT: <Icon component={Accept} style={{fontSize: 16,fontWeight:800}}/>,
     // 拒绝
     REFUSE: <Icon component={RefuseIcon} style={{fontSize: 14}}/>,
     // 新增

@@ -6,7 +6,7 @@ import {useHistory} from "react-router-dom";
 import {APPLICATION_STATE} from '../../../../constants/state'
 import qs from "querystring";
 import {OPTION_ICONS} from "../../../../constants/icon";
-import ArrangeInterviewModal from "../../../components/ArrangeInterviewForm";
+import ViewInterview from "../../../components/ViewInterview";
 
 export default function ApplicationManage() {
 
@@ -14,21 +14,22 @@ export default function ApplicationManage() {
     const history = useHistory()
     const [applicationList, setApplicationList] = useState([])
 
-    useEffect(() => {
+    const refreshApplication = () => {
         getApplicationByUserId(userInfo.userId).then(res => {
             const {data} = res.data
             setApplicationList(data)
         })
+    }
+
+    useEffect(() => {
+        refreshApplication()
     }, [])
 
     const handleApplicationUpdate = (applicationId, state) => {
         updateApplicationState(qs.stringify({applicationId, state}))
             .then(() => {
+                refreshApplication()
                 message.success('操作成功！')
-                getApplicationByUserId(userInfo.userId).then(res => {
-                    const {data} = res.data
-                    setApplicationList(data)
-                })
             })
     }
 
@@ -41,33 +42,53 @@ export default function ApplicationManage() {
             >
                 查看
             </Button>
+            {item.state === APPLICATION_STATE.INTERVIEW_PASS.value &&
+            <Button size="small" type='primary' icon={OPTION_ICONS.ACCEPT}
+                    onClick={() =>
+                        Modal.confirm({
+                            title: `您确认加入【${item.associationName}-${item.departmentName}】吗？`,
+                            onOk: () => {
+                                handleApplicationUpdate(item.applicationId, APPLICATION_STATE.CONFIRM.value)
+                            }
+                        })
+                    }>确认加入</Button>
+            }
             {item.state === APPLICATION_STATE.APPLYING.value &&
             <Button size="small" danger icon={<RollbackOutlined/>}
-                    onClick={() => handleApplicationUpdate(item.applicationId, APPLICATION_STATE.UN_COMMIT.value)}>撤销</Button>
+                    onClick={() => {
+                        Modal.confirm({
+                            title: '您确认要撤销申请吗？',
+                            onOk: () => {
+                                handleApplicationUpdate(item.applicationId, APPLICATION_STATE.UN_COMMIT.value)
+                            }
+                        })
+                    }}>撤销</Button>
             }
             {item.state === APPLICATION_STATE.UN_COMMIT.value &&
             <Button size="small" icon={OPTION_ICONS.COMMIT}
                     onClick={() => handleApplicationUpdate(item.applicationId, APPLICATION_STATE.APPLYING.value)}>提交</Button>
             }
             {item.state === APPLICATION_STATE.INTERVIEW_INVITING.value &&
-            <Button size="small" type='primary' icon={OPTION_ICONS.REFUSE}
-                    onClick={() =>
+            <Button size="small" type='primary' icon={OPTION_ICONS.ACCEPT}
+                    onClick={() => {
                         Modal.confirm({
-                            title:'接受面试',
-                            width:698,
-                            content:<ArrangeInterviewModal canEdit={false}/>,
-                            onOk:()=>{
+                            title: '接受面试',
+                            width: 698,
+                            content: <ViewInterview application={item}/>,
+                            onOk: () => {
                                 handleApplicationUpdate(item.applicationId, APPLICATION_STATE.UN_INTERVIEW.value)
-                            }
+                            },
+                            okText: '确认接受',
+                            cancelText: '取消操作',
                         })
-                    }>接受</Button>
+                    }}>接受</Button>
             }
             {item.state === APPLICATION_STATE.INTERVIEW_INVITING.value &&
             <Button size="small" danger icon={OPTION_ICONS.REFUSE}
                     onClick={() =>
                         Modal.confirm({
-                            title:'拒绝面试邀请无法撤销，确认拒绝吗？',
-                            onOk:()=>{
+                            title: '拒绝面试邀请无法撤销，确认拒绝吗？',
+                            onOk: () => {
                                 handleApplicationUpdate(item.applicationId, APPLICATION_STATE.REFUSE_INVITING.value)
                             }
                         })
@@ -91,13 +112,13 @@ export default function ApplicationManage() {
         },
         {
             title: '社团及意向部门',
-            dataIndex: 'intentionDepartment',
-            render(intentionDepartment, item) {
+            dataIndex: 'departmentName',
+            render(departmentName, item) {
                 return (
                     <>
-                        <a onClick={()=>{
+                        <a onClick={() => {
                             history.push(`/user/associationDetail/${item.associationId}`)
-                        }}>{item.associationName}</a> —— {item.intentionDepartment}
+                        }}>{item.associationName}</a> —— {departmentName || '未选择部门'}
                     </>
                 )
             }
@@ -124,6 +145,10 @@ export default function ApplicationManage() {
                         return <Badge status="warning" text={APPLICATION_STATE.REFUSE_INVITING.name}/>
                     case APPLICATION_STATE.UN_INTERVIEW.value:
                         return <Badge status="processing" text={APPLICATION_STATE.UN_INTERVIEW.name}/>
+                    case APPLICATION_STATE.INTERVIEW_PASS.value:
+                        return <Badge status="processing" text={APPLICATION_STATE.INTERVIEW_PASS.name}/>
+                    case APPLICATION_STATE.CONFIRM.value:
+                        return <Badge status="success" text={APPLICATION_STATE.CONFIRM.name}/>
                     default:
                         return <Badge status="error" text="状态异常"/>
                 }

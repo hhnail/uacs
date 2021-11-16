@@ -32,6 +32,11 @@ export function updateApplicationState(data) {
     return axios.post('/association/updateApplicationState', data)
 }
 
+/**
+ * 安排面试（更新申请表信息）
+ * @param data
+ * @returns {Promise<AxiosResponse<any>>}
+ */
 export function updateApplicationInterview(data) {
     return axios.post(`/association/updateApplicationInterview`, data)
 }
