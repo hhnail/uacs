@@ -37,7 +37,7 @@ export default function ApplicationManage() {
         return <Space>
             <Button size="small" icon={OPTION_ICONS.VIEW}
                     onClick={() => {
-                        history.push(`/manage/review/joinAssociation/${item.applicationId}`)
+                        history.push(`/manage/review/joinAssociation/${item.applicationId}/0`)
                     }}
             >
                 查看
@@ -149,6 +149,8 @@ export default function ApplicationManage() {
                         return <Badge status="processing" text={APPLICATION_STATE.INTERVIEW_PASS.name}/>
                     case APPLICATION_STATE.CONFIRM.value:
                         return <Badge status="success" text={APPLICATION_STATE.CONFIRM.name}/>
+                    case APPLICATION_STATE.APPLY_REFUSE.value:
+                        return <Badge status="error" text={APPLICATION_STATE.APPLY_REFUSE.name}/>
                     default:
                         return <Badge status="error" text="状态异常"/>
                 }

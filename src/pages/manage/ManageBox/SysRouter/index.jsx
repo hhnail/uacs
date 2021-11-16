@@ -67,7 +67,7 @@ function SysRouter(props) {
                 {/* =============== 审核管理 =======================*/}
                 <Route path="/manage/review/addAssociation" component={AddAssociation}></Route>
                 {/*审批入团申请 -- 申请表详情（申请表 + 个人简历）*/}
-                <Route path="/manage/review/joinAssociation/:applicationId" component={ApplicationDetail}></Route>
+                <Route path="/manage/review/joinAssociation/:applicationId/:isReview" component={ApplicationDetail}></Route>
                 {/*审批入团申请*/}
                 <Route path="/manage/review/joinAssociation" component={ApplicationList}></Route>
                 {/*发布纳新通知*/}

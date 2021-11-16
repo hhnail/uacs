@@ -108,7 +108,7 @@ export default function ApplicationList() {
             dataIndex: 'name',
             render(name, item) {
                 return <Tooltip title="点击查看详情">
-                    <a href={`#/manage/review/joinAssociation/${item.applicationId}`}
+                    <a href={`#/manage/review/joinAssociation/${item.applicationId}/1`}
                     >{name}</a>
                 </Tooltip>;
             }
@@ -142,6 +142,8 @@ export default function ApplicationList() {
                         return <Badge status="processing" text={APPLICATION_STATE.UN_INTERVIEW.name}/>
                     case APPLICATION_STATE.INTERVIEW_PASS.value:
                         return <Badge status="success" text={APPLICATION_STATE.INTERVIEW_PASS.name}/>
+                    case APPLICATION_STATE.APPLY_REFUSE.value:
+                        return <Badge status="error" text={APPLICATION_STATE.APPLY_REFUSE.name}/>
                     default:
                         return <Badge status="error" text="状态异常"/>
                 }
@@ -162,12 +164,24 @@ export default function ApplicationList() {
                     <Button size="small" type='primary' icon={OPTION_ICONS.ARRANGE}
                             onClick={() => {
                                 Modal.confirm({
-                                    title: `您确认要录用【${item.departmentName} - ${item.name}】吗？`,
+                                    title: `您确认要录用【${item.name}】为【${item.departmentName}】的一员吗？`,
                                     onOk: () => {
                                         handleApplicationUpdate(item.applicationId, APPLICATION_STATE.INTERVIEW_PASS.value)
                                     }
                                 })
                             }}>录用</Button>
+                    }
+                    {(item.state === APPLICATION_STATE.UN_INTERVIEW.value || item.state === APPLICATION_STATE.APPLYING.value) &&
+                    <Button size="small" danger icon={OPTION_ICONS.REFUSE}
+                            onClick={() => {
+                                Modal.confirm({
+                                    title: `您确认要拒绝【${item.name}】的入团申请吗？`,
+                                    onOk: () => {
+                                        // TODO 填写拒绝回复理由
+                                        handleApplicationUpdate(item.applicationId, APPLICATION_STATE.APPLY_REFUSE.value)
+                                    }
+                                })
+                            }}>拒绝</Button>
                     }
                     {item.state === APPLICATION_STATE.INTERVIEW_INVITING.value &&
                     <Button size="small" danger icon={<RollbackOutlined/>}

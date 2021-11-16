@@ -51,6 +51,8 @@ export default function ApplicationDetail(props) {
                 return <Badge status="success" text={APPLICATION_STATE.INTERVIEW_INVITING.name}/>
             case APPLICATION_STATE.UN_INTERVIEW.value:
                 return <Badge status="processing" text={APPLICATION_STATE.UN_INTERVIEW.name}/>
+            case APPLICATION_STATE.APPLY_REFUSE.value:
+                return <Badge status="error" text={APPLICATION_STATE.APPLY_REFUSE.name}/>
             default:
                 return <Badge status="error" text="状态异常"/>
         }
@@ -81,13 +83,30 @@ export default function ApplicationDetail(props) {
                                     查看面试安排
                                 </Button>
                                 }
+                                {(applicationDetail.state === APPLICATION_STATE.APPLY_REFUSE.value)
+                                && <Button type="primary" onClick={() => {
+                                    Modal.info({
+                                        title: '面试安排',
+                                        width: 698,
+                                        content: '很抱歉，您不符合我们的需求，希望您早日找到合适的社团，祝您大学生活愉快~',
+                                        onOk: () => {
+                                        },
+                                        okText: '关闭',
+                                    })
+                                }}>
+                                    查看申请回复
+                                </Button>
+                                }
 
                                 {/* ======== 个人简历浏览 ========== */}
+                                {/* 从路由身上取得的是number，所以要用== */}
+                                {props.match.params.isReview == 1 &&
                                 <Button type="primary" onClick={() => {
                                     setVisible(true);
                                 }}>
-                                    浏览成员简历
+                                    浏览简历
                                 </Button>
+                                }
                             </Space>}
                 />
                 {/*====== 基本信息 + 照片 ======*/}
