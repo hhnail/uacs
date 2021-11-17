@@ -56,7 +56,7 @@ export default function UserList(props) {
                     renderItem={user => (
                         <List.Item>
                             <List.Item.Meta
-                                avatar={<Avatar src="https://joeschmoe.io/api/v1/random"/>}
+                                avatar={<Avatar src="http://localhost:7100/association/getImageById/794543bb675b4e8ca09757b069dc8b01"/>}
                                 title={renderUserTitle(user)}
                                 description={`个性签名：${user.personalSignature || '该成员很懒，没有签名哦~'}`}
                             />

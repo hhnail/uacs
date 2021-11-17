@@ -59,8 +59,29 @@ const GENDER_TYPE = {
     },
 }
 
+
+const IMAGE_TYPE = {
+    USER_AVATAR: {
+        label: '用户头像',
+        value: 'USER_AVATAR',
+    },
+    USER_PHOTO_ALBUM: {
+        label: '用户相册',
+        value: 'USER_PHOTO_ALBUM',
+    },
+    ASSOCIATION_HOMEPAGE: {
+        label: '社团首页',
+        value: 'ASSOCIATION_HOMEPAGE',
+    },
+    ASSOCIATION_PHOTO_ALBUM: {
+        label: '社团相册',
+        value: 'ASSOCIATION_PHOTO_ALBUM',
+    },
+}
+
 export {
     ROLE_TYPE,
     TREE_NODE_TYPE,
     GENDER_TYPE,
+    IMAGE_TYPE,
 }

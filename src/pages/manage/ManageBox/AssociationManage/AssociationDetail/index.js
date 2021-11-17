@@ -8,6 +8,8 @@ import {ICON, OPTION_ICONS} from "../../../../../constants/icon";
 import {ReactComponent as DeleteIcon} from "../../../../../icons/delete.svg";
 import {deleteDepartment} from "../../../../../services/departmentService";
 import UserList from "./UserList";
+import {IMAGE_TYPE} from "../../../../../constants/type";
+import {getAssociationImageUrl} from "../../../../../services/imageService";
 
 const {TabPane} = Tabs;
 
@@ -29,19 +31,18 @@ export default function AssociationDetail(props) {
     const [previewVisible, setPreviewVisible] = useState(false)
     const [previewImage, setPreviewImage] = useState('')
     const [previewTitle, setPreviewTitle] = useState('')
-    const [fileList, setFileList] = useState([
-        {
-            uid: '-4',
-            name: 'image.png',
-            status: 'done',
-            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-        },
-        {
-            uid: '-5',
-            name: 'image.png',
-            status: 'error',
-        },
-    ],)
+    const [fileList, setFileList] = useState([])
+    // {
+    //     uid: '-4',
+    //         name: 'image.png',
+    //     status: 'done',
+    //     url: 'http://localhost:7100/association/getImageById/d8a5f2c962bf4208852bbcccf050908e',
+    // },
+    // {
+    //     uid: '-5',
+    //         name: 'image.png',
+    //     status: 'error',
+    // },
 
     const refreshAssociationData = () => {
         getAssociationDetail(props.match.params.associationId).then(res => {
@@ -52,13 +53,18 @@ export default function AssociationDetail(props) {
     }
 
     useEffect(() => {
-        // TODO 图片查询
-        // axios.get(`/association/getImageById/${1}`).then(res => {
-        //     const {data} = res.data
-        //     console.log(data)
-        // })
         refreshAssociationData()
-    }, [])
+        if (association) {
+            const type = IMAGE_TYPE.ASSOCIATION_HOMEPAGE.value
+            const ownerId = association.associationId + ''
+            getAssociationImageUrl(type, ownerId).then(res => {
+                const images = res.data.data
+                // console.log('images')
+                // console.log(images)
+                setFileList(images)
+            })
+        }
+    }, [association?.associationId])
 
 
     // 预览图片
@@ -72,14 +78,12 @@ export default function AssociationDetail(props) {
     };
 
     // 控制上传change
-    const handleChange = ({fileList}) => {
+    const handleChange = ({file, fileList}) => {
+        if (file.status === 'done') {
+            message.success("上传成功！")
+        }
         setFileList(fileList)
         // TODO 图片上传 变化
-        // axios.post('/association/uploadImage', fileList[2])
-        //     .then(res => {
-        // const {data} = res.data
-        // console.log(res.data.data)
-        // })
     };
 
 
@@ -191,8 +195,8 @@ export default function AssociationDetail(props) {
                     {/* 上传图片 */}
                     首页社团图片
                     <Upload listType="picture-card"
-                        // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                            action={`/association/uploadImage`}
+                            action={`/association/uploadImage/${IMAGE_TYPE.ASSOCIATION_HOMEPAGE.value}/${association?.associationId + ''}`}
+                            name='image'
                             fileList={fileList}
                             onPreview={handlePreview}
                             onChange={handleChange}
