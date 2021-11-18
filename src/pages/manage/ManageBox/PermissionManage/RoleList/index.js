@@ -3,7 +3,7 @@ import {
     Table,
     Button,
     Modal,
-    Tree
+    Tree, message
 } from 'antd'
 import {
     UnorderedListOutlined,
@@ -152,11 +152,11 @@ export default class RoleList extends Component {
                 return item;
             }
         })
-        console.log("==75 new roleList", newDataSource);
+        // console.log("==75 new roleList", newDataSource);
         this.setState({ roleList: newDataSource })
         // 同步后端数据库(今天先写到这里--20210829)
-        console.log("==81 roleId", roleId);
-        console.log("==81 permissionIds", permissionIds);
+        // console.log("==81 roleId", roleId);
+        // console.log("==81 permissionIds", permissionIds);
         axios({
             url: "/association/reGrantPermissions2Role",
             method: 'post',
@@ -165,10 +165,10 @@ export default class RoleList extends Component {
                 permissionIds: permissionIds
             },
             headers: { 'Content-Type': 'application/json;charset=UTF-8' }
-        }).then(res => {
-            // console.log("==27 res", res);
-        }).catch(err => {
-            // console.log("==26 err", err);
+        }).then(() => {
+            message.success("操作成功！")
+        }).catch(() => {
+            message.error("操作失败！")
         })
 
     }

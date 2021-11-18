@@ -9,7 +9,7 @@ import {ReactComponent as DeleteIcon} from "../../../../../icons/delete.svg";
 import {deleteDepartment} from "../../../../../services/departmentService";
 import UserList from "./UserList";
 import {IMAGE_TYPE} from "../../../../../constants/type";
-import {getAssociationImageUrl} from "../../../../../services/imageService";
+import {deleteImage, getAssociationImageUrl} from "../../../../../services/imageService";
 
 const {TabPane} = Tabs;
 
@@ -32,17 +32,6 @@ export default function AssociationDetail(props) {
     const [previewImage, setPreviewImage] = useState('')
     const [previewTitle, setPreviewTitle] = useState('')
     const [fileList, setFileList] = useState([])
-    // {
-    //     uid: '-4',
-    //         name: 'image.png',
-    //     status: 'done',
-    //     url: 'http://localhost:7100/association/getImageById/d8a5f2c962bf4208852bbcccf050908e',
-    // },
-    // {
-    //     uid: '-5',
-    //         name: 'image.png',
-    //     status: 'error',
-    // },
 
     const refreshAssociationData = () => {
         getAssociationDetail(props.match.params.associationId).then(res => {
@@ -79,11 +68,18 @@ export default function AssociationDetail(props) {
 
     // 控制上传change
     const handleChange = ({file, fileList}) => {
-        if (file.status === 'done') {
-            message.success("上传成功！")
-        }
+        const changeAction = file.status
         setFileList(fileList)
-        // TODO 图片上传 变化
+        switch (changeAction) {
+            case 'done':
+                message.success("上传成功！")
+                break
+            case 'removed':
+                // TODO 删除首页图片
+                deleteImage(file.uid).then(() => {
+                    message.success("删除成功！")
+                })
+        }
     };
 
 
@@ -190,10 +186,14 @@ export default function AssociationDetail(props) {
                         </Col>
                     </Row>
                 </TabPane>
-
-                <TabPane tab="社团展示" key="dataView">
+                <TabPane tab="使用橘集" key="useUacs">
                     {/* 上传图片 */}
-                    首页社团图片
+                    <div style={{
+                        fontSize: 17,
+                        fontWeight: 900,
+                    }}>
+                        系统首页社团轮播图
+                    </div>
                     <Upload listType="picture-card"
                             action={`/association/uploadImage/${IMAGE_TYPE.ASSOCIATION_HOMEPAGE.value}/${association?.associationId + ''}`}
                             name='image'
@@ -201,21 +201,13 @@ export default function AssociationDetail(props) {
                             onPreview={handlePreview}
                             onChange={handleChange}
                     >
-                        {fileList.length < 9
+                        {/* === 只允许上传3张图片 === */}
+                        {fileList.length < 3
                         && <div>
                             <PlusOutlined/>
                             <div style={{marginTop: 8}}>上传图片</div>
                         </div>}
                     </Upload>
-                </TabPane>
-
-
-                {/* ================= 社团大事记  ====================-  */}
-                <TabPane tab="社团大事记" key="bigEvent">
-
-                </TabPane>
-                <TabPane tab="更多" key="easyUse">
-
                 </TabPane>
             </Tabs>
 

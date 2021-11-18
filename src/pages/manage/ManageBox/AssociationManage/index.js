@@ -15,7 +15,6 @@ export default function AssociationList(props) {
 
 
     useEffect(() => {
-        // getAllAssociationList().then(res => {
         getAssociationAsMember(userInfo.userId).then(res => {
             const {data} = res.data
             // console.log('社团列表：')

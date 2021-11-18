@@ -1,11 +1,12 @@
 import React, {useEffect, useRef, useState} from 'react'
-import {Button, Modal, Switch, Table,} from 'antd'
+import {Alert, Button, Modal, Switch, Table} from 'antd'
 
 import {DeleteOutlined, ExclamationCircleOutlined, UnorderedListOutlined} from '@ant-design/icons';
 
 import axios from 'axios'
-import UserForm from '../../../../../components/user-manage/UserForm';
-import {addUser, getAllAssociationList, getAllUsers, getRoleList, getUserById} from "../../../../../services/db";
+import UserForm from '../../../../components/user-manage/UserForm';
+import {addUser, getAllAssociationList, getAllUsers, getRoleList, getUserById} from "../../../../services/db";
+import BatchImport from "./BatchImport";
 
 
 const {confirm} = Modal
@@ -140,6 +141,7 @@ export default function UserList() {
                 setDataSource(newList)
                 // 调用后端接口，同步后台数据库
                 console.log("同步后台数据。。。")
+                // 硬删除
                 axios.delete(`/association/deleteUserById/${item.userId}`)
                     .then((res) => {
 
@@ -152,12 +154,6 @@ export default function UserList() {
 
             }
         })
-    }
-
-    // 弹出模态框
-    const showAddModal = () => {
-        // console.log("==1 弹出模态框");
-        setIsAddModalVisible(true)
     }
 
 
@@ -191,41 +187,72 @@ export default function UserList() {
         })
     }
 
-    return (
-        <div>
-            <div style={{float: "right"}}>
-                <Button type="primary" // shape="circle"
-                        onClick={showAddModal}
-                >
-                    新增成员
-                </Button>
+    return <>
+        <div style={{
+            display: 'flex',
+            flexDirection: 'row',
+            margin: '10px 0px 20px 0px',
+        }}>
+            <div style={{
+                width: 398,
+                height: 180,
+                marginLeft:50,
+            }}>
+                <BatchImport/>
             </div>
-            <Table
-                dataSource={dataSource}
-                columns={columns}
-                pagination={{
-                    pageSize: 6
-                }}
-                rowKey={item => item.id}
-            />
-            <Modal
-                visible={isAddModalVisible}
-                title="创建新成员"
-                okText="确认"
-                cancelText="取消"
-                onCancel={() => {
-                    setIsAddModalVisible(false)
-                    console.log("==3 取消");
-                }}
-                onOk={handelUserAddModalOk}
+            <Button type="primary"
+                    style={{
+                        marginLeft: -85,
+                        marginTop: -3,
+                    }}
+                    onClick={() => {
+                        setIsAddModalVisible(true)
+                    }}
             >
-                <UserForm
-                    associationList={associationList}
-                    roleList={roleList}
-                    ref={addFormRef}
-                ></UserForm>
-            </Modal>
-        </div>
-    )
+                新增成员
+            </Button>
+            <Alert message="数据格式" type="info" closable
+                   style={{
+                       height: 180,
+                       width: 600,
+                       marginLeft: 30,
+                   }}
+                   description={<>
+                       <div> @列1：学号；格式：英文或数字组合，最长不超过20个字符</div>
+                       <div>@列2：姓名：格式：中文或英文，最长不超过50个字符</div>
+                       <div>@列3：密码：格式：字符和数字的组合，最短6个字符，最长不超过50个字符。可以不提供，系统默认密码为学号后6位</div>
 
+                       <div style={{
+                           marginTop:9,
+                           color:'red',
+                       }}>批量导入失败请检查上述数据格式。若还不成功，请联系管理员18030290509</div>
+                   </>}
+            />
+        </div>
+        <Table
+            dataSource={dataSource}
+            columns={columns}
+            pagination={{
+                pageSize: 6
+            }}
+            rowKey={item => item.id}
+        />
+
+        {/* 添加成员 Modal */}
+        <Modal
+            visible={isAddModalVisible}
+            title="创建新成员"
+            okText="确认"
+            cancelText="取消"
+            onCancel={() => {
+                setIsAddModalVisible(false)
+            }}
+            onOk={handelUserAddModalOk}
+        >
+            <UserForm
+                associationList={associationList}
+                roleList={roleList}
+                ref={addFormRef}/>
+        </Modal>
+    </>
 }

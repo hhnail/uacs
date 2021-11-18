@@ -79,6 +79,7 @@ const SIDE_MENU_ICON_LIST = {
     // 成员管理
     "/manage/user": <TeamOutlined/>,
     "/manage/user/list": <TableOutlined/>,
+    "/manage/user/add": <UsergroupAddOutlined/>,
     // 社团管理
     "/manage/association": <ClusterOutlined/>,
     "/manage/association/list": <TableOutlined/>,
