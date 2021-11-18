@@ -4,7 +4,6 @@ import {connect} from "react-redux";
 import 'nprogress/nprogress.css'
 import Home from '../../Home'
 import UserList from '../UserManage'
-import AssociationList from '../AssociationManage'
 import RoleList from '../PermissionManage/RoleList'
 import PermissionList from '../PermissionManage/PermissionList'
 import NoPermission from '../../NoPermission'
@@ -25,6 +24,9 @@ import ApplicationManage from "../ApplicationManage";
 import AssociationDetail from "../AssociationManage/AssociationDetail";
 import InterviewAddress from "../Other/InterviewAddress";
 import Contacter from "../Other/Contacter";
+import AddUser from "../UserManage/AddUser";
+import BatchAddAssociation from "../AssociationManage/BatchAddAssociation";
+import AssociationList from "../AssociationManage";
 
 function SysRouter(props) {
     // TODO 动态创建路由 防止路由穿透
@@ -45,11 +47,13 @@ function SysRouter(props) {
                 <Route path="/manage/account/resume" component={Resume}></Route>
 
                 {/* ==================== 成员管理 ==================== */}
+                <Route path="/manage/user/add" component={AddUser}></Route>
                 <Route path="/manage/user/list" component={UserList}></Route>
 
                 {/* ==================== 社团管理 ==================== */}
                 {/*社团列表*/}
                 <Route path="/manage/association/list/:associationId" component={AssociationDetail}></Route>
+                <Route path="/manage/association/add" component={BatchAddAssociation}></Route>
                 <Route path="/manage/association/list" component={AssociationList}></Route>
 
 

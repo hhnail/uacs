@@ -112,7 +112,7 @@ export default function AssociationDetail(props) {
             <Tabs defaultActiveKey="structure">
                 {/* ================= 社团经历分享  ====================-  */}
                 <TabPane tab="社团组织" key="structure">
-                    <Row gutter={[24, 24]} style={{marginTop: 30}}>
+                    <Row gutter={[24, 24]} style={{marginTop: 10}}>
                         {/* =============== 左侧部门列表 =============== */}
                         <Col span={6}>
                             <Row gutter={[0, 24]}>
@@ -201,8 +201,8 @@ export default function AssociationDetail(props) {
                             onPreview={handlePreview}
                             onChange={handleChange}
                     >
-                        {/* === 只允许上传3张图片 === */}
-                        {fileList.length < 3
+                        {/* === 只允许上传5张图片 === */}
+                        {fileList.length < 5
                         && <div>
                             <PlusOutlined/>
                             <div style={{marginTop: 8}}>上传图片</div>
