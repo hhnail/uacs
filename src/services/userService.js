@@ -52,6 +52,11 @@ export function getUserByAssociationId(associationId) {
     return axios.get(`/association/getUserByAssociationId/${associationId}`)
 }
 
-
-
-
+/**
+ * 更新简历信息
+ * @param data
+ * @returns {Promise<AxiosResponse<any>>}
+ */
+export function updateResume(data) {
+    return axios.post("/user/updateResume", data)
+}

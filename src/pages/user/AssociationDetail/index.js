@@ -65,10 +65,6 @@ export default function AssociationDetail(props) {
                 onBack={() => history.goBack()}
                 title={associationDetail?.associationName}
                 subTitle={associationDetail?.info}
-                extra={[
-                    <Button key="3">不感兴趣</Button>,
-                    <Button key="2">收藏</Button>,
-                ]}
             >
                 {/* ======== 头部 描述信息 ==========*/}
                 <div>
@@ -84,7 +80,7 @@ export default function AssociationDetail(props) {
             {/* ============================ 页面体 内容 ============================*/}
             <Tabs defaultActiveKey="associationShare">
                 {/* ================= 社团经历分享  ====================-  */}
-                <TabPane tab="社团风采" key="associationShare">
+                <TabPane tab="成员分享" key="associationShare">
                     <Share associationId={associationId}/>
                 </TabPane>
 
@@ -116,7 +112,7 @@ export default function AssociationDetail(props) {
                 </TabPane>
 
                 {/* ================================= echarts数据可视化部分  =================================  */}
-                <TabPane tab="数据可视化" key="dataView">
+                <TabPane tab="了解我们" key="dataView">
                     <DataView/>
                 </TabPane>
                 {/* ================= 社团大事记  ====================-  */}

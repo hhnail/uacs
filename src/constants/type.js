@@ -65,6 +65,14 @@ const IMAGE_TYPE = {
         label: '用户头像',
         value: 'USER_AVATAR',
     },
+        USER_ID_PHOTO: {
+        label: '证件照',
+        value: 'USER_ID_PHOTO',
+    },
+    SHARE_HEAD_PHOTO: {
+        label: '社团经历分享头图',
+        value: 'SHARE_HEAD_PHOTO',
+    },
     USER_PHOTO_ALBUM: {
         label: '用户相册',
         value: 'USER_PHOTO_ALBUM',
@@ -76,6 +84,14 @@ const IMAGE_TYPE = {
     ASSOCIATION_PHOTO_ALBUM: {
         label: '社团相册',
         value: 'ASSOCIATION_PHOTO_ALBUM',
+    },
+    CAROUSEL: {
+        label: '首页轮播图',
+        value: 'CAROUSEL',
+    },
+    SYSTEM_BACKGROUND: {
+        label: '系统背景图',
+        value: 'SYSTEM_BACKGROUND',
     },
 }
 

@@ -12,8 +12,8 @@ const nullArray = new Array(5).fill(null);
 //“广场”菜单
 const partMenuArray = [
     {id: 1, value: '纳新广场'},
-    {id: 2, value: '社团风采'},
-    {id: 3, value: '活动广场'}
+    // {id: 2, value: '社团风采'},
+    // {id: 3, value: '活动广场'}
 ];
 //用户菜单
 const userMenuArray = [

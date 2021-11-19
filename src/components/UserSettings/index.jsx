@@ -74,6 +74,8 @@ export default function UserSettings(props) {
         setConfirmLoading(true);
         userForm.validateFields()
             .then(() => {
+                console.log("表达信息：")
+                console.log(userForm.getFieldsValue())
                 updateUserSettings(userForm.getFieldsValue())
                     .then((res) => {
                         message.success("更新成功！")

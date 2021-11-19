@@ -28,7 +28,10 @@ export default function AssociationCard(props) {
                 width: 50,
                 height: 50
             }}/>}
-                  title={currentAssociation.associationName}
+                  title={<div style={{
+                      fontSize:18,
+                      fontWeight:900,
+                  }}>{currentAssociation.associationName}</div>}
             />
             <div>
                 纳新状态：
