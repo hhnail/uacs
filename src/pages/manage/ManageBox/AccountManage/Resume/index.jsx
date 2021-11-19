@@ -25,6 +25,7 @@ import axios from "axios";
 import {updateResume} from "../../../../../services/userService";
 import {IMAGE_TYPE} from "../../../../../constants/type";
 import {deleteImage, getAssociationImageUrl} from "../../../../../services/imageService";
+import {OPTION_ICONS} from "../../../../../constants/icon";
 
 // antd组件结构
 const {TextArea} = Input;
@@ -66,8 +67,8 @@ export default function Resume() {
             })
             getAssociationImageUrl(IMAGE_TYPE.USER_ID_PHOTO.value, userId).then(res => {
                 const images = res.data.data
-                console.log("images:")
-                console.log(images)
+                // console.log("images:")
+                // console.log(images)
                 setFileList(images)
             })
         }
@@ -259,7 +260,7 @@ export default function Resume() {
                     <Card style={{width: 298}}
                           actions={[
                               <Tooltip placement="bottom" title='点击上传头像'>
-                                  <SettingOutlined key="setting"/>
+                                  {OPTION_ICONS.AVATAR}
                               </Tooltip>,
                               <Tooltip placement="bottom" title='点击修改个签'>
                                   <EditOutlined key="edit"/>
@@ -325,8 +326,8 @@ export default function Resume() {
                                                   userId: userInfo.userId,
                                                   className: collegeMajorClass.join("/")
                                               }
-                                              console.log('formattedData：')
-                                              console.log(formattedData)
+                                              // console.log('formattedData：')
+                                              // console.log(formattedData)
                                               updateResume(formattedData).then(() => {
                                                   refreshResume()
                                                   message.success("更新成功！")

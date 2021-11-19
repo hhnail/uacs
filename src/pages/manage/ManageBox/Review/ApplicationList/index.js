@@ -84,6 +84,8 @@ export default function ApplicationList() {
     const refresh = () => {
         getApplicationList(userInfo.manageAssociationKeys).then(res => {
             const {data} = res.data
+            console.log('申请list')
+            console.log(data)
             setApplicationList(data)
         })
     }

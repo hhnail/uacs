@@ -22,13 +22,24 @@ import {useHistory} from "react-router-dom";
 import {getApplicationDetail} from "../../../../../services/applicationService";
 import ViewInterview from "../../../../components/ViewInterview";
 import {APPLICATION_STATE} from "../../../../../constants/state";
+import {getUserById} from "../../../../../services/db";
+import {getAssociationImageUrl} from "../../../../../services/imageService";
+import {IMAGE_TYPE} from "../../../../../constants/type";
+import {getClassTree} from "../../../../../services/treeService";
 
 
 export default function ApplicationDetail(props) {
 
+
     const history = useHistory()
+    // 申请表
     const [visible, setVisible] = useState(false)
     const [applicationDetail, setApplicationDetail] = useState()
+    // 用户简历信息
+    const userSession = JSON.parse(localStorage.getItem("userInfo"))
+    const [userInfo, setUserInfo] = useState()
+    const [userIdPhoto, setUserIdPhoto] = useState()
+
 
     useEffect(() => {
         getApplicationDetail(props.match.params.applicationId).then(res => {
@@ -36,6 +47,17 @@ export default function ApplicationDetail(props) {
             console.log('申请表详情：')
             console.log(applicationDetail)
             setApplicationDetail(applicationDetail)
+
+            getUserById(applicationDetail.userId).then(res => {
+                const {data} = res.data
+                // console.log('用户信息：')
+                // console.log(data)
+                setUserInfo(data)
+            })
+            getAssociationImageUrl(IMAGE_TYPE.USER_ID_PHOTO.value, applicationDetail.userId).then(res => {
+                const images = res.data.data
+                setUserIdPhoto(images[0])
+            })
         })
     }, [])
 
@@ -62,7 +84,7 @@ export default function ApplicationDetail(props) {
         <div style={{
             marginTop: -20,
         }}>
-            {applicationDetail &&
+            {(applicationDetail && userInfo && userIdPhoto) &&
             <>
                 <PageHeader onBack={() => history.goBack()} title={'申请表详情'}
                             extra={<Space>
@@ -97,7 +119,6 @@ export default function ApplicationDetail(props) {
                                     查看申请回复
                                 </Button>
                                 }
-
                                 {/* ======== 个人简历浏览 ========== */}
                                 {/* 从路由身上取得的是number，所以要用== */}
                                 {props.match.params.isReview == 1 &&
@@ -119,22 +140,18 @@ export default function ApplicationDetail(props) {
                             <Descriptions title="" bordered column={6}>
                                 <Descriptions.Item label="姓名" span={2}>{applicationDetail.name}</Descriptions.Item>
                                 <Descriptions.Item label="学号" span={2}>{applicationDetail.userId}</Descriptions.Item>
-                                <Descriptions.Item label="性别" span={2}>2019-04-24 18:00:00 </Descriptions.Item>
-                                <Descriptions.Item label="院系" span={3}>工商管理学院</Descriptions.Item>
-                                <Descriptions.Item label="专业班级" span={3}>商务1811</Descriptions.Item>
-                                <Descriptions.Item label="联系方式" span={3}>18030290001</Descriptions.Item>
-                                <Descriptions.Item label="电子邮箱" span={3}>hhnail@163.com</Descriptions.Item>
+                                <Descriptions.Item label="性别" span={2}>{userInfo.gender}</Descriptions.Item>
+                                <Descriptions.Item label="院系专业班级"
+                                                   span={6}>{userInfo.collegeMajorClass}</Descriptions.Item>
+                                <Descriptions.Item label="联系方式" span={3}>{userInfo.phone}</Descriptions.Item>
+                                <Descriptions.Item label="电子邮箱" span={3}>{userInfo.email}</Descriptions.Item>
                                 <Descriptions.Item label="意向部门"
                                                    span={3}>{applicationDetail.departmentName}</Descriptions.Item>
                                 <Descriptions.Item label="是否接受调剂" span={3}>是</Descriptions.Item>
                             </Descriptions>
                         </Col>
                         <Col span={6}>
-                            <Image
-                                width={200}
-                                height={200}
-                                src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-                            />
+                            <Image width={208} height={212} src={userIdPhoto?.url}/>
                         </Col>
                     </Row>
 
@@ -142,9 +159,7 @@ export default function ApplicationDetail(props) {
                     <Descriptions title="" bordered column={6} labelStyle={{
                         width: 165,
                     }}>
-                        <Descriptions.Item label="兴趣爱好" span={6}>
-                            篮球、足球、钢琴、跳舞
-                        </Descriptions.Item>
+                        <Descriptions.Item label="兴趣爱好" span={6}>{userInfo.selfLike}</Descriptions.Item>
                         <Descriptions.Item label="个人特长及优势" span={6}>
                             {applicationDetail.selfProfile}
                         </Descriptions.Item>
@@ -162,53 +177,41 @@ export default function ApplicationDetail(props) {
             </>}
 
             {/* ============================ 抽屉展示个人简历 ============================ */}
-            <Drawer visible={visible} title="成员简历" placement="right" width={900}
+            {userInfo &&
+            <Drawer visible={visible} title="成员主页" placement="right" width={900}
                     onClose={() => {
                         setVisible(false);
                     }}>
-                <Descriptions title="" bordered={true} column={2}>
-                    <Descriptions.Item label="姓名">
-                        <Input placeholder="请填写姓名"/>
+                <Row>
+                    <Col span={18}>
+                        <Descriptions column={7} bordered={true} size={'small'}>
+                            <Descriptions.Item label="姓名" span={3}> {userInfo.name} </Descriptions.Item>
+                            <Descriptions.Item label="学号" span={4}>{userInfo.userId}
+                            </Descriptions.Item>
+                            <Descriptions.Item label="专业班级"
+                                               span={7}>{userInfo.collegeMajorClass} </Descriptions.Item>
+                            <Descriptions.Item label="联系方式" span={3}>{userInfo?.phone}</Descriptions.Item>
+                            <Descriptions.Item label="邮箱" span={4}>{userInfo.email}</Descriptions.Item>
+                            <Descriptions.Item label="微信" span={3}>{userInfo.wechat} </Descriptions.Item>
+                            <Descriptions.Item label="QQ" span={3}>{userInfo.qq}</Descriptions.Item>
+                        </Descriptions>
+                    </Col>
+                    {/* == 证件照 == */}
+                    <Col span={6}>
+                        <Image width={145} height={153} src={userIdPhoto?.url}/>
+                    </Col>
+                </Row>
+                {/* ====== 描述信息 ======  */}
+                <Descriptions bordered={true} column={24} size={'small'}>
+                    <Descriptions.Item label="生日" span={8}>{userInfo.birthday}</Descriptions.Item>
+                    <Descriptions.Item label="民族" span={8}>{userInfo.nation}
                     </Descriptions.Item>
-                    <Descriptions.Item label="性别">
-                        <Input placeholder="请填写性别"/>
-                    </Descriptions.Item>
-                    <Descriptions.Item label="联系方式">
-                        <Input placeholder="请填写联系方式"/>
-                    </Descriptions.Item>
-                    <Descriptions.Item label="兴趣爱好" span={2}>
-                        <Input placeholder="请填写兴趣爱好"/>
-                    </Descriptions.Item>
-                    <Descriptions.Item label="学院/专业/班级">
-                        <Cascader options={MAJORANDCLASS} defaultValue={['学院', '专业', '班级']}
-                                  onChange={(value) => {
-                                      console.log(value);
-                                  }}
-                        />
-                    </Descriptions.Item>
-                    <Descriptions.Item label="生日">
-                        <DatePicker onChange={() => {
-
-                        }} bordered={false} placeholder="请选择生日" locale/>
-                    </Descriptions.Item>
-                    <Descriptions.Item label="自我评价" span={2}>
-                        沟通能力：<Slider defaultValue={80} disabled={false}/>
-                        表达能力：<Slider defaultValue={80} disabled={false}/>
-                        合作能力：<Slider defaultValue={80} disabled={false}/>
-                        抗压能力：<Slider defaultValue={80} disabled={false}/>
-                        <TextArea rows={4}/>
-                    </Descriptions.Item>
-                    <Descriptions.Item label="加入社团的期望" span={2}>
-                        <TextArea rows={4}/>
-                    </Descriptions.Item>
-                    <Descriptions.Item label="面试结果评价">
-                        <Input placeholder="请填写兴趣爱好"/>
-                    </Descriptions.Item>
-                    <Descriptions.Item label="纳新审核结果">
-                        <Badge status="processing" text="审核中"/>
-                    </Descriptions.Item>
+                    <Descriptions.Item label="性别" span={8}>{userInfo.gender} </Descriptions.Item>
+                    <Descriptions.Item label="兴趣爱好" span={24}>{userInfo.selfLike}</Descriptions.Item>
+                    <Descriptions.Item label="自我评价" span={24}>{userInfo.selfProfile}</Descriptions.Item>
                 </Descriptions>
             </Drawer>
+            }
         </div>
     )
 }

@@ -35,6 +35,7 @@ import {ReactComponent as Department} from "../icons/department.svg";
 import {ReactComponent as Boy} from "../icons/boy.svg";
 import {ReactComponent as Girl} from "../icons/girl.svg";
 import {ReactComponent as Accept} from "../icons/accept.svg";
+import {ReactComponent as Avatar} from "../icons/avatar.svg";
 
 
 // 用户操作图标
@@ -55,6 +56,8 @@ const OPTION_ICONS = {
     ADD: <Icon component={Add} style={{fontSize: 14}}/>,
     // 编辑
     EDIT: <Icon component={Edit} style={{fontSize: 14}}/>,
+    // 头像
+    AVATAR: <Icon component={Avatar} style={{fontSize: 14}}/>,
 }
 
 // 系统图标
