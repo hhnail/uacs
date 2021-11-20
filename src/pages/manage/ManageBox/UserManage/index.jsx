@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react'
-import {Button, Modal, Switch, Table} from 'antd'
+import {Button, message, Modal, Switch, Table} from 'antd'
 import {DeleteOutlined, ExclamationCircleOutlined, UnorderedListOutlined} from '@ant-design/icons';
 import axios from 'axios'
 import {getAllUsers, getRoleList} from "../../../../services/db";
+import {USER_STATE} from "../../../../constants/state";
 
 
 const {confirm} = Modal
@@ -14,15 +15,19 @@ export default function UserList() {
 
     const [roleList, setRoleList] = useState([])
 
+    const refreshUserList = () => {
+        getAllUsers().then(res => {
+            const {data} = res.data
+            setDataSource(data)
+        })
+    }
+
     // 获取角色列表 &  获取用户列表
     useEffect(() => {
         getRoleList().then(res => {
             setRoleList(res.data.data)
         })
-        getAllUsers().then(res => {
-            const {data} = res.data
-            setDataSource(data)
-        })
+        refreshUserList()
     }, [])
 
     // 表的行列结构
@@ -59,28 +64,38 @@ export default function UserList() {
                     }
                 })
                 return exist
-
             },
             render: (roleList, item) => {
                 return roleList.map((role) => {
+                    let roleName = ''
+                    if (role.roleName === "超级管理员") {
+                        roleName = "超级管理员"
+                    } else if (role.roleName === "普通学生") {
+                        roleName = "普通学生"
+                    } else {
+                        roleName = `${role.roleName}——${role.associationName}`
+                    }
                     return (
-                        <div key={role.roleId}>
-                            {
-                                role.roleName === "超级管理员" ?
-                                    `${role.roleName}`
-                                    : `${role.roleName} OF ${role.associationName}`
-                            }
-                        </div>
+                        <div key={role.roleId}>{roleName}</div>
                     )
                 })
             }
         },
         {
-            title: '成员状态',
+            title: '是否可用',
             dataIndex: 'state',
-            render: ((state) => {
+            render: ((state, item) => {
+                // console.log('itemID')
+                // console.log(item.userId)
+                const checkd = (state === USER_STATE.OPEN.value)
                 return <Switch
-                    checked={state === "OPEN"}
+                    checked={checkd}
+                    onChange={() => {
+                        axios.get(`/user/updateUserLineState/${item.userId}/${state}`).then(()=>{
+                            refreshUserList()
+                            message.success("操作成功！")
+                        })
+                    }}
                 >
                 </Switch>
             })
@@ -137,8 +152,6 @@ export default function UserList() {
             }
         })
     }
-
-
 
 
     return <>

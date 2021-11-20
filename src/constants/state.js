@@ -1,3 +1,12 @@
+const USER_STATE = {
+    OPEN: {
+        value: 'OPEN',
+    },
+    CLOSE: {
+        value: 'CLOSE',
+    },
+}
+
 /**
  * 纳新通知 状态
  * map
@@ -199,6 +208,7 @@ const getAssociationTypeLabel = (value) => {
 }
 
 export {
+    USER_STATE,
     RECRUITMENT_STATE_MAP,
     RECRUITMENT_PUBLISH_STATE_MAP,
     RECRUITMENT_PUBLISH_STATE_LIST,

@@ -25,6 +25,10 @@ export default function Login(props) {
         localStorage.removeItem("token") // 将原有的token移除
         localStorage.removeItem("userInfo") // 将原有的userInfo移除
         login(values).then(res => {
+            if(res.data.msg === "用户为关闭状态"){
+                message.error("用户被锁定，无法登录！！") // 验证失败，提示用户
+                return
+            }
             const userInfo = res.data.data
             if (!userInfo) {
                 message.error("用户名或密码输入错误！") // 验证失败，提示用户
