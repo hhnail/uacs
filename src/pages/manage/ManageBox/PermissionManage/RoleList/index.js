@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import {
     Table,
     Button,
@@ -11,8 +11,9 @@ import {
     ExclamationCircleOutlined
 } from '@ant-design/icons';
 import axios from 'axios'
+import {reGrantPermissions2Role} from "../../../../../services/db";
 
-const { confirm } = Modal
+const {confirm} = Modal
 
 export default class RoleList extends Component {
 
@@ -40,18 +41,18 @@ export default class RoleList extends Component {
                     return <div>
                         <Button
                             shape={"circle"}
-                            icon={<UnorderedListOutlined />}
+                            icon={<UnorderedListOutlined/>}
                             onClick={() => {
-                                this.setState({ isModalVisible: true })
-                                this.setState({ currentRolePermissionKeys: this.mapPermissions2Keys(item.permissions) })
-                                this.setState({ currentRoleId: item.roleId })
+                                this.setState({isModalVisible: true})
+                                this.setState({currentRolePermissionKeys: this.mapPermissions2Keys(item.permissions)})
+                                this.setState({currentRoleId: item.roleId})
                             }}
                         >
                         </Button>
                         &nbsp;&nbsp;&nbsp;
                         <Button
                             shape={"circle"}
-                            icon={<DeleteOutlined />}
+                            icon={<DeleteOutlined/>}
                             danger
                             onClick={() => this.confirmDelete(item)}
                         >
@@ -76,7 +77,7 @@ export default class RoleList extends Component {
         axios.get("/association/getRoleList").then(res => {
             const roleData = res.data.data
             // console.log("==31 roleData", roleData);
-            this.setState({ roleList: roleData })
+            this.setState({roleList: roleData})
         }).catch(err => {
             console.log("获取角色列表出错！", err);
         })
@@ -86,7 +87,7 @@ export default class RoleList extends Component {
     getPermissionList = () => {
         axios.get("/association/getPermissionList").then(res => {
             const permissionData = res.data.data
-            this.setState({ permissionList: permissionData })
+            this.setState({permissionList: permissionData})
         }).catch(err => {
             console.log("获取权限列表出错！", err);
         })
@@ -94,16 +95,16 @@ export default class RoleList extends Component {
 
     // TODO 删除后给个loading提示
     confirmDelete = (item) => {
-        const { roleList } = this.state
+        const {roleList} = this.state
         const thisPoint = this
         confirm({
             title: '您确认要删除吗？',
-            icon: <ExclamationCircleOutlined />,
+            icon: <ExclamationCircleOutlined/>,
             onOk() {
                 // 同步页面
                 // console.log("==1 dataSource", roleList);
                 const newList = roleList.filter(data => data.roleId !== item.roleId)
-                thisPoint.setState({ roleList: newList })
+                thisPoint.setState({roleList: newList})
                 // 调用后端接口，同步后台数据库
                 // axios.get(`/association/deleteRoleById/${item.roleId}`)
             },
@@ -116,7 +117,7 @@ export default class RoleList extends Component {
     // 模态框 点击ok 重新为角色分配权限
     handleOk = () => {
         // 隐藏模态框
-        this.setState({ isModalVisible: false })
+        this.setState({isModalVisible: false})
 
         // 为同步后端做准备
         let roleId
@@ -135,13 +136,15 @@ export default class RoleList extends Component {
                 const currentPermissions = []
                 secondPermissions.map((secondPms) => {
                     // 如果当前二级权限在 选中的权限 中存在，则加入数组（数组为新的权限列表）
-                    if (this.state.currentRolePermissionKeys.find((e) => { return e === secondPms.key })) {
+                    if (this.state.currentRolePermissionKeys.find((e) => {
+                        return e === secondPms.key
+                    })) {
                         // console.log("==76 当前权限被选中：", secondPms);
                         permissionIds.push(secondPms.key) // 同步后端
                         currentPermissions.push(secondPms)
                     }
                 })
-                const newItem = { ...item, permissions: currentPermissions }
+                const newItem = {...item, permissions: currentPermissions}
                 // console.log("==77 newItem", newItem);
 
                 roleId = item.roleId // 同步后端
@@ -153,29 +156,34 @@ export default class RoleList extends Component {
             }
         })
         // console.log("==75 new roleList", newDataSource);
-        this.setState({ roleList: newDataSource })
+        this.setState({roleList: newDataSource})
         // 同步后端数据库(今天先写到这里--20210829)
         // console.log("==81 roleId", roleId);
         // console.log("==81 permissionIds", permissionIds);
-        axios({
-            url: "/association/reGrantPermissions2Role",
-            method: 'post',
-            data: {
-                roleId: roleId,
-                permissionIds: permissionIds
-            },
-            headers: { 'Content-Type': 'application/json;charset=UTF-8' }
-        }).then(() => {
+        reGrantPermissions2Role(roleId, permissionIds).then((res) => {
+            let errorFlag = true
+            permissionIds.map(itemKey => {
+                if (itemKey === 13) {
+                    errorFlag = false
+                }
+            })
+            if (errorFlag) {
+                message.error("操作非法，超级管理员不得排除管理权限！")
+                return
+            }
+            // console.log('res msg')
+            // console.log(res)
+            if (res.data.msg === 'ILLEGAL_ACTION') {
+                message.error("操作非法！")
+                return
+            }
             message.success("操作成功！")
-        }).catch(() => {
-            message.error("操作失败！")
         })
-
     }
 
     // 模态框 点击cancel || 右上角x号 || 点击模态框以外的界面
     handleCancel = () => {
-        this.setState({ isModalVisible: false })
+        this.setState({isModalVisible: false})
     }
 
     mapPermissions2Keys = (permissions) => {
@@ -191,7 +199,7 @@ export default class RoleList extends Component {
     onCheck = (checkedKeys) => {
         // console.log("==61 checkedKeys", checkedKeys);
         // console.log("==62 state.当前role的permission", this.state.currentRolePermissionKeys);
-        this.setState({ currentRolePermissionKeys: checkedKeys })
+        this.setState({currentRolePermissionKeys: checkedKeys})
     }
 
     getSecondPermissions = () => {
@@ -216,15 +224,15 @@ export default class RoleList extends Component {
                 >
                 </Table>
                 <Modal title="分配权限"
-                    visible={this.state.isModalVisible}
-                    onOk={this.handleOk}
-                    onCancel={this.handleCancel}>
+                       visible={this.state.isModalVisible}
+                       onOk={this.handleOk}
+                       onCancel={this.handleCancel}>
                     <Tree
                         treeData={this.state.permissionList}
                         checkable={true}
                         checkedKeys={this.state.currentRolePermissionKeys}
                         onCheck={this.onCheck}
-                    // checkStrictly={true}
+                        // checkStrictly={true}
                     />
                 </Modal>
             </div>

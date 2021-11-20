@@ -74,6 +74,18 @@ export function getAssociationAsMember(userId) {
     return axios.post('/association/getAssociationAsMember', qs.stringify({userId}))
 }
 
+export function reGrantPermissions2Role(roleId, permissionIds) {
+    return axios({
+        url: "/association/reGrantPermissions2Role",
+        method: 'post',
+        data: {
+            roleId: roleId,
+            permissionIds: permissionIds
+        },
+        headers: {'Content-Type': 'application/json;charset=UTF-8'}
+    })
+}
+
 
 
 
