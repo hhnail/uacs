@@ -5,7 +5,6 @@ import UserSettings from "../UserSettings";
 import {useHistory} from "react-router-dom";
 import {ReactComponent as OrangeIcon} from "../../icons/orange.svg";
 
-
 //空菜单
 const nullArray = new Array(5).fill(null);
 

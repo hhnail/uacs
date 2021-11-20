@@ -1,13 +1,11 @@
-import React, {useState} from 'react'
+import React from 'react'
 import {useHistory} from 'react-router-dom'
-import {Button, Form, Input, Layout, message,} from 'antd';
-
+import {Button, Form, Input, message,} from 'antd';
 import {UnlockOutlined, UserOutlined,} from '@ant-design/icons';
-
 import Particles from 'react-particles-js';
-
 import './index.css'
 import {login} from "../../../services/userService";
+import {ReactComponent as OrangeIcon} from "../../../icons/orange.svg";
 
 export default function Login(props) {
 
@@ -15,12 +13,12 @@ export default function Login(props) {
 
     const formatUserInfo = (userInfo) => {
         const manageAssociationKeys = []
-        userInfo.roleList.map(role=>{
-            if(role.roleName == '社团管理员'){
+        userInfo.roleList.map(role => {
+            if (role.roleName == '社团管理员') {
                 manageAssociationKeys.push(role.associationId)
             }
         })
-        return {...userInfo,manageAssociationKeys}
+        return {...userInfo, manageAssociationKeys}
     }
 
     const onFinish = (values) => {
@@ -150,7 +148,13 @@ export default function Login(props) {
                 }
             />
             <div className="userFormContainer">
-                <div className="loginTitle">UACS社团管理-橘集</div>
+                <div className="loginTitle">
+                    高校社团管理系统-橘集@UACS
+                    <OrangeIcon style={{
+                        width: 40,
+                        height: 40,
+                        marginTop: 10,
+                    }}/></div>
                 <Form labelCol={{span: 4,}}
                       onFinish={onFinish}
                 >

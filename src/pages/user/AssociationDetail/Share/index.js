@@ -2,6 +2,8 @@ import {Avatar, List, Space} from "antd";
 import {EyeOutlined, LikeOutlined, MessageOutlined} from "@ant-design/icons";
 import React, {useEffect, useState} from "react";
 import {getShareByAssociation} from "../../../../services/shareService";
+import {getAssociationImageUrl} from "../../../../services/imageService";
+import {IMAGE_TYPE} from "../../../../constants/type";
 
 const sharePageSize = 5
 export default function Share(props) {
@@ -12,7 +14,7 @@ export default function Share(props) {
         getShareByAssociation(props.associationId)
             .then(res => {
                 const {data} = res.data
-                // console.log("社团分享：", data)
+                console.log("社团分享：", data)
                 // 调整展示方式
                 const newData = data.map(item => {
                     return {
@@ -33,6 +35,15 @@ export default function Share(props) {
             {text}
         </Space>
     );
+
+    // 查头像
+    const getAvatarUrl = async (userId) => {
+        let image
+        await getAssociationImageUrl(IMAGE_TYPE.USER_AVATAR.value, userId).then(res => {
+            image = res.data.data
+        })
+        return image.url
+    }
 
     return (
         <List size="large" itemLayout="vertical"
@@ -63,7 +74,7 @@ export default function Share(props) {
                       }
                   >
                       <List.Item.Meta
-                          avatar={<Avatar src={item.avatar}/>}
+                          avatar={<Avatar src={getAvatarUrl(item.userId)}/>}
                           title={
                               <a href={`#/user/share/list/${item.shareId}`}>{item.title}</a>}
                           description={item.description}

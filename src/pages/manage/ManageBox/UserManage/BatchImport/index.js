@@ -5,35 +5,12 @@ const {Dragger} = Upload;
 
 export default function BatchImport() {
 
-    // const props = {
-    //     name: 'file',
-    //     multiple: true,
-    //     action: '/association/batchImportUser',
-    //     onChange(info) {
-    //         const {status} = info.file;
-    //         if (status !== 'uploading') {
-    //             console.log(info.file, info.fileList);
-    //         }
-    //         if (status === 'done') {
-    //             message.success(`${info.file.name} file uploaded successfully.`);
-    //         } else if (status === 'error') {
-    //             message.error(`${info.file.name} file upload failed.`);
-    //         }
-    //     },
-    //     onDrop(e) {
-    //         console.log('Dropped files', e.dataTransfer.files);
-    //     },
-    // };
-
     const handelFileChange = (info) => {
         const {status} = info.file;
-        if (status !== 'uploading') {
-            console.log(info.file, info.fileList);
-        }
         if (status === 'done') {
-            message.success(`${info.file.name} file uploaded successfully.`);
+            message.success('批量导入成功！');
         } else if (status === 'error') {
-            message.error(`${info.file.name} file upload failed.`);
+            message.error('批量导入失败，请检查数据格式！');
         }
     }
 

@@ -1,23 +1,5 @@
-import {
-    Badge,
-    Button,
-    Cascader,
-    Col,
-    DatePicker,
-    Descriptions,
-    Drawer,
-    Image,
-    Input, Modal,
-    PageHeader,
-    Row,
-    Slider,
-    Space
-} from 'antd';
-
-
 import React, {useEffect, useState} from 'react';
-import {MAJORANDCLASS} from "../../../../../constants/baseInfo";
-import TextArea from "antd/es/input/TextArea";
+import {Badge, Button, Col, Descriptions, Drawer, Image, Modal, PageHeader, Row, Space} from 'antd';
 import {useHistory} from "react-router-dom";
 import {getApplicationDetail} from "../../../../../services/applicationService";
 import ViewInterview from "../../../../components/ViewInterview";
@@ -25,7 +7,6 @@ import {APPLICATION_STATE} from "../../../../../constants/state";
 import {getUserById} from "../../../../../services/db";
 import {getAssociationImageUrl} from "../../../../../services/imageService";
 import {IMAGE_TYPE} from "../../../../../constants/type";
-import {getClassTree} from "../../../../../services/treeService";
 
 
 export default function ApplicationDetail(props) {

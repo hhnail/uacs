@@ -136,12 +136,7 @@ export default function AssociationDetail(props) {
                                 <Descriptions.Item label="姓名" span={2}>{userResume?.name}</Descriptions.Item>
                                 <Descriptions.Item label="学号" span={2}>{userResume?.userId}</Descriptions.Item>
                                 <Descriptions.Item label="性别" span={2}>{userResume?.gender}</Descriptions.Item>
-                                <Descriptions.Item label="院系" span={3}>
-                                    {userResume?.college}
-                                </Descriptions.Item>
-                                <Descriptions.Item label="专业班级" span={3}>
-                                    {userResume?.majorAndClass}
-                                </Descriptions.Item>
+                                <Descriptions.Item label="院系专业班级" span={6}>{userResume?.collegeMajorClass}</Descriptions.Item>
                                 <Descriptions.Item label="联系方式" span={3}>{userResume?.phone}</Descriptions.Item>
                                 <Descriptions.Item label="电子邮箱" span={3}>{userResume?.email}</Descriptions.Item>
                                 <Descriptions.Item label="意向部门" span={3}>
