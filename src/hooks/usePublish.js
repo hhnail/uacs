@@ -12,10 +12,10 @@ function usePublish() {
     useEffect(() => {
         listRecruitmentByUserId(userInfo.userId)
             .then(res => {
-                console.log("==27 resData", res.data.data);
+                // console.log("==27 resData", res.data.data);
                 setDataSource(res.data.data)
             }).catch(err => {
-            console.log("==26 err", err);
+            // console.log("==26 err", err);
         })
     }, [])
 

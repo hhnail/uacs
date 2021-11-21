@@ -1,18 +1,3 @@
-import {
-    AuditOutlined,
-    BarsOutlined,
-    ClusterOutlined,
-    FormOutlined,
-    TableOutlined,
-    TeamOutlined,
-    UsergroupAddOutlined
-} from "@ant-design/icons";
-import {ReactComponent as HomeIcon} from "../icons/home.svg";
-import {ReactComponent as ResumeIcon} from "../icons/resume.svg";
-import {ReactComponent as AccountManageIcon} from "../icons/account-manage.svg";
-import {ReactComponent as ShareManageIcon} from "../icons/share.svg";
-import {ReactComponent as RecruitmentIcon} from "../icons/recruitment.svg";
-import {ReactComponent as PermissionIcon} from "../icons/permission.svg";
 import React from "react";
 
 const MAJORANDCLASS = [

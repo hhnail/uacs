@@ -33,6 +33,8 @@ export default function AssociationDetail(props) {
         })
         getRecentRecruitment(associationId).then(res => {
             const {data} = res.data
+            // console.log('最近的纳新通知：')
+            // console.log(data)
             setRecentRecruitment(data)
         })
         getUserById(userInfo.userId).then(res => {
@@ -113,7 +115,8 @@ export default function AssociationDetail(props) {
 
                 {/* ================================= echarts数据可视化部分  =================================  */}
                 <TabPane tab="了解我们" key="dataView">
-                    <DataView/>
+                    <DataView associationId={associationDetail?.associationId}
+                              recruitmentId={recentRecruitment?.recruitmentId}/>
                 </TabPane>
                 {/* ================= 社团大事记  ====================-  */}
                 <TabPane tab="社团大事记" key="bigEvent">
@@ -136,7 +139,8 @@ export default function AssociationDetail(props) {
                                 <Descriptions.Item label="姓名" span={2}>{userResume?.name}</Descriptions.Item>
                                 <Descriptions.Item label="学号" span={2}>{userResume?.userId}</Descriptions.Item>
                                 <Descriptions.Item label="性别" span={2}>{userResume?.gender}</Descriptions.Item>
-                                <Descriptions.Item label="院系专业班级" span={6}>{userResume?.collegeMajorClass}</Descriptions.Item>
+                                <Descriptions.Item label="院系专业班级"
+                                                   span={6}>{userResume?.collegeMajorClass}</Descriptions.Item>
                                 <Descriptions.Item label="联系方式" span={3}>{userResume?.phone}</Descriptions.Item>
                                 <Descriptions.Item label="电子邮箱" span={3}>{userResume?.email}</Descriptions.Item>
                                 <Descriptions.Item label="意向部门" span={3}>
