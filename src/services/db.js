@@ -74,6 +74,10 @@ export function getAssociationAsMember(userId) {
     return axios.post('/association/getAssociationAsMember', qs.stringify({userId}))
 }
 
+export function getAssociationType() {
+    return axios.post('/association/getAssociationType')
+}
+
 export function reGrantPermissions2Role(roleId, permissionIds) {
     return axios({
         url: "/association/reGrantPermissions2Role",
@@ -87,6 +91,13 @@ export function reGrantPermissions2Role(roleId, permissionIds) {
 }
 
 
+export function saveAssociation(data) {
+    return axios.post(`/association/saveAssociation`, data)
+}
+
+export function checkAssociationExist(associationName) {
+    return axios.get(`/association/checkAssociationExist/${associationName}`)
+}
 
 
 
