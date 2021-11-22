@@ -4,6 +4,7 @@ import React, {useEffect, useState} from "react";
 import {getShareByAssociation} from "../../../../services/shareService";
 import {getAssociationImageUrl} from "../../../../services/imageService";
 import {IMAGE_TYPE} from "../../../../constants/type";
+import {USER_IMAGE_URL} from "../../../../constants/image";
 
 const sharePageSize = 5
 export default function Share(props) {
@@ -36,7 +37,7 @@ export default function Share(props) {
         </Space>
     );
 
-    // 查头像
+    // TODO 查头像
     const getAvatarUrl = async (userId) => {
         let image
         await getAssociationImageUrl(IMAGE_TYPE.USER_AVATAR.value, userId).then(res => {
@@ -74,7 +75,8 @@ export default function Share(props) {
                       }
                   >
                       <List.Item.Meta
-                          avatar={<Avatar src={getAvatarUrl(item.userId)}/>}
+                          // avatar={<Avatar src={getAvatarUrl(item.userId)}/>}
+                          avatar={<Avatar src={USER_IMAGE_URL.DEFAULT.url}/>}
                           title={
                               <a href={`#/user/share/list/${item.shareId}`}>{item.title}</a>}
                           description={item.description}

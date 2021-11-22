@@ -184,12 +184,12 @@ const ASSOCIATION_TYPE_LIST = [
         value: 'ACADEMIC',
     },
     {
-        label: '康乐性社团',
+        label: '文娱性社团',
         value: 'RECREATIONAL',
     },
     {
-        label: '艺术性社团',
-        value: 'ARTISTIC',
+        label: '组织性社团',
+        value: 'ORGANIZED',
     },
     {
         label: '体能性社团',
@@ -198,7 +198,7 @@ const ASSOCIATION_TYPE_LIST = [
 ]
 
 const getAssociationTypeLabel = (value) => {
-    let Label = ''
+    let Label = '其他类型'
     ASSOCIATION_TYPE_LIST.map(item => {
         if (item.value === value) {
             Label = item.label

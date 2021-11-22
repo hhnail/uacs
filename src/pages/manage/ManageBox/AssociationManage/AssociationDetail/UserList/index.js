@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react";
 import {getUserByAssociationId} from "../../../../../../services/userService";
 import {ICON} from "../../../../../../constants/icon";
 import {GENDER_TYPE} from "../../../../../../constants/type";
+import {USER_IMAGE_URL} from "../../../../../../constants/image";
 
 export default function UserList(props) {
 
@@ -13,8 +14,8 @@ export default function UserList(props) {
         getUserByAssociationId(associationId)
             .then(res => {
                 const {data} = res.data
-                // console.log('成员列表：')
-                // console.log(data)
+                console.log('成员列表：')
+                console.log(data)
                 setUserList(data)
 
             })
@@ -28,16 +29,16 @@ export default function UserList(props) {
     const renderUserTitle = (user) => {
         let genderIcon = ''
         // console.log(user.gender)
-        if(user.gender === GENDER_TYPE.BOY.label){
+        if (user.gender === GENDER_TYPE.BOY.label) {
             genderIcon = ICON.boy
-        }else if (user.gender === GENDER_TYPE.GIRL.label){
+        } else if (user.gender === GENDER_TYPE.GIRL.label) {
             genderIcon = ICON.girl
-        }else{
+        } else {
 
         }
         return <>
             <Space>
-                <Tag icon={ICON.member}color={'#cd201f'}>社团成员</Tag>
+                <Tag icon={ICON.member} color={'#cd201f'}>社团成员</Tag>
                 <Tooltip placement="topLeft" title={'点击查看TA的主页~'}>
                     <a href="/#"><b>{user.name}</b></a>
                 </Tooltip>
@@ -56,7 +57,7 @@ export default function UserList(props) {
                     renderItem={user => (
                         <List.Item>
                             <List.Item.Meta
-                                avatar={<Avatar src="http://localhost:7100/association/getImageById/794543bb675b4e8ca09757b069dc8b01"/>}
+                                avatar={<Avatar src={user.avatarUrl || USER_IMAGE_URL.DEFAULT.url}/>}
                                 title={renderUserTitle(user)}
                                 description={`个性签名：${user.personalSignature || '该成员很懒，没有签名哦~'}`}
                             />

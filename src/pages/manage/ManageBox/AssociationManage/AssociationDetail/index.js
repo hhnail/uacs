@@ -91,15 +91,7 @@ export default function AssociationDetail(props) {
                 <PageHeader ghost={false}
                             title="社团详情"
                             subTitle="对社团基本信息进行管理"
-                            onBack={() => history.goBack()}
-                            extra={[
-                                <Button key="3">Operation</Button>,
-                                <Button key="2">Operation</Button>,
-                                <Button key="1" type="primary">
-                                    Primary
-                                </Button>,
-                            ]}
-                >
+                            onBack={() => history.goBack()}>
                     <Descriptions size="small" column={3}>
                         <Descriptions.Item label="社团名称">{association.associationName}</Descriptions.Item>
                         <Descriptions.Item label="隶属单位">{association.adminUnit}</Descriptions.Item>
