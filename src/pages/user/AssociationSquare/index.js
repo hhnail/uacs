@@ -1,34 +1,32 @@
-import {Carousel, Col, Row} from "antd";
+import {Card, Carousel, Col, List, Row} from "antd";
 import AssociationCard from "../../../components/AssociationCard";
 import React, {useEffect, useRef, useState} from "react";
-import {getAllAssociationList} from "../../../services/db";
+import {countAssociationTypeAndNum, getAllAssociationList, getRecruitmentListCard} from "../../../services/db";
 import * as echarts from "echarts";
-import axios from "axios";
-import {ASSOCIATION_TYPE_LIST, getAssociationTypeLabel} from "../../../constants/state";
+import {getAssociationTypeLabel} from "../../../constants/state";
 
-const contentStyle = {
-    position: 'center',
-    // width: '80%',
-    height: '160px',
-    color: '#fff',
-    lineHeight: '160px',
-    textAlign: 'center',
-    background: 'orange',
-};
 
 export default function AssciationSquare() {
 
     const [associationList, setAssociationList] = useState([])
     const associationTypeContainer = useRef()
+    const [recruitmentList, setRecruitmentList] = useState([])
 
     useEffect(() => {
+        // 获取最近的纳新通知
+        getRecruitmentListCard(5).then(res => {
+            const {data} = res.data
+            setRecruitmentList(data)
+        })
+
+        // 获取社团列表
         getAllAssociationList().then(res => {
             // console.log('首页社团列表：')
             // console.log(res.data.data)
             setAssociationList(res.data.data)
         })
-        // 类别。人数
-        axios.get(`/association/countAssociationTypeAndNum`).then(res => {
+        // 获取社团类型图表
+        countAssociationTypeAndNum().then(res => {
             const {data} = res.data
             // console.log("类型data：")
             // console.log(data)
@@ -147,7 +145,21 @@ export default function AssciationSquare() {
                 <div style={{
                     display: "inline-block",
                 }}>
-                    纳新通知列表Card
+                    <Card bordered={false} style={{width: 300,height:398}}>
+                        <List
+                            size="small"
+                            header={<div style={{
+                                fontWeight: 800,
+                            }}>纳新通知快报</div>}
+                            bordered
+                            dataSource={recruitmentList}
+                            renderItem={item =>
+                                <List.Item>
+                                    <a href="">{item.title}</a>
+                                </List.Item>
+                            }
+                        />
+                    </Card>
                 </div>
             </div>
             {/* ======================== 社团展示栏-卡片组 ======================== */}

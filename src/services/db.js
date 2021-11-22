@@ -99,6 +99,14 @@ export function checkAssociationExist(associationName) {
     return axios.get(`/association/checkAssociationExist/${associationName}`)
 }
 
+export function countAssociationTypeAndNum() {
+    return axios.get(`/association/countAssociationTypeAndNum`)
+}
+
+export function getRecruitmentListCard(size) {
+    return axios.get(`/association/getRecruitmentListCard/${size}`)
+}
+
 
 
 

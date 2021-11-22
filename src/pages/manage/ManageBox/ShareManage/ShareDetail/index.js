@@ -15,7 +15,7 @@ const {confirm} = Modal
 export default function ShareDetail(props) {
 
     const [shareInfo, setShareInfo] = useState()
-
+    const isAdmin = false
     // 获取用户列表
     useEffect(() => {
         // 如何获取url地址中的参数？
@@ -36,7 +36,7 @@ export default function ShareDetail(props) {
                 onBack={() => window.history.back()}
                 title="纳新详情"
                 subTitle={shareInfo.title}
-                extra={[
+                extra={isAdmin && [
                     <Button key="3">打回</Button>,
                     <Button key="1" type="primary">通过审核</Button>,
                 ]}

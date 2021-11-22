@@ -20,7 +20,7 @@ export default function AssociationDetail(props) {
     const {associationId} = props.match.params
     const [userResume, setUserResume] = useState()
     const [associationDetail, setAssociationDetail] = useState()
-    const [recentRecruitment, setRecentRecruitment] = useState()
+    const [recentRecruitment, setRecentRecruitment] = useState([])
     // 入团申请表 Modal
     const [joinModalVisible, setJoinModalVisible] = useState(false);
     // 入团申请表 Form
@@ -35,7 +35,9 @@ export default function AssociationDetail(props) {
             const {data} = res.data
             // console.log('最近的纳新通知：')
             // console.log(data)
-            setRecentRecruitment(data)
+            if (data && data.length > 0) {
+                setRecentRecruitment(data[0])
+            }
         })
         getUserById(userInfo.userId).then(res => {
             // console.log('用户简历信息：')

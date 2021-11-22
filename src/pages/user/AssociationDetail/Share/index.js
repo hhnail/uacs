@@ -69,9 +69,7 @@ export default function Share(props) {
                           <IconText icon={MessageOutlined} text="2" key="list-vertical-message"/>,
                       ]}
                       extra={
-                          <img width={272} alt="logo"
-                               src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
-                          />
+                          <img width={272} alt="logo" src={USER_IMAGE_URL.SHARE_HEAD_PHOTO.url}/>
                       }
                   >
                       <List.Item.Meta
