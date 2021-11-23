@@ -88,7 +88,7 @@ class SideMenu extends Component {
             if (item.children.length > 0 && this.checkPageElement(item)) {
                 return <SubMenu key={item.routePath} title={item.title} icon={SIDE_MENU_ICON_LIST[item.routePath]}
                                 style={{
-                                    backgroundColor: `rgba(232, 140, 20, 0.05)`,
+                                    backgroundColor: `rgba(208, 205, 0, 0.3)`,
                                 }}>
                     {this.renderMenu(item.children)}{/* 递归 */}
                 </SubMenu>
@@ -129,8 +129,16 @@ class SideMenu extends Component {
                         <Menu theme="light" mode="inline"
                               defaultSelectedKeys={this.state.selectKeys}
                               defaultOpenKeys={this.state.openKeys}
-                              style={{height: '100%', borderRight: 0}}>
+                              style={{
+                                  height: '100%',
+                                  borderRight: 0,
+                              }}
+                        >
+
                             <Menu.Item key={'systemHome'}
+                                       style={{
+                                           backgroundColor: `rgba(208, 205, 0, 0.3)`,
+                                       }}
                                        onClick={() => {
                                            this.props.history.push('/#/manage/home')
                                        }}

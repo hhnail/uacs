@@ -6,6 +6,7 @@ import Particles from 'react-particles-js';
 import './index.css'
 import {login} from "../../../services/userService";
 import {ReactComponent as OrangeIcon} from "../../../icons/orange.svg";
+import {ROLE_TYPE} from "../../../constants/type";
 
 export default function Login(props) {
 
@@ -13,19 +14,23 @@ export default function Login(props) {
 
     const formatUserInfo = (userInfo) => {
         const manageAssociationKeys = []
+        let isSuperAdmin = false
         userInfo.roleList.map(role => {
-            if (role.roleName == '社团管理员') {
+            if (role.roleId == ROLE_TYPE.ASSOCIATION_ADMIN.key) {
                 manageAssociationKeys.push(role.associationId)
             }
+            if (role.roleId === ROLE_TYPE.SUPER_ADMIN.key) {
+                isSuperAdmin = true
+            }
         })
-        return {...userInfo, manageAssociationKeys}
+        return {...userInfo, isSuperAdmin, manageAssociationKeys}
     }
 
     const onFinish = (values) => {
         localStorage.removeItem("token") // 将原有的token移除
         localStorage.removeItem("userInfo") // 将原有的userInfo移除
         login(values).then(res => {
-            if(res.data.msg === "用户为关闭状态"){
+            if (res.data.msg === "用户为关闭状态") {
                 message.error("用户被锁定，无法登录！！") // 验证失败，提示用户
                 return
             }
@@ -36,8 +41,7 @@ export default function Login(props) {
             }
             // 如果data非空,说明验证成功
             localStorage.setItem("token", res.data.data.accessToken) // 将token保存到浏览器中
-            // 为便于权限控制，对用户信息进行二次处理
-            const formattedUserInfo = formatUserInfo(userInfo)
+            const formattedUserInfo = formatUserInfo(userInfo) // 为便于权限控制，对用户信息进行二次处理
             localStorage.setItem("userInfo", JSON.stringify(formattedUserInfo)) // 将userLoginInfo保存到浏览器中
             message.success("登录成功，跳转中...")
             setTimeout(() => {

@@ -94,7 +94,7 @@ export default class RoleList extends Component {
         })
     }
 
-    // TODO 删除后给个loading提示
+    // TODO 删除后给个loading提示   。。。。等等 真的能删吗？
     confirmDelete = (item) => {
         const {roleList} = this.state
         const thisPoint = this
@@ -123,9 +123,34 @@ export default class RoleList extends Component {
         // 为同步后端做准备
         let roleId
         let permissionIds = []
-        // 同步后端数据库(今天先写到这里--20210829)
-        // console.log("==81 roleId", roleId);
-        // console.log("==81 permissionIds", permissionIds);
+        const secondPermissions = this.getSecondPermissions()
+        const dataSource = this.state.roleList
+        const newDataSource = dataSource.map((item) => {
+            // 拿到当前role（即需要修改的role）
+            if (item.roleId === this.state.currentRoleId) {
+                const currentPermissions = []
+                secondPermissions.map((secondPms) => {
+                    // 如果当前二级权限在 选中的权限 中存在，则加入数组（数组为新的权限列表）
+                    if (this.state.currentRolePermissionKeys.find((e) => {
+                        return e === secondPms.key
+                    })) {
+                        // console.log("==76 当前权限被选中：", secondPms);
+                        permissionIds.push(secondPms.key) // 同步后端
+                        currentPermissions.push(secondPms)
+                    }
+                })
+                const newItem = {...item, permissions: currentPermissions}
+                // console.log("==77 newItem", newItem);
+
+                roleId = item.roleId // 同步后端
+
+                return newItem
+                // 若不是当前role，则原样返还
+            } else {
+                return item;
+            }
+        })
+
         reGrantPermissions2Role(roleId, permissionIds).then((res) => {
             if(roleId === ROLE_TYPE.SUPER_ADMIN.key){
                 let errorFlag = true
@@ -139,47 +164,13 @@ export default class RoleList extends Component {
                     return
                 }
             }
-            // console.log('res msg')
-            // console.log(res)
             if (res.data.msg === 'ILLEGAL_ACTION') {
                 message.error("操作非法！")
                 return
             }
             message.success("操作成功！")
 
-            // 同步前端dataSource
-            // console.log("==71 当前roleId", this.state.currentRoleId);
-            // console.log("==71 完整的permissionList", this.state.permissionList);
-            const secondPermissions = this.getSecondPermissions()
-            // console.log("==73 secondPermissions", secondPermissions);
-            const dataSource = this.state.roleList
-            // console.log("==75 原先的roleList", dataSource);
-            const newDataSource = dataSource.map((item) => {
-                // 拿到当前role（即需要修改的role）
-                if (item.roleId === this.state.currentRoleId) {
-                    const currentPermissions = []
-                    secondPermissions.map((secondPms) => {
-                        // 如果当前二级权限在 选中的权限 中存在，则加入数组（数组为新的权限列表）
-                        if (this.state.currentRolePermissionKeys.find((e) => {
-                            return e === secondPms.key
-                        })) {
-                            // console.log("==76 当前权限被选中：", secondPms);
-                            permissionIds.push(secondPms.key) // 同步后端
-                            currentPermissions.push(secondPms)
-                        }
-                    })
-                    const newItem = {...item, permissions: currentPermissions}
-                    // console.log("==77 newItem", newItem);
-
-                    roleId = item.roleId // 同步后端
-
-                    return newItem
-                    // 若不是当前role，则原样返还
-                } else {
-                    return item;
-                }
-            })
-            // console.log("==75 new roleList", newDataSource);
+            // 操作成功，同步前端
             this.setState({roleList: newDataSource})
         })
     }

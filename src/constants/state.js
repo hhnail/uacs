@@ -28,10 +28,11 @@ const RECRUITMENT_STATE_MAP = new Map([
     ['OVER', '结束'],
 ]);
 
+// 未提交-申请中（已提交）-申请通过（未发布）-已发布-下线（时间过了。手动/自动？）
 const RECRUITMENT_STATE = {
-    UNEXAMINE: {
-        name: '未审核',
-        value: 'UNEXAMINE',
+    UN_COMMIT: {
+        name: '未提交',
+        value: 'UN_COMMIT',
     },
     EXAMINING: {
         name: '审核中',
@@ -40,6 +41,22 @@ const RECRUITMENT_STATE = {
     EXAMINE_PASS: {
         name: '审核通过',
         value: 'EXAMINE_PASS',
+    },
+    EXAMINE_REFUSE: {
+        name: '审核被拒',
+        value: 'EXAMINE_REFUSE',
+    },
+    OFFLINE: {
+        name: '已下线',
+        value: 'OFFLINE',
+    },
+    PUBLISHED: {
+        name: '已发布',
+        value: 'PUBLISHED',
+    },
+    OVER: {
+        name: '流程结束',
+        value: 'OVER',
     },
 }
 
