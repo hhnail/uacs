@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react'
-import {Badge, Button, Modal, Popover, Space, Table, Tooltip} from 'antd'
+import {Badge, Button, Modal, Space, Table, Tooltip} from 'antd'
 import {
-    CloseOutlined, DeleteOutlined, ExclamationCircleOutlined,
-    RollbackOutlined, CheckOutlined
+    CheckOutlined,
+    CloseOutlined,
+    DeleteOutlined,
+    ExclamationCircleOutlined,
+    RollbackOutlined
 } from '@ant-design/icons';
-import usePublish from "../../../../hooks/usePublish";
 import {ROLE_TYPE} from "../../../../constants/type";
-import axios from "axios";
 import {getShareList} from "../../../../services/shareService";
 
 const {confirm} = Modal
@@ -14,11 +15,13 @@ const {confirm} = Modal
 export default function ShareManage() {
 
     const userInfo = JSON.parse(localStorage.getItem("userInfo"))
+    const isSuperAdmin = userInfo.isSuperAdmin
     const [shareList, setShareList] = useState([])
 
     useEffect(() => {
-        getShareList().then(res => {
+        getShareList(userInfo.userId).then(res => {
             const {data} = res.data
+            console.log()
             setShareList(data)
         })
     }, [])
@@ -28,14 +31,6 @@ export default function ShareManage() {
     }
 
     const renderOptions = (item) => {
-        let isSuperAdmin = false
-        const hasRoleList = userInfo.roleList
-        hasRoleList.map(role => {
-            if (role.roleName === ROLE_TYPE.SUPER_ADMIN.name) {
-                isSuperAdmin = true
-                return
-            }
-        })
         return <Space>
             {!isSuperAdmin &&
             <Button size="small" danger icon={<RollbackOutlined/>}

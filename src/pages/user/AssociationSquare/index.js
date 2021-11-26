@@ -16,6 +16,8 @@ export default function AssciationSquare() {
         // 获取最近的纳新通知
         getRecruitmentListCard(5).then(res => {
             const {data} = res.data
+            console.log('纳新通知list')
+            console.log(data)
             setRecruitmentList(data)
         })
 
@@ -155,7 +157,7 @@ export default function AssciationSquare() {
                             dataSource={recruitmentList}
                             renderItem={item =>
                                 <List.Item>
-                                    <a href="">{item.title}</a>
+                                    <a href={`/#/user/associationDetail/${item.associationId}`}>{item.title}</a>
                                 </List.Item>
                             }
                         />

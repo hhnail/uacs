@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react"
-import {Button, Col, Descriptions, Form, Image, Input, Modal, PageHeader, Row, Tabs} from 'antd'
+import {Button, Col, Descriptions, Form, Image, Modal, notification, PageHeader, Row, Select, Tabs} from 'antd'
 import {useHistory} from "react-router-dom";
 import {getAssociationDetail, getRecentRecruitment, getUserById} from "../../../services/db";
 import Share from "./Share";
@@ -8,8 +8,9 @@ import DataView from "./DataView";
 import {useForm} from "antd/es/form/Form";
 import styles from './index.less'
 import TextArea from "antd/es/input/TextArea";
-import axios from "axios";
+import {checkCanRecruitment, saveApplication} from "../../../services/applicationService";
 
+const {Option} = Select;
 const {TabPane} = Tabs;
 
 export default function AssociationDetail(props) {
@@ -29,6 +30,8 @@ export default function AssociationDetail(props) {
     useEffect(() => {
         getAssociationDetail(associationId).then(res => {
             const {data} = res.data
+            // console.log('社团详情')
+            // console.log(data)
             setAssociationDetail(data)
         })
         getRecentRecruitment(associationId).then(res => {
@@ -55,8 +58,17 @@ export default function AssociationDetail(props) {
                 userId: userResume.userId,
                 recruitmentId: recentRecruitment.recruitmentId,
             }
-            axios.post('/association/saveApplication', data).then(res => {
-                console.log("申请表提交结果", res.data.data)
+            // console.log('表单数据：')
+            // console.log(data)
+            saveApplication(data).then(() => {
+                // console.log("申请表提交结果", res.data.data)
+                setJoinModalVisible(false)
+                notification['success']({
+                    message: '操作成功！',
+                    description:
+                        '您可以到【管理界面——我的申请】中跟进流程~',
+                });
+            }).catch(() => {
                 setJoinModalVisible(false)
             })
         })
@@ -82,12 +94,7 @@ export default function AssociationDetail(props) {
 
 
             {/* ============================ 页面体 内容 ============================*/}
-            <Tabs defaultActiveKey="associationShare">
-                {/* ================= 社团经历分享  ====================-  */}
-                <TabPane tab="成员分享" key="associationShare">
-                    <Share associationId={associationId}/>
-                </TabPane>
-
+            <Tabs defaultActiveKey="recruitment">
                 {/* ================================= 纳新通知  =================================  */}
                 <TabPane tab="社团纳新" key="recruitment">
                     <div style={{
@@ -100,8 +107,22 @@ export default function AssociationDetail(props) {
                                     height: 50,
                                 }}
                                 onClick={() => {
-                                    setJoinModalVisible(true)
-                                }}>申请加入</Button>
+                                    checkCanRecruitment(userInfo.userId, recentRecruitment.recruitmentId).then(res => {
+                                        const canApplication = res.data.data
+                                        // console.log('查询结果')
+                                        if (canApplication) {
+                                            setJoinModalVisible(true)
+                                        } else {
+                                            notification['error']({
+                                                message: '操作失败！',
+                                                description:
+                                                    '您已经申请过本次社团纳新了,无法重复申请~',
+                                            });
+                                        }
+                                    })
+                                }}>
+                            申请加入
+                        </Button>
                     </div>
                     <div style={{
                         padding: '16px 16px 16px 16px',
@@ -112,22 +133,31 @@ export default function AssociationDetail(props) {
                             __html: recentRecruitment?.content
                         }}/>
                     </div>
-
                 </TabPane>
 
-                {/* ================================= echarts数据可视化部分  =================================  */}
+                {/* ================= 社团经历分享  ====================-  */}
+                <TabPane tab="成员分享" key="associationShare">
+                    <Share associationId={associationId}/>
+                </TabPane>
+
+
+
+                {/* ================================= echarts数据可视化部分  =================================  */
+                }
                 <TabPane tab="了解我们" key="dataView">
                     <DataView associationId={associationDetail?.associationId}
                               recruitmentId={recentRecruitment?.recruitmentId}/>
                 </TabPane>
-                {/* ================= 社团大事记  ====================-  */}
+                {/* ================= 社团大事记  ====================-  */
+                }
                 <TabPane tab="社团大事记" key="bigEvent">
                     <BigEvent/>
                 </TabPane>
             </Tabs>
 
 
-            {/* ================== 申请加入社团 Modal =============== */}
+            {/* ================== 申请加入社团 Modal =============== */
+            }
             <Modal title="入团申请表" visible={joinModalVisible} width={1200}
                    onOk={handleJoinOk}
                    onCancel={() => {
@@ -145,16 +175,27 @@ export default function AssociationDetail(props) {
                                                    span={6}>{userResume?.collegeMajorClass}</Descriptions.Item>
                                 <Descriptions.Item label="联系方式" span={3}>{userResume?.phone}</Descriptions.Item>
                                 <Descriptions.Item label="电子邮箱" span={3}>{userResume?.email}</Descriptions.Item>
-                                <Descriptions.Item label="意向部门" span={3}>
-                                    <Form.Item name={'intentionDepartment'}
-                                               rules={[{required: true, message: '请填写意向部门！'}]}>
-                                        <Input/>
+                                <Descriptions.Item label="意向部门" span={4}>
+                                    <Form.Item name={'departmentId'}
+                                               rules={[{required: true, message: '请选择意向部门！'}]}
+                                               initialValue={associationDetail?.departments.length > 0 ? associationDetail?.departments[0].departmentId : ''}
+                                    >
+                                        <Select style={{width: 180}}>
+                                            {associationDetail?.departments.map(dpt => {
+                                                return <Option value={dpt.departmentId}>{dpt.departmentName}</Option>
+                                            })}
+                                        </Select>
                                     </Form.Item>
                                 </Descriptions.Item>
-                                <Descriptions.Item label="是否接受调剂" span={3}>
+                                <Descriptions.Item label="是否接受调剂" span={2}>
                                     <Form.Item name={'canAdjust'}
-                                               rules={[{required: true, message: '请确认是否接受调剂！'}]}>
-                                        <Input/>
+                                               rules={[{required: true, message: '请确认是否接受调剂！'}]}
+                                               initialValue={0}
+                                    >
+                                        <Select style={{width: 180}}>
+                                            <Option value={1}>是</Option>
+                                            <Option value={0}>否</Option>
+                                        </Select>
                                     </Form.Item>
                                 </Descriptions.Item>
                             </Descriptions>

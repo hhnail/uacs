@@ -2,11 +2,13 @@ import {Avatar, Card, Col, List, Row, Space, Tag, Tooltip} from "antd";
 import React, {useEffect, useState} from "react";
 import {getUserByAssociationId} from "../../../../../../services/userService";
 import {ICON} from "../../../../../../constants/icon";
-import {GENDER_TYPE} from "../../../../../../constants/type";
+import {GENDER_TYPE, ROLE_TYPE} from "../../../../../../constants/type";
 import {USER_IMAGE_URL} from "../../../../../../constants/image";
+import {useHistory} from "react-router-dom";
 
 export default function UserList(props) {
 
+    const history = useHistory()
     const [userList, setUserList] = useState([])
 
     const refreshUserList = () => {
@@ -28,7 +30,6 @@ export default function UserList(props) {
 
     const renderUserTitle = (user) => {
         let genderIcon = ''
-        // console.log(user.gender)
         if (user.gender === GENDER_TYPE.BOY.label) {
             genderIcon = ICON.boy
         } else if (user.gender === GENDER_TYPE.GIRL.label) {
@@ -36,11 +37,26 @@ export default function UserList(props) {
         } else {
 
         }
+
+        let roleName = '社团成员'
+        if (user.roleId) {
+            switch (user.roleId) {
+                case ROLE_TYPE.ASSOCIATION_ADMIN.key:
+                    roleName = ROLE_TYPE.ASSOCIATION_ADMIN.name
+                    break
+                case ROLE_TYPE.STUDENT.key:
+                    roleName = ROLE_TYPE.STUDENT.name
+                    break
+            }
+        }
         return <>
             <Space>
-                <Tag icon={ICON.member} color={'#cd201f'}>社团成员</Tag>
+                <Tag icon={ICON.member} color={'#cd201f'}>{roleName}</Tag>
                 <Tooltip placement="topLeft" title={'点击查看TA的主页~'}>
-                    <a href="/#"><b>{user.name}</b></a>
+                    <a onClick={() => {
+                        history.push(`/manage/association/list/userHomePage/${user.userId}`)
+                    }}
+                    ><b>{user.name}</b></a>
                 </Tooltip>
                 {genderIcon}
             </Space>

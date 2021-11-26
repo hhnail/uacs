@@ -1,7 +1,7 @@
 import axios from "axios";
 
-export function getShareList() {
-    return axios.get('/bulletin/getShareList')
+export function getShareList(userId) {
+    return axios.get(`/bulletin/getShareList/${userId}`)
 }
 
 export function getShareById(shareId) {

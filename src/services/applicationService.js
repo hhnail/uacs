@@ -41,3 +41,11 @@ export function updateApplicationInterview(data) {
     return axios.post(`/association/updateApplicationInterview`, data)
 }
 
+export function saveApplication(data) {
+    return axios.post('/association/saveApplication', data)
+}
+
+export function checkCanRecruitment(userId,recruitmentId) {
+    return axios.get(`/association/checkCanRecruitment/${userId}/${recruitmentId}`)
+}
+

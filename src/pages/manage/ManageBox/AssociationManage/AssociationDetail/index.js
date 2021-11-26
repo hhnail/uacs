@@ -1,15 +1,30 @@
 import React, {useEffect, useState} from 'react'
-import {Button, Card, Col, Descriptions, message, Modal, PageHeader, Row, Tabs, Upload} from 'antd';
+import {
+    Button,
+    Card,
+    Col,
+    Descriptions,
+    Form,
+    Input,
+    message,
+    Modal,
+    PageHeader,
+    Row,
+    Select,
+    Tabs,
+    Upload
+} from 'antd';
 import Icon, {EditOutlined, PlusCircleOutlined, PlusOutlined} from '@ant-design/icons';
 import axios from "axios";
 import {useHistory} from "react-router-dom";
-import {getAssociationDetail} from "../../../../../services/db";
+import {checkAssociationExist, getAssociationDetail, getUserById} from "../../../../../services/db";
 import {ICON, OPTION_ICONS} from "../../../../../constants/icon";
 import {ReactComponent as DeleteIcon} from "../../../../../icons/delete.svg";
 import {deleteDepartment} from "../../../../../services/departmentService";
 import UserList from "./UserList";
 import {IMAGE_TYPE} from "../../../../../constants/type";
 import {deleteImage, getAssociationImageUrl} from "../../../../../services/imageService";
+import {JS} from "json-server/lib/cli/utils/is";
 
 const {TabPane} = Tabs;
 
@@ -24,6 +39,7 @@ function getBase64(file) {
 
 export default function AssociationDetail(props) {
 
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'))
     const history = useHistory()
     const [association, setAssociation] = useState()
 
@@ -82,6 +98,9 @@ export default function AssociationDetail(props) {
         }
     };
 
+    const checkAssociationManager = ()=>{
+        return userInfo.manageAssociationKeys.includes(association.associationId)
+    }
 
     return (
         <div>
@@ -111,7 +130,33 @@ export default function AssociationDetail(props) {
                                 <Col span={24}>
                                     <Card bordered hoverable style={{height: 195}}
                                           onClick={() => {
-
+                                              if (!checkAssociationManager()) {
+                                                  message.error('抱歉，您没有对应权限！')
+                                                  return
+                                              }
+                                              Modal.info({
+                                                  title: '新增部门',
+                                                  content: <Form name="addAssociationForm"
+                                                                 labelCol={{
+                                                                     span: 6,
+                                                                 }}
+                                                                 wrapperCol={{
+                                                                     span: 16,
+                                                                 }}
+                                                                 autoComplete="off"
+                                                                 style={{
+                                                                     marginTop: 20
+                                                                 }}
+                                                  >
+                                                      <Form.Item label="部门名称" name="departmentName"
+                                                                 rules={[{required: true, message: '请输入部门名称！',},]}>
+                                                          <Input/>
+                                                      </Form.Item>
+                                                  </Form>,
+                                                  onOk: () => {
+                                                      message.success('操作成功！')
+                                                  }
+                                              })
                                           }}
                                     >
                                         <div style={{
@@ -184,7 +229,7 @@ export default function AssociationDetail(props) {
                         fontSize: 17,
                         fontWeight: 900,
                     }}>
-                        系统首页社团轮播图
+                        系统首页社团头图
                     </div>
                     <Upload listType="picture-card"
                             action={`/association/uploadImage/${IMAGE_TYPE.ASSOCIATION_HOMEPAGE.value}/${association?.associationId + ''}`}

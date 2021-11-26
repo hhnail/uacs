@@ -17,7 +17,7 @@ const {Option} = Select;
 export default function AssociationList(props) {
 
     const userInfo = JSON.parse(localStorage.getItem("userInfo"))
-    const isSuperAdmin = false
+    const isSuperAdmin = userInfo.isSuperAdmin
 
     const history = useHistory()
     const [dataSource, setDataSource] = useState([])
@@ -86,20 +86,23 @@ export default function AssociationList(props) {
                         onClick={() => {
                             history.push(`/manage/association/list/${item.associationId}`)
                         }}>详情</Button>
-                <Button danger size='small' icon={OPTION_ICONS.DELETE}>删除</Button>
+                {isSuperAdmin
+                && <Button danger size='small' icon={OPTION_ICONS.REFUSE}>冻结</Button>}
             </Space>
         },
     ];
 
     return (
         <div>
-            <Button type={'primary'} size={"middle"} style={{}}
-                    onClick={() => {
-                        setModalVisible(true)
-                    }}
+            {isSuperAdmin
+            && <Button type={'primary'} size={"middle"} style={{}}
+                       onClick={() => {
+                           setModalVisible(true)
+                       }}
             >
                 新增社团
             </Button>
+            }
             <Table columns={columns}
                    dataSource={dataSource}
                    pagination={{

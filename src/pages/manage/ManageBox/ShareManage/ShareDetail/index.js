@@ -45,11 +45,13 @@ export default function ShareDetail(props) {
                     <Descriptions.Item label="纳新社团">{shareInfo.associationName}</Descriptions.Item>
                     <Descriptions.Item label="申请人">{shareInfo.name}</Descriptions.Item>
                     <Descriptions.Item
-                        label="审核状态">{RECRUITMENT_STATE_MAP.get(shareInfo.state)}</Descriptions.Item>
-                    <Descriptions.Item label="发布状态">
-                        {RECRUITMENT_PUBLISH_STATE_MAP.get(shareInfo.state)
-                            ? RECRUITMENT_PUBLISH_STATE_MAP.get(shareInfo.state)
-                            : RECRUITMENT_PUBLISH_STATE_LIST.UNPUBLISH.name}</Descriptions.Item>
+                        // label="审核状态">{RECRUITMENT_STATE_MAP.get(shareInfo.state)}</Descriptions.Item>
+                        label="审核状态">通过审核</Descriptions.Item>
+                    {/*<Descriptions.Item label="发布状态">*/}
+                    {/*    {RECRUITMENT_PUBLISH_STATE_MAP.get(shareInfo.state)*/}
+                    {/*        ? RECRUITMENT_PUBLISH_STATE_MAP.get(shareInfo.state)*/}
+                    {/*        : RECRUITMENT_PUBLISH_STATE_LIST.UNPUBLISH.name}</Descriptions.Item>*/}
+                    <Descriptions.Item label="发布状态">已发布</Descriptions.Item>
                     <Descriptions.Item label="备注">{shareInfo.description}</Descriptions.Item>
                     <Descriptions.Item label="浏览量">{shareInfo.view}</Descriptions.Item>
                 </Descriptions>

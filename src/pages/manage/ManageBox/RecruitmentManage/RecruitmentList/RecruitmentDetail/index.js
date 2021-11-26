@@ -12,7 +12,9 @@ const {confirm} = Modal
 
 export default function RecruitmentDetail(props) {
 
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'))
     const [recruitmentInfo, setRecruitmentInfo] = useState([])
+    const isSuperAdmin = userInfo.isSuperAdmin
 
     // 获取用户列表
     useEffect(() => {
@@ -31,10 +33,10 @@ export default function RecruitmentDetail(props) {
                 onBack={() => window.history.back()}
                 title="纳新详情"
                 subTitle={recruitmentInfo.title}
-                extra={[
+                extra={isSuperAdmin ? [
                     <Button key="3">打回</Button>,
                     <Button key="1" type="primary">通过审核</Button>,
-                ]}
+                ] : []}
             >
                 <Descriptions size="small" column={3}>
                     <Descriptions.Item label="纳新社团">{recruitmentInfo.associationName}</Descriptions.Item>

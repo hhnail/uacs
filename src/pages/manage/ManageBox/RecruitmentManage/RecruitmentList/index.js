@@ -38,14 +38,14 @@ export default function RecruitmentList() {
         return <Space>
             {/*非超管。可以提交、撤销提交、发布、下线*/}
             {!isSuperAdmin && item.state === RECRUITMENT_STATE.EXAMINE_PASS.value &&
-            <Button size="small" type='primary' icon={<ArrowUpOutlined/>}
+            <Button size="small" type='primary' icon={OPTION_ICONS.ONLINE}
                     onClick={() => handlePublish(item.recruitmentId)}>发布</Button>}
 
             {!isSuperAdmin && item.state === RECRUITMENT_STATE.PUBLISHED.value &&
-            <Button size="small" danger icon={<ArrowDownOutlined/>}
+            <Button size="small" danger icon={OPTION_ICONS.OFFLINE}
                     onClick={() => {
                         Modal.confirm({
-                            title: '您确认要下线该纳新通知吗？',
+                            title: '您确认要下线该通知，停止纳新吗？',
                             onOk: () => {
                                 handleOffline(item.recruitmentId)
                             }
@@ -76,13 +76,13 @@ export default function RecruitmentList() {
     }
 
     const columns = [
-        {
-            title: '纳新通知ID',
-            dataIndex: 'recruitmentId',
-            render(recruitmentId) {
-                return <b>{recruitmentId}</b>;
-            }
-        },
+        // {
+        //     title: '纳新通知ID',
+        //     dataIndex: 'recruitmentId',
+        //     render(recruitmentId) {
+        //         return <b>{recruitmentId}</b>;
+        //     }
+        // },
         {
             title: '标题',
             dataIndex: 'title',

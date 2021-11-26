@@ -27,6 +27,7 @@ import Contacter from "../Other/Contacter";
 import AddUser from "../UserManage/AddUser";
 import BatchAddAssociation from "../AssociationManage/BatchAddAssociation";
 import AssociationList from "../AssociationManage";
+import MemberResume from "../AssociationManage/AssociationDetail/MemberResume";
 
 function SysRouter(props) {
     // TODO 动态创建路由 防止路由穿透
@@ -52,6 +53,7 @@ function SysRouter(props) {
 
                 {/* ==================== 社团管理 ==================== */}
                 {/*社团列表*/}
+                <Route path="/manage/association/list/userHomePage/:userId" component={MemberResume}></Route>
                 <Route path="/manage/association/list/:associationId" component={AssociationDetail}></Route>
                 <Route path="/manage/association/add" component={BatchAddAssociation}></Route>
                 <Route path="/manage/association/list" component={AssociationList}></Route>
@@ -71,7 +73,8 @@ function SysRouter(props) {
                 {/* =============== 审核管理 =======================*/}
                 <Route path="/manage/review/addAssociation" component={AddAssociation}></Route>
                 {/*审批入团申请 -- 申请表详情（申请表 + 个人简历）*/}
-                <Route path="/manage/review/joinAssociation/:applicationId/:isReview" component={ApplicationDetail}></Route>
+                <Route path="/manage/review/joinAssociation/:applicationId/:isReview"
+                       component={ApplicationDetail}></Route>
                 {/*审批入团申请*/}
                 <Route path="/manage/review/joinAssociation" component={ApplicationList}></Route>
                 {/*发布纳新通知*/}

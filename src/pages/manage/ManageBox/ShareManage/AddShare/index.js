@@ -38,7 +38,7 @@ export default function AddShare(props) {
         const data = {
             userId: userInfo.userId,
             // TODO 多个角色怎么判断？
-            roleIds: [2],
+            roleIds: [4],
         }
         axios.post('/association/getAssociationByUserId',
             qs.stringify(data))
@@ -122,8 +122,8 @@ export default function AddShare(props) {
                         <Form.Item label="想要分享的社团" name="associationId">
                             {<Select style={{width: 240}}>
                                 {associationList.map(association => {
-                                    return<Option key={association.associationId}
-                                                  value={association.associationId}
+                                    return <Option key={association.associationId}
+                                                   value={association.associationId}
                                     >{association.associationName}</Option>
                                 })}
                             </Select>}

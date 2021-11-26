@@ -1,5 +1,7 @@
 import React from "react";
 import Icon, {
+    ArrowDownOutlined,
+    ArrowUpOutlined,
     AuditOutlined,
     BarsOutlined,
     ClusterOutlined,
@@ -58,6 +60,10 @@ const OPTION_ICONS = {
     EDIT: <Icon component={Edit} style={{fontSize: 14}}/>,
     // 头像
     AVATAR: <Icon component={Avatar} style={{fontSize: 14}}/>,
+    // 上线
+    ONLINE: <ArrowUpOutlined/>,
+    // 下线
+    OFFLINE: <ArrowDownOutlined/>,
 }
 
 // 系统图标
